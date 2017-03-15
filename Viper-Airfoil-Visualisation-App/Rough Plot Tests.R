@@ -35,7 +35,7 @@ ggplot(testsmall, aes(x = X, y = Y, z = P)) +
 
 ### Interp using akima
 library(akima)
-asdf <- with(testsmall, interp(x = X, y = Y, z = P))
+asdf <- with(test, interp(x = X, y = Y, z = P))
 
 filled.contour(x = asdf$x,
                y = asdf$y,
@@ -47,8 +47,30 @@ names(df) <- c("X", "Y", "P")
 df$X <- asdf$z[df$X]
 df$Y <- asdf$z[df$Y]
 
-ggplot(data = df, aes(x = X, y = Y, z = P)) +
-  stat_contour()
-+
+ggplot(data = df, aes(x = X, y = Y, colour = P)) +
+  geom_point() +
+  stat_contour() +
   geom_point(data = filter(test, P == 0), colour = "red")
 
+  
+#----------------------
+# Interpolate
+testinterp <- filter(test, X > -1.5 & X < 1.5 & Y > -1.5 & Y < 1.5)
+testinterp <- with(testinterp, interp(x = X, y = Y, z = P,
+                   linear = TRUE,
+                   extrap = TRUE,
+                   xo = seq(min(testinterp$X),max(testinterp$X),length=1000),
+                   yo = seq(min(testinterp$Y),max(testinterp$Y),length=1000))
+                   )
+# Plot using base R
+# filled.contour(x = testinterp$x,
+#                y = testinterp$y,
+#                z = testinterp$z)
+# contour(testinterp)
+# Plot using ggplot
+testinterp2 <- as.data.frame(interp2xyz(testinterp))
+ggplot() +
+  geom_raster(data=testinterp2, aes(x=x, y=y, fill = z)) +
+  # geom_contour(data=testinterp2, aes(x=x, y=y, z=z), bins = 20, colour = "white") +
+  coord_equal() +
+  geom_point(data = filter(test, U == 0), aes(x = X, y = Y), colour = "red")

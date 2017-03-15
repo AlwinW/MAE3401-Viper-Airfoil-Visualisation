@@ -30,6 +30,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(reshape2)
 library(directlabels)
+library(akima)
 
 # theme_set(theme_linedraw())
 theme_set(theme_bw())
