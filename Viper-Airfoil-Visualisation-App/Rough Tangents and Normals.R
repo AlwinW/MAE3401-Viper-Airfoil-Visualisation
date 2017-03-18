@@ -1,3 +1,7 @@
+#----------------------------
+#--- Rough functions for Tangents and Normals
+#============================
+
 NACA = 4412
 # Max camber; Location of m; Thickness
 m = (NACA %/% 1000) / 100

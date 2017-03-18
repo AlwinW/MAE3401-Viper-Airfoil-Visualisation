@@ -1,3 +1,7 @@
+#----------------------------
+#--- Rough Scripting to Test Interpolation
+#============================
+
 testraw <- read.table("test.dat", sep = " ",
                       skip = 12,
                       nrow = 9888)
