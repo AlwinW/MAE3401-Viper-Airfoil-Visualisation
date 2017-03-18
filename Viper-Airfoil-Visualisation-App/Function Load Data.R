@@ -31,6 +31,7 @@ AirfoilData <- function(NACA, a, c) {
   # Output - maybe try list2env(airfoildata, envir = .GlobalEnv) ?
   airfoildata = list(m = m, p = p, t = t, c = c, a = a)
   list2env(airfoildata, envir = .GlobalEnv)
+  return(airfoildata)
 }
 
 # Additional information required:
