@@ -2,7 +2,7 @@
 #--- Install Required Packages
 #============================
 
-## Install Packages ======================================================================
+#--- Install Packages ----
 # install.packages(c(
 #   "shiny",
 #   "shinyAce",
@@ -17,7 +17,7 @@
 #   "reshape2"
 # ))
 
-## Load Packages ======================================================================
+#--- Load Packages ----
 library(shiny)
 library(shinyAce)
 library(rsconnect)

@@ -2,7 +2,7 @@
 #--- Functions to  Load Data
 #============================
 
-## Load data from a .dat file ====
+#--- Load data from a .dat file ----
 LoadData <- function(filename) {
   # Determine the starting and ending lines
   rstart = grep("DT=", readLines(filename))[1]
@@ -19,7 +19,7 @@ LoadData <- function(filename) {
   return(filedata)
 }
 
-## Summarise Critical Airfoil Data ====
+#--- Summarise Critical Airfoil Data ----
 AirfoilData <- function(NACA, a, c) {
   # Max camber; Location of m; Thickness
   m = (NACA %/% 1000) / 100
