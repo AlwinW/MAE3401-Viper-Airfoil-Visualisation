@@ -30,6 +30,24 @@ AirfoilCurve <- function(x, out = "all") {
     return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL))
 }
 
+AirfoilCoord <- function(xmin = a, xmax = c + a, res = 100) {
+  coord <- data.frame(x = seq(xmin, xmax, length.out = res)) %>%
+    rowwise() %>%
+    do(data.frame(., AirfoilCurve(.$x))) %>%
+    ungroup() %>%
+    data.frame(.) %>%
+    select(x,xU, yU, xL, yL) %>%
+    gather(key, value, -x) %>%
+    mutate(coord = paste(substr(key,1,1),"p",sep=""), surf = substr(key, 2,2)) %>%
+    select(-key) %>%
+    spread(coord, value) %>%
+    mutate(surf = factor(surf, levels = c("U", "L"))) %>%
+    arrange(surf, x*ifelse(surf=="U", 1, -1)) %>%
+    select(xp, yp, surf)
+  return(coord)
+}
+
+
 AirfoilGrads <- function(x, step = c/100000, out = "all") {
   xsurf <- suppressWarnings(data.frame(x = rbind(x - step, x, x + step)))
   surf <- xsurf %>%
@@ -50,21 +68,55 @@ AirfoilGrads <- function(x, step = c/100000, out = "all") {
   return(out)
 }
 
+AoATransform <- function(data, AoA) {
+  #Assumes X is column 1 an dY is column 2
+  ocolnames <- colnames(data[c(1,2)])
+  colnames(data) <- c("x","y")
+  data <- data %>%
+    select(x, y) %>%
+    mutate(
+      r = sqrt(x^2 + y^2),
+      theta = atan(y/x),
+      theta = ifelse(is.na(theta),0,theta),
+      theta = ifelse(x<0, theta + pi, theta),
+      theta = theta - AoA*pi/180,
+      x = r*cos(theta),
+      y = r*sin(theta)
+    ) %>%
+    select(x, y)
+  colnames(data) <- ocolnames
+  return(data)
+  }
 
-AirfoilLineGen <- function(x, gradint = AirfoilGrads(x), surf = "upper", eq = "norm", focusdist = 1, len = focusdist*50+1) {
+AirfoilLineGen <- function(x, gradint = AirfoilGrads(x), AoA = 0,
+                           surf = "upper", eq = "norm", focusdist = 0.5, len = 51, factor = 5) {
   # NOTE: Tan is broken, won't work!!
   gradint <- gradint %>%
     filter(surf == get("surf") & eq == get("eq")) %>%
     mutate(focusdist = focusdist, len = len) %>%
     mutate(xfocusdist = sign(m)*focusdist/sqrt(1+m^2)*ifelse(surf=="upper",1,-1)) %>%
     mutate(xfocus = x + xfocusdist, yfocus = y + xfocusdist*m) %>%
-    mutate(xmax = x + 4*xfocusdist, ymax = y + 4*xfocusdist*m)
-  print(gradint)
-  xvec = with(gradint, c(seq(x, xfocus, length.out = len), seq(x, xmax, length.out = len)))
-  yvec = with(gradint, c(seq(y, yfocus, length.out = len), seq(y, ymax, length.out = len)))
-  return(data.frame(xvec, yvec))
+    mutate(xmax = x + factor*xfocusdist, ymax = y + factor*xfocusdist*m)
+  # print(gradint)
+  xvec = with(gradint, c(seq(x, xfocus, length.out = len), seq(xfocus, xmax, length.out = len)))
+  yvec = with(gradint, c(seq(y, yfocus, length.out = len), seq(yfocus, ymax, length.out = len)))
+  lvec = data.frame(xvec, yvec)
+  lvec = AoATransform(lvec, AoA)
+  return(distinct(lvec))
 }
 
 # ggplot(AirfoilLineGen(-0.4, surf = "upper")) + 
   # geom_point(aes(x = xvec, y = yvec))
+
+# AoAtest = 10
+# 
+# ggplot() + 
+#   geom_path(data = AoATransform(AirfoilCoord(), AoA = AoAtest), aes(x=xp, y=yp)) +
+#   geom_point(data = AirfoilLineGen(x=-0.3, surf = "upper", AoA = AoAtest), aes(x=xvec, y=yvec)) + 
+#   geom_point(data = AirfoilLineGen(x=-0, surf = "upper", AoA = AoAtest), aes(x=xvec, y=yvec)) + 
+#   geom_point(data = AirfoilLineGen(x=0.3, surf = "upper", AoA = AoAtest), aes(x=xvec, y=yvec)) + 
+#   geom_point(data = AirfoilLineGen(x=-0.3, surf = "lower", AoA = AoAtest), aes(x=xvec, y=yvec)) +
+#   geom_point(data = AirfoilLineGen(x=-0, surf = "lower", AoA = AoAtest), aes(x=xvec, y=yvec)) + 
+#   geom_point(data = AirfoilLineGen(x=0.3, surf = "lower", AoA = AoAtest), aes(x=xvec, y=yvec)) + 
+#   coord_fixed()
 
