@@ -14,23 +14,25 @@ c = 1
 AoA = 10
 airfoildata <- AirfoilData(NACA, a, c)
 
-# Sample Airfoil Plot ----
+#--- Sample Airfoil Plot ----
 airfoilcoord <- AirfoilCoord(AoA = AoA, res = 100)
-
 ggplot(airfoilcoord, aes(x = x, y = y, colour = surf)) + 
   geom_path() +
   geom_point() +
   coord_fixed()
 
-
-normalplot <- ggplot () +
-  geom_path(data = AoATransform(AirfoilCoord(), AoA = AoA), aes(x=x, y=y))
+#--- Sample Plot of Normals to the Airfoil
 xvec = seq(a, a+c, by = 0.05)
-xvec = -2*a/c^2 * (xvec - a)^2 + a
-xvec = xvec[2:(length(xvec)-1)]
+xvec = -2*a/c^3 * (xvec - a)^3 + a
+xvec = c(xvec[2:(length(xvec)-1)], (a+c) - sign(a+c)*(a+c)*0.01)
+focusdist = 0.2; totaldist = 0.5; len = 21
+normalplot <- ggplot () +
+  geom_path(data = AoATransform(AirfoilCoord(), AoA = AoA), aes(x = x, y = y))
 for (x in xvec) {
-  normalplot = normalplot+
-    geom_point(data = AirfoilLineGen(x=x, surf = "upper", AoA = AoA, totaldist = 1), aes(x=x, y=y)) +
-    geom_point(data = AirfoilLineGen(x=x, surf = "lower", AoA = AoA, totaldist = 1), aes(x=x, y=y))
+  for (surf in c("upper", "lower")) {
+    normalplot = normalplot +
+      geom_point(data = AirfoilLineGen(x, AoA, surf, eq = "norm", focusdist, totaldist, len),
+      aes(x = x, y = y))
+  }
 }
 normalplot + coord_fixed()

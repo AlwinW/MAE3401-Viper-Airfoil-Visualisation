@@ -120,7 +120,7 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-5, out = "all") {
 
 #--- Generate (x,y) lines from the surface ----
 AirfoilLineGen <- function(xO, AoA = 0, surf = "upper", eq = "norm", 
-                           focusdist = 0.5, len = 51, totaldist = 20) {
+                           focusdist = 0.5, totaldist = 20, len = 51) {
   # NOTE: tangent is broken, won't work!!
   # focusdist and totaldist are lenghts ALONG the line
   gradint <- AirfoilGrads(xO, surf = surf)
