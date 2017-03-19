@@ -55,6 +55,10 @@ AirfoilCurve <- function(x = 0, out = "all") {
     return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL))
   else if(out == "coord")
     return(data.frame(x, xU, yU, xL, yL))
+  else if (out == "upper")
+    return(data.frame(x = xU, y = yU))
+  else if (out == "lower")
+    return(data.frame(x = xL, y = yL))
 }
 
 #--- Reshape Airfoil Points into (x,y) columns and AoA transform for plotting ----
@@ -63,50 +67,72 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   xvec = abs(a) * sin(seq(xmin, xmax, length.out = res)*pi/c)
   # Generate coordinates in a tidy format
   coord = AirfoilCurve(xvec, out = "coord") %>%
-    rename(xo = x) %>%
-    gather(key, value, -xo) %>%
+    rename(xO = x) %>%
+    gather(key, value, -xO) %>%
     mutate(coord = substr(key,1,1), surf = substr(key, 2,2)) %>%
     select(-key) %>%
     spread(coord, value) %>%
     mutate(surf = factor(surf, levels = c("U", "L"))) %>%
-    arrange(surf, xo*ifelse(surf=="U", 1, -1)) %>%
+    arrange(surf, xO*ifelse(surf=="U", 1, -1)) %>%
     select(x, y, surf)
   coord = AoATransform(coord, AoA = AoA)
   return(coord)
 }
 
+#--- Find the xL or XU value for a given x ---
+Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
+  # Use the rooting finding in {stats} to find the root
+  rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
+          lower = a, upper = a + c,
+          tol = tol)
+  if(out == "x")
+    return(rootfind$root)
+  else if(out ==  "all")
+    return(rootfind)
+  else if(out == "str")
+    return(str(rootfind))
+}
+
 #--- Determine the gradient of the airfoil at x ----
-AirfoilGrads <- function(x, del = c/100000, out = "all") {
-  # Determine the points right next to x
-  surf = AirfoilCurve(c(x - del, x, x + del), out = "coord") 
+AirfoilGrads <- function(xO, surf = "upper", del = c*1e-5, out = "all") {
+  # Determine the value of x for xO on the airfoil and neighbours
+  x = Airfoilx(xO, surf = surf)
+  x = c(x-del, x, x + del)
+  # Determine the values
+  surfval = AirfoilCurve(x, out = surf)
+  
   # Estimate the gradients
-  dyUdx = with(surf, (yU[3] - yU[1])/(xU[3] - xU[1]))
-  dyLdx = with(surf, (yL[3] - yL[1])/(xL[3] - xL[1]))
+  surfval <- mutate(surfval,
+                    dydx = (y - lag(y, 1)) / (x - lag(x, 1)),
+                    dydxave = (dydx + lag(dydx, 1)) / 2)
+  dydx = surfval$dydxave[3]
+
   # Determine normal and tagential equations for output
   out <- data.frame(
-    surf = c("upper", "upper", "lower", "lower"),
-    eq = c("tan", "norm", "tan", "norm"),
-    xo = x,
-    x = with(surf, c(xU[2], xU[2], xL[2], xL[2])),
-    y = with(surf, c(yU[2], yU[2], yL[2], yL[2])),
-    m = c(dyUdx, -1/dyUdx, dyLdx, -1/dyLdx)) %>%
+    surf = surf,
+    eq = c("tan", "norm"),
+    x = surfval$x[2],
+    y = surfval$y[2],
+    m = c(dydx, -1/dydx)) %>%
     mutate(c = -m*x + y)
   return(out)
 }
 
 #--- Generate (x,y) lines from the surface ----
-AirfoilLineGen <- function(
-    x, gradint = AirfoilGrads(x), AoA = 0, surf = "upper", eq = "norm", 
-    focusdist = 0.5, len = 51, totaldist = 20) {
+AirfoilLineGen <- function(xO, AoA = 0, surf = "upper", eq = "norm", 
+                           focusdist = 0.5, len = 51, totaldist = 20) {
   # NOTE: tangent is broken, won't work!!
+  # focusdist and totaldist are lenghts ALONG the line
+  gradint <- AirfoilGrads(xO, surf = surf)
   # Using the graident-intercepts, determine the range of points
   #   (corrected for gradient direction & upper vs lower surface)
   gradint <- gradint %>%
     filter(surf == get("surf") & eq == get("eq")) %>%
     mutate(focusdist = focusdist, len = len) %>%
-    mutate(xfocusdist = sign(m) * focusdist/sqrt(1+m^2) * ifelse(surf=="upper",1,-1)) %>%
+    mutate(xfocusdist = sign(m) * focusdist/sqrt(1+m^2) * ifelse(surf=="upper",1,-1),
+           xtotaldist = totaldist/focusdist * xfocusdist) %>%
     mutate(xfocus = x + xfocusdist, yfocus = y + xfocusdist*m) %>%
-    mutate(xmax = x + totaldist, ymax = y + totaldist*m)
+    mutate(xmax = x + xtotaldist, ymax = y + xtotaldist*m)
   # Generate the points (x,y)
   x = with(gradint, c(seq(x, xfocus, length.out = len), seq(xfocus, xmax, length.out = len)))
   y = with(gradint, c(seq(y, yfocus, length.out = len), seq(yfocus, ymax, length.out = len)))
