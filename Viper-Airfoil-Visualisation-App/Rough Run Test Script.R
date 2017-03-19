@@ -9,11 +9,11 @@ source("Function Airfoil Profile.R")
 source("Function Interpolation.R")
 
 #--- Initial Data ----
-filedata <- LoadData("test.dat")
+filedata <- LoadData("test.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 10
+AoA = 10 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -99,6 +99,7 @@ load(file = "InterpTest1Long.RData")
 
 ##3C4BA0, #BE2828
 
+# Plot of U' i.e. perp to the normal from the airfoil
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Udash)) +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
@@ -107,6 +108,7 @@ ggplot () +
   scale_colour_gradientn("U'", colours = brewer.pal(11, "RdYlBu"), limits = c(-1.2, 1.2)) +
   coord_fixed()
 
+# Plot of U'/Um, where Um is 1 x sin(theta)
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentUm)) +
   geom_point(data = filter(InterpTest1Long, percentUm < -150), aes(x = x, y = y, colour = P), colour = "#BE2828") +
@@ -116,6 +118,7 @@ ggplot () +
   scale_colour_gradientn("U'/Um", colours = brewer.pal(11, "RdYlBu"), limits = c(-150, 150)) +
   coord_fixed()
 
+# Plot of V' i.e. para to normal from the airfoil
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Vdash)) +
   geom_point(data = filter(InterpTest1Long, Vdash < -0.8), aes(x = x, y = y, colour = P), colour = "#BE2828") +
@@ -125,6 +128,7 @@ ggplot () +
   scale_colour_gradientn("V'", colours = brewer.pal(11, "RdYlBu"), limits = c(-0.8, 0.8)) +
   coord_fixed()
 
+# Plot of V'/Vm, where Vm is 1 x cos(theta)
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentVm)) +
   geom_point(data = filter(InterpTest1Long, percentVm > 200), aes(x = x, y = y, colour = P), colour = "#3C4BA0") +
@@ -134,6 +138,7 @@ ggplot () +
   scale_colour_gradientn("V'/Vm", colours = brewer.pal(11, "RdYlBu"), limits = c(-200, 200)) +
   coord_fixed()
 
+# Plot of Pressure
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = P)) +
   geom_point(data = filter(InterpTest1Long, P > 0.5), aes(x = x, y = y, colour = P), colour = "#BE2828") +
