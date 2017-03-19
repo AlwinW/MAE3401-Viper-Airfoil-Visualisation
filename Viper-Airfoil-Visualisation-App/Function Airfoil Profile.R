@@ -28,9 +28,11 @@ AoATransform <- function(data, AoA) {
 }
 
 #--- Surface Coordinates for a NACA 4 digit airfoil ----
-AirfoilCurve <- function(x = 0, out = "all") {
+AirfoilCurve <- function(x = 0, out = "all", del = 1e-3) {
   # Test if x is within range
-  on = ifelse(x >= a & x <= a + c, TRUE, stop("x not on airfoil"))
+  # on = ifelse(x >= a - sign(a)*a*del & x <= (a + c) + sign(a + c)*(a + c)*del, 
+  on = ifelse(x >= a & x <= (a + c),
+              TRUE, stop("x not on airfoil"))
   # Determine the camber line yc
   yc = ifelse(x < p + a, 
     m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2),
@@ -65,11 +67,12 @@ AirfoilCurve <- function(x = 0, out = "all") {
 AirfoilSamp <- function(xvec, del = c*8e-6) {
   # Sample according to a cubic function
   xvec = -2*a/c^3 * (xvec - a)^3 + a
-  # Replace x = a if need be
-  if (xvec[1] == a)
-    # xvec[1] = a - sign(a)*abs(a)*del
-    xvec = xvec[2:length(xvec)]
-  # Replace x = a+c if need be
+  # # Replace x = a if need be
+  # if (xvec[1] == a)
+  #   # xvec[1] = a - sign(a)*abs(a)*del
+  #   xvec = xvec[2:length(xvec)]
+  # # Replace x = a+c if need be
+  xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
   if (xvec[length(xvec)] == a + c)
     xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
   return(xvec)
@@ -148,8 +151,8 @@ AirfoilLineGen <- function(xO, AoA = 0, surf = "upper", eq = "norm",
     mutate(xfocus = x + xfocusdist, yfocus = y + xfocusdist*m) %>%
     mutate(xmax = x + xtotaldist, ymax = y + xtotaldist*m)
   # Generate the points (x,y)
-  x = with(gradint, c(seq(x, xfocus, length.out = len), seq(xfocus, xmax, length.out = len)))
-  y = with(gradint, c(seq(y, yfocus, length.out = len), seq(yfocus, ymax, length.out = len)))
+  x = with(gradint, c(seq(x, xfocus, length.out = len), seq(xfocus, xmax, length.out = len*4)))
+  y = with(gradint, c(seq(y, yfocus, length.out = len), seq(yfocus, ymax, length.out = len*4)))
   lvec = data.frame(x, y)
   # Transform the points based on the AoA supplied
   lvec = AoATransform(distinct(lvec), AoA)

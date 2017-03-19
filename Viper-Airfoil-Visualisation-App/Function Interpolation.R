@@ -55,7 +55,7 @@ InterpPerpLine <- function(omesh,
            Um = Um,
            Vm = Vm) %>%
     mutate(Udash = sign(theta) * (sin(theta) * U - cos(theta) * V),
-           Vdash = ifelse(surf=="upper", 1, -1) * (cos(theta) * U + sin(theta) * V)) %>% ## NEEDS TO BE FIXED ----
+           Vdash = ifelse(surf == "upper", 1, -1) * sign(theta) * (cos(theta) * U + sin(theta) * V)) %>% ## NEEDS TO BE FIXED ----
     mutate(percentUm = Udash/Um * 100,
            percentVm = Vdash/Vm * 100)
   return(lmesh)

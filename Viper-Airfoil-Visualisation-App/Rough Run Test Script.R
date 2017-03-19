@@ -50,10 +50,14 @@ airfoilmeshlong <- airfoilmesh %>%
   gather(var, value, -x, -y, -surf) %>%
   mutate(var = factor(var, levels = c("U", "V", "P", "vort_xy_plane"))) %>%
   group_by(var)
-# ggplot(airfoilmeshlong) + 
-#   geom_path(aes(x = x, y = y, colour = value)) + 
-#   facet_wrap(~var, scales = "free") +
-#   coord_equal() 
+
+ggplot(filter(airfoilmeshlong, var == "P"), aes(x = x, y = y, colour = value)) +
+  geom_path() +
+  geom_point() +
+  geom_point(data = filter(airfoilmeshlong, var == "P" & value > 0.8), aes(x = x, y = y), colour = "#BE2828") +
+  scale_colour_gradientn("P", colours = rev(brewer.pal(11, "RdYlBu")), limits = c(-0.8, 0.8)) +
+  coord_equal()
+  
 
 out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(m) {
   m <- droplevels(m)
@@ -63,44 +67,78 @@ out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(
 do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
 # Along a perpendicular lines
-xvec = AirfoilSamp(seq(a, a+c, by = 0.2))
-focusdist = 0.2; totaldist = 0.5; len = 21
+xvec = AirfoilSamp(seq(a, a+c, by = 0.01))
 
-pblapply(xvec, function(x) {
+InterpTest1U <- pblapply(xvec, function(x) {
   list(
-    data.frame(xO = x, surf, AoA, Re),
-    InterpPath(omesh, x, AoA = AoA, surf = "upper", len = 5
-   ))
+    data.frame(xO = x, surf = "upper", AoA, Re),
+    InterpPerpLine(omesh, x, AoA = AoA, surf = "upper")
+    )
 })
-
-
-
-data <- list(
-  list(data.frame(subject = "A", year = "2016"),
-       data.frame(results = rnorm(500), time = rnorm(500))
-  ),
-  list(data.frame(subject = "B", year = "2017"),
-       data.frame(results = rnorm(500), time = rnorm(500))
-  )
-)
-
-data.frame(
-  subject = c(rep("A", 3), rep("B", 3)),
-  year = c(rep(2016, 3), rep(2017, 3)),
-  results = c(1, 2, 3, 7, 8, 9),
-  time = c(4, 5, 6, 10, 11, 12)
-)
-
-df = data.frame()
-for (i in (1:length(data))) {
-  df = rbind(df,
-             cbind(data[[i]][[1]], data[[i]][[2]]))
+InterpTest1LongU = data.frame()
+for (i in (1:length(InterpTest1U))) {
+  InterpTest1LongU = rbind(InterpTest1LongU,
+              cbind(InterpTest1U[[i]][[1]], InterpTest1U[[i]][[2]]))
 }
 
-system.time({
-  df = data.frame()
-  for (i in (1:length(data))) {
-    df = rbind(df,
-               cbind(data[[i]][[1]], data[[i]][[2]]))
-  }
+InterpTest1L <- pblapply(xvec, function(x) {
+  list(
+    data.frame(xO = x, surf = "lower", AoA, Re),
+    InterpPerpLine(omesh, x, AoA = AoA, surf = "lower")
+  )
 })
+InterpTest1LongL = data.frame()
+for (i in (1:length(InterpTest1L))) {
+  InterpTest1LongL = rbind(InterpTest1LongL,
+              cbind(InterpTest1L[[i]][[1]], InterpTest1L[[i]][[2]]))
+}
+
+InterpTest1Long = rbind(InterpTest1LongU, InterpTest1LongL)
+save(InterpTest1Long, file = "InterpTest1Long.RData")
+load(file = "InterpTest1Long.RData")
+
+##3C4BA0, #BE2828
+
+ggplot () +
+  geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Udash)) +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+  xlim(-1.2, 0.8) +
+  ylim(-0.8, 0.8) +
+  scale_colour_gradientn("U'", colours = brewer.pal(11, "RdYlBu"), limits = c(-1.2, 1.2)) +
+  coord_fixed()
+
+ggplot () +
+  geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentUm)) +
+  geom_point(data = filter(InterpTest1Long, percentUm < -150), aes(x = x, y = y, colour = P), colour = "#BE2828") +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+  xlim(-1.2, 0.8) +
+  ylim(-0.8, 0.8) +
+  scale_colour_gradientn("U'/Um", colours = brewer.pal(11, "RdYlBu"), limits = c(-150, 150)) +
+  coord_fixed()
+
+ggplot () +
+  geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Vdash)) +
+  geom_point(data = filter(InterpTest1Long, Vdash < -0.8), aes(x = x, y = y, colour = P), colour = "#BE2828") +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+  xlim(-1.2, 0.8) +
+  ylim(-0.8, 0.8) +
+  scale_colour_gradientn("V'", colours = brewer.pal(11, "RdYlBu"), limits = c(-0.8, 0.8)) +
+  coord_fixed()
+
+ggplot () +
+  geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentVm)) +
+  geom_point(data = filter(InterpTest1Long, percentVm > 200), aes(x = x, y = y, colour = P), colour = "#3C4BA0") +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+  xlim(-1.2, 0.8) +
+  ylim(-0.8, 0.8) +
+  scale_colour_gradientn("V'/Vm", colours = brewer.pal(11, "RdYlBu"), limits = c(-200, 200)) +
+  coord_fixed()
+
+ggplot () +
+  geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = P)) +
+  geom_point(data = filter(InterpTest1Long, P > 0.5), aes(x = x, y = y, colour = P), colour = "#BE2828") +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+  xlim(-1.2, 0.8) +
+  ylim(-0.8, 0.8) +
+  scale_colour_gradientn("P", colours = rev(brewer.pal(11, "RdYlBu")), limits = c(-0.5, 0.5)) +
+  coord_fixed()
