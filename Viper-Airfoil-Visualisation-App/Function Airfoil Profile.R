@@ -79,7 +79,7 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   return(coord)
 }
 
-#--- Find the xL or XU value for a given x ---
+#--- Find the xL or XU value for a given x ----
 Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
   # Use the rooting finding in {stats} to find the root
   rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
