@@ -61,6 +61,20 @@ AirfoilCurve <- function(x = 0, out = "all") {
     return(data.frame(x = xL, y = yL))
 }
 
+#--- Function for better sampling of points ----
+AirfoilSamp <- function(xvec, del = c*8e-6) {
+  # Sample according to a cubic function
+  xvec = -2*a/c^3 * (xvec - a)^3 + a
+  # Replace x = a if need be
+  if (xvec[1] == a)
+    # xvec[1] = a - sign(a)*abs(a)*del
+    xvec = xvec[2:length(xvec)]
+  # Replace x = a+c if need be
+  if (xvec[length(xvec)] == a + c)
+    xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
+  return(xvec)
+}
+
 #--- Reshape Airfoil Points into (x,y) columns and AoA transform for plotting ----
 AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   # Cluster points around LE and TE
@@ -94,7 +108,7 @@ Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
 }
 
 #--- Determine the gradient of the airfoil at x ----
-AirfoilGrads <- function(xO, surf = "upper", del = c*1e-5, out = "all") {
+AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
   # Determine the value of x for xO on the airfoil and neighbours
   x = Airfoilx(xO, surf = surf)
   x = c(x-del, x, x + del)
