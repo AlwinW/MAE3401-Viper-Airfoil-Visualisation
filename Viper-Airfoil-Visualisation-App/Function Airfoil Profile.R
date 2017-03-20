@@ -115,6 +115,7 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
   # Determine the value of x for xO on the airfoil and neighbours
   x = Airfoilx(xO, surf = surf)
   x = c(x-del, x, x + del)
+  ## MODEL THE FRONT AS A CYLINDER??
   # Determine the values
   surfval = AirfoilCurve(x, out = surf)
   
