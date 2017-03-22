@@ -42,7 +42,7 @@ for (x in xvec) {
 }
 normalplot + coord_fixed()
 
-#--- Sample Interpolation Plot
+#--- Sample Interpolation Plots ----
 omesh = filedata
 # Along the airfoil
 airfoilmesh <-  InterpPath(omesh, lvec = airfoilcoord, linear = TRUE)

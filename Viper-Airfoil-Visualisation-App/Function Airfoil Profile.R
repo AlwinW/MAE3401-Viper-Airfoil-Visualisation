@@ -28,18 +28,18 @@ AoATransform <- function(data, AoA) {
 }
 
 #--- Surface Coordinates for a NACA 4 digit airfoil ----
-AirfoilCurve <- function(x = 0, out = "all", del = 1e-3) {
+AirfoilCurve <- function(x = 0, out = "all") {
   # Test if x is within range
   # on = ifelse(x >= a - sign(a)*a*del & x <= (a + c) + sign(a + c)*(a + c)*del, 
   on = ifelse(x >= a & x <= (a + c),
               TRUE, stop("x not on airfoil"))
   # Determine the camber line yc
-  yc = ifelse(x < p + a, 
+  yc = ifelse(x < p * c + a, 
     m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2),
     m/(1-p)^2  * (1 - 2*p + 2*p*((x-a)/c) - ((x-a)/c)^2)
   )
   # Determine the gradient of the camber line dycdx
-  dycdx = ifelse(x < p + a,
+  dycdx = ifelse(x < p * c + a,
     2*m/p^2 * (p - (x-a)/c),
     2*m/(1-p)^2 * (p - (x-a)/c)
   )
@@ -72,7 +72,9 @@ AirfoilSamp <- function(xvec, del = c*8e-6) {
   #   # xvec[1] = a - sign(a)*abs(a)*del
   #   xvec = xvec[2:length(xvec)]
   # # Replace x = a+c if need be
-  xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
+  
+  # xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
+  
   if (xvec[length(xvec)] == a + c)
     xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
   return(xvec)
@@ -110,8 +112,8 @@ Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
     return(str(rootfind))
 }
 
-#--- Determine the gradient of the airfoil at x ----
-AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
+#--- Helper functions for finding the gradient ----
+AirfoilGradNACA <- function(xO, surf, del) {
   # Determine the value of x for xO on the airfoil and neighbours
   x = Airfoilx(xO, surf = surf)
   x = c(x-del, x, x + del)
@@ -124,15 +126,49 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
                     dydx = (y - lag(y, 1)) / (x - lag(x, 1)),
                     dydxave = (dydx + lag(dydx, 1)) / 2)
   dydx = surfval$dydxave[3]
-
+  
   # Determine normal and tagential equations for output
-  out <- data.frame(
+  out <- list(out = data.frame(
     surf = surf,
     eq = c("tan", "norm"),
     x = surfval$x[2],
     y = surfval$y[2],
     m = c(dydx, -1/dydx)) %>%
     mutate(c = -m*x + y)
+  )
+  return(out)
+}
+
+AirfoilGradCyl <- function(xO, surf, del) {
+  # Equivalent radius of the cylinder 
+  r = 1.1019*t^2*c
+  # Find cylinder centre
+  rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
+                      lower = a, upper = a + p*c,
+                      tol = 1e-9)
+  xc <- rootfind$root 
+  yc <- m/p^2 * (2*p*((xc-a)/c) - ((xc-a)/c)^2)
+  # Find the gradient of the normal
+  theta = acos(abs(xO - xc)/r)
+  mN = ifelse(surf == "upper", -1, 1) * tan(theta) # Normal ALREADY
+  # Generate the output
+  out <- list(out = data.frame(
+    surf = surf,
+    eq = c("tan", "norm"),
+    x = xO,
+    y = yc + mN * (xO - xc),
+    m = c(-1/mN, mN)) %>%
+    mutate(c = -m*x + y)
+  )
+  return(out)
+}
+
+#--- Determine the gradient of the airfoil at x ----
+AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
+  out <- ifelse(xO < a - sign(a)*abs(a)*del*100,
+                AirfoilGradCyl(xO, surf, del),
+                AirfoilGradNACA(xO, surf, del))
+  out <- out[[1]]
   return(out)
 }
 
