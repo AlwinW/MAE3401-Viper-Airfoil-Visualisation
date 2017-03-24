@@ -9,11 +9,11 @@ source("Function Airfoil Profile.R")
 source("Function Interpolation.R")
 
 #--- Initial Data ----
-filedata <- LoadData("test-40.dat") ## CHANGE THIS TO YOUR FILE
+filedata <- LoadData("test040.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = -40 ## CHANGE THIS TO YOUR AoA
+AoA = 40 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -67,7 +67,7 @@ out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(
 do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
 # Along a perpendicular lines
-xvec = AirfoilSamp(seq(a, a+c, by = 0.01))
+xvec = AirfoilSamp(seq(a, a+c, by = 0.02)) # WHAT IF I JUST CHANGE THE START AND END PTS JABAJA
 
 InterpTest1U <- pblapply(xvec, function(x) {
   list(

@@ -40,9 +40,10 @@ InterpPerpLine <- function(omesh,
                       xO, AoA, surf, eq, focusdist, totaldist, len,
                       lvec, varnames, linear)
   # Caculate the gradient and angle of the line
-  grad = tail(lmesh,1) - head(lmesh, 1)
-  grad = grad[[2]]/grad[[1]]
+  del = tail(lmesh,1) - head(lmesh, 1)
+  grad = del[[2]]/del[[1]]
   theta = atan(grad)
+  ydir = sign(del[[2]])
   # Caculate the free stream conditions along the line (U = 1, V = 0)
   Um = abs(sin(theta))
   Vm = sign(m) * cos(theta)   ## NEEDS TO BE CHECKED----
@@ -56,6 +57,8 @@ InterpPerpLine <- function(omesh,
            Vm = Vm) %>%
     mutate(Udash = sign(theta) * (sin(theta) * U - cos(theta) * V),
            Vdash = ifelse(surf == "upper", 1, -1) * sign(theta) * (cos(theta) * U + sin(theta) * V)) %>% ## NEEDS TO BE FIXED ----
+    mutate(Udash = ifelse(surf == "upper" & ydir == -1, -1, 1) * ifelse(surf == "lower" & ydir == 1, -1, 1) * Udash,
+           Vdash = ifelse(surf == "upper" & ydir == -1, -1, 1) * ifelse(surf == "lower" & ydir == 1, -1, 1) * Vdash) %>%
     mutate(percentUm = Udash/Um * 100,
            percentVm = Vdash/Vm * 100)
   return(lmesh)

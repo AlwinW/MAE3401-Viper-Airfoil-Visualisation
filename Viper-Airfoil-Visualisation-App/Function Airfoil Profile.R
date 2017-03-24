@@ -31,8 +31,10 @@ AoATransform <- function(data, AoA) {
 AirfoilCurve <- function(x = 0, out = "all") {
   # Test if x is within range
   # on = ifelse(x >= a - sign(a)*a*del & x <= (a + c) + sign(a + c)*(a + c)*del, 
+  # on = ifelse(x >= a & x <= (a + c),
+  #             TRUE, stop("x not on airfoil"))
   on = ifelse(x >= a & x <= (a + c),
-              TRUE, stop("x not on airfoil"))
+              1, 2)
   # Determine the camber line yc
   yc = ifelse(x < p * c + a, 
     m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2),
@@ -54,13 +56,13 @@ AirfoilCurve <- function(x = 0, out = "all") {
   yL = yc - yt*cos(theta)
   # Output depending on the Out parameter
   if(out == "all")
-    return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL))
+    return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL) * on)
   else if(out == "coord")
-    return(data.frame(x, xU, yU, xL, yL))
+    return(data.frame(x, xU, yU, xL, yL)  * on)
   else if (out == "upper")
-    return(data.frame(x = xU, y = yU))
+    return(data.frame(x = xU, y = yU)  * on)
   else if (out == "lower")
-    return(data.frame(x = xL, y = yL))
+    return(data.frame(x = xL, y = yL)  * on)
 }
 
 #--- Function for better sampling of points ----
@@ -75,6 +77,8 @@ AirfoilSamp <- function(xvec, del = c*8e-6) {
   
   # xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
   
+  if (xvec[1] == a)
+    xvec = xvec[2:length(xvec)]
   if (xvec[length(xvec)] == a + c)
     xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
   return(xvec)
@@ -99,17 +103,19 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
 }
 
 #--- Find the xL or XU value for a given x ----
-Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
+Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, del = c*1e-8, out = "x") {
   # Use the rooting finding in {stats} to find the root
-  rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
+  
+  root <- ifelse(xO < a - sign(a)*abs(a)*del*100, xO,
+                 uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
           lower = a, upper = a + c,
-          tol = tol)
+          tol = tol)$root)
   if(out == "x")
-    return(rootfind$root)
-  else if(out ==  "all")
-    return(rootfind)
-  else if(out == "str")
-    return(str(rootfind))
+    return(root)
+  # else if(out ==  "all")
+  #   return(rootfind)
+  # else if(out == "str")
+  #   return(str(rootfind))
 }
 
 #--- Helper functions for finding the gradient ----
@@ -143,11 +149,11 @@ AirfoilGradCyl <- function(xO, surf, del) {
   # Equivalent radius of the cylinder 
   r = 1.1019*t^2*c
   # Find cylinder centre
-  rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
-                      lower = a, upper = a + p*c,
-                      tol = 1e-9)
-  xc <- rootfind$root 
-  yc <- m/p^2 * (2*p*((xc-a)/c) - ((xc-a)/c)^2)
+  # rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
+  #                     lower = a, upper = a + p*c,
+  #                     tol = 1e-9)
+  xc <- a - sign(a) * r
+  yc <- 0
   # Find the gradient of the normal
   theta = acos(abs(xO - xc)/r)
   mN = ifelse(surf == "upper", -1, 1) * tan(theta) # Normal ALREADY
