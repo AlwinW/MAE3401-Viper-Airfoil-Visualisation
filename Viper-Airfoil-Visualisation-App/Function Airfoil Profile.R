@@ -30,11 +30,7 @@ AoATransform <- function(data, AoA) {
 #--- Surface Coordinates for a NACA 4 digit airfoil ----
 AirfoilCurve <- function(x = 0, out = "all") {
   # Test if x is within range
-  # on = ifelse(x >= a - sign(a)*a*del & x <= (a + c) + sign(a + c)*(a + c)*del, 
-  # on = ifelse(x >= a & x <= (a + c),
-  #             TRUE, stop("x not on airfoil"))
-  on = ifelse(x >= a & x <= (a + c),
-              1, 2)
+  on = ifelse(x >= a & x <= (a + c), 1, 0) # allows for root-finding
   # Determine the camber line yc
   yc = ifelse(x < p * c + a, 
     m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2),
@@ -47,7 +43,7 @@ AirfoilCurve <- function(x = 0, out = "all") {
   )
   # Determine the magnitude and direction of the thickness
   theta = atan(dycdx)
-  yt = 5*t*(0.2969*sqrt((x-a)/c) - 0.1260*((x-a)/c) - 0.3516*((x-a)/c)^2 +
+  yt = 5*t*(0.2969*sqrt(abs((x-a)/c)) - 0.1260*((x-a)/c) - 0.3516*((x-a)/c)^2 +
               0.2843*((x-a)/c)^3 - 0.1036*((x-a)/c)^4)
   # Add the thickness to the camber line
   xU = x - yt*sin(theta)
@@ -56,35 +52,30 @@ AirfoilCurve <- function(x = 0, out = "all") {
   yL = yc - yt*cos(theta)
   # Output depending on the Out parameter
   if(out == "all")
-    return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL) * on)
+    summary = data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL)
   else if(out == "coord")
-    return(data.frame(x, xU, yU, xL, yL)  * on)
+    summary = data.frame(x, xU, yU, xL, yL)
   else if (out == "upper")
-    return(data.frame(x = xU, y = yU)  * on)
+    summary = data.frame(x = xU, y = yU)
   else if (out == "lower")
-    return(data.frame(x = xL, y = yL)  * on)
+    summary = data.frame(x = xL, y = yL)
+  # Return the output
+  return(summary * on)
 }
 
 #--- Function for better sampling of points ----
 AirfoilSamp <- function(xvec, del = c*8e-6) {
   # Sample according to a cubic function
   xvec = -2*a/c^3 * (xvec - a)^3 + a
-  # # Replace x = a if need be
-  # if (xvec[1] == a)
-  #   # xvec[1] = a - sign(a)*abs(a)*del
-  #   xvec = xvec[2:length(xvec)]
-  # # Replace x = a+c if need be
-  
-  # xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
-  
+  # Move the TE normal slightly inward
   if (xvec[1] == a)
-    xvec = xvec[2:length(xvec)]
+    xvec[1] = a - sign(a)*abs(a)*del
   if (xvec[length(xvec)] == a + c)
     xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
   return(xvec)
 }
 
-#--- Reshape Airfoil Points into (x,y) columns and AoA transform for plotting ----
+#--- Outputs Airfoil Points into (x,y) columns and AoA transform for plotting ----
 AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   # Cluster points around LE and TE
   xvec = abs(a) * sin(seq(xmin, xmax, length.out = res)*pi/c)
@@ -123,7 +114,6 @@ AirfoilGradNACA <- function(xO, surf, del) {
   # Determine the value of x for xO on the airfoil and neighbours
   x = Airfoilx(xO, surf = surf)
   x = c(x-del, x, x + del)
-  ## MODEL THE FRONT AS A CYLINDER??
   # Determine the values
   surfval = AirfoilCurve(x, out = surf)
   
@@ -148,10 +138,10 @@ AirfoilGradNACA <- function(xO, surf, del) {
 AirfoilGradCyl <- function(xO, surf, del) {
   # Equivalent radius of the cylinder 
   r = 1.1019*t^2*c
-  # Find cylinder centre
-  # rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
-  #                     lower = a, upper = a + p*c,
-  #                     tol = 1e-9)
+  # I DON'T WANT TO HAVE TO FIND EVERY FUNCTION CALL
+  rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
+                      lower = a, upper = a + p*c,
+                      tol = 1e-9)
   xc <- a - sign(a) * r
   yc <- 0
   # Find the gradient of the normal
@@ -171,7 +161,10 @@ AirfoilGradCyl <- function(xO, surf, del) {
 
 #--- Determine the gradient of the airfoil at x ----
 AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
-  out <- ifelse(xO < a - sign(a)*abs(a)*del*100,
+  # out <- ifelse(xO < a - sign(a)*abs(a)*del*100,
+  #               AirfoilGradCyl(xO, surf, del),
+  #               AirfoilGradNACA(xO, surf, del))
+  out <- ifelse(xO < a,
                 AirfoilGradCyl(xO, surf, del),
                 AirfoilGradNACA(xO, surf, del))
   out <- out[[1]]
