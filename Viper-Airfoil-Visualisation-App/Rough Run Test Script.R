@@ -26,6 +26,7 @@ ggplot(airfoilcoord, aes(x = x, y = y, colour = surf)) +
 
 #--- Sample Plot of Normals to the Airfoil
 xvec = AirfoilSamp(seq(a, a+c, by = 0.05))
+
 focusdist = 0.2; totaldist = 0.5; len = 21
 normalplot <- ggplot () +
   geom_path(data = AoATransform(AirfoilCoord(), AoA = AoA), aes(x = x, y = y), size = 1.2)
@@ -67,7 +68,10 @@ out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(
 do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
 # Along a perpendicular lines
-xvec = AirfoilSamp(seq(a, a+c, by = 0.02)) # WHAT IF I JUST CHANGE THE START AND END PTS JABAJA
+xvec = AirfoilSamp(seq(a, a+c, by = 0.01)) # WHAT IF I JUST CHANGE THE START AND END PTS JABAJA
+
+# Quicker run
+xvec = c(head(xvec, 10), tail(xvec, 1))
 
 InterpTest1U <- pblapply(xvec, function(x) {
   list(
