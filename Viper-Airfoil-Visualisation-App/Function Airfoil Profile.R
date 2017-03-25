@@ -63,18 +63,6 @@ AirfoilCurve <- function(x = 0, out = "all") {
   return(summary * on)
 }
 
-#--- Function for better sampling of points ----
-AirfoilSamp <- function(xvec, del = c*8e-6) {
-  # Sample according to a cubic function
-  xvec = -2*a/c^3 * (xvec - a)^3 + a
-  # Move the TE normal slightly inward
-  if (xvec[1] == a)
-    xvec[1] = a - sign(a)*abs(a)*del
-  if (xvec[length(xvec)] == a + c)
-    xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
-  return(xvec)
-}
-
 #--- Outputs Airfoil Points into (x,y) columns and AoA transform for plotting ----
 AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   # Cluster points around LE and TE
@@ -93,20 +81,43 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   return(coord)
 }
 
+#--- Function for better sampling of points ----
+AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
+  # xvec = seq(a, a+c, by = 0.01)
+  # Sample according to a cubic function
+  xvec = -2*a/c^3 * (xvec - a)^3 + a
+  # Add extra x values for interpolation
+  if (cylinder == TRUE & xvec[1] == a) {
+    # Determine the number of points from -theta_c to theta_c
+    xadd = seq(-thetac, 0, 
+               length.out = ceiling(length(xvec[xvec < xsamp])/2 + 1))
+    # 'encode it' and combine
+    xadd = a - abs(a) + xadd
+    xvec = c(xadd, xvec)
+  }
+  # Remove any unecessary LE
+  LE = match(a, xvec)
+  xvec[LE] = a - sign(a)*abs(a)*del
+  if (xvec[LE] > xvec[LE +1])
+    xvec = xvec[-LE]
+  # Adjust the TE value
+  if (xvec[length(xvec)] == a + c)
+    xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
+  return(xvec)
+}
+
 #--- Find the xL or XU value for a given x ----
-Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, del = c*1e-8, out = "x") {
+Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
   # Use the rooting finding in {stats} to find the root
-  
-  root <- ifelse(xO < a - sign(a)*abs(a)*del*100, xO,
-                 uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
+  rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
           lower = a, upper = a + c,
-          tol = tol)$root)
+          tol = tol)
   if(out == "x")
-    return(root)
-  # else if(out ==  "all")
-  #   return(rootfind)
-  # else if(out == "str")
-  #   return(str(rootfind))
+    return(rootfind$root)
+  else if(out ==  "all")
+    return(rootfind)
+  else if(out == "str")
+    return(str(rootfind))
 }
 
 #--- Helper functions for finding the gradient ----
@@ -136,23 +147,16 @@ AirfoilGradNACA <- function(xO, surf, del) {
 }
 
 AirfoilGradCyl <- function(xO, surf, del) {
-  # Equivalent radius of the cylinder 
-  r = 1.1019*t^2*c
-  # I DON'T WANT TO HAVE TO FIND EVERY FUNCTION CALL
-  rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
-                      lower = a, upper = a + p*c,
-                      tol = 1e-9)
-  xc <- a - sign(a) * r
-  yc <- 0
-  # Find the gradient of the normal
-  theta = acos(abs(xO - xc)/r)
-  mN = ifelse(surf == "upper", -1, 1) * tan(theta) # Normal ALREADY
+  thetaO = xO - a + abs(a)
+  thetaO = ifelse(surf == "upper", 1, -1) * thetaO
+  mN = tan(thetaO)
+  
   # Generate the output
   out <- list(out = data.frame(
     surf = surf,
     eq = c("tan", "norm"),
-    x = xO,
-    y = yc + mN * (xO - xc),
+    x = xc -r*cos(thetaO),
+    y = yc -r*sin(thetaO),
     m = c(-1/mN, mN)) %>%
     mutate(c = -m*x + y)
   )
