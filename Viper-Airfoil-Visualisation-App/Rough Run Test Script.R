@@ -13,7 +13,7 @@ filedata <- LoadData("test.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 0 ## CHANGE THIS TO YOUR AoA
+AoA = 10 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -67,8 +67,8 @@ out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(
 })
 do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
-# Along a perpendicular lines
-xvec = AirfoilSamp(seq(a, a+c, by = 0.02), cylinder = TRUE)
+# Along a perpendicular lines ----
+xvec = AirfoilSamp(seq(a, a+c, by = 0.01), cylinder = TRUE)
 
 # Quicker run
 # xvec = c(head(xvec, 30), tail(xvec, 1))
@@ -101,11 +101,13 @@ InterpTest1Long = rbind(InterpTest1LongU, InterpTest1LongL)
 save(InterpTest1Long, file = "InterpTest1Long.RData")
 load(file = "InterpTest1Long.RData")
 
-##3C4BA0, #BE2828
+##BLUE - 3C4BA0, #RED - BE2828
 
 # Plot of U' i.e. perp to the normal from the airfoil
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Udash)) +
+  geom_point(data = filter(InterpTest1Long, Udash < -1.2), aes(x = x, y = y, colour = Udash), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, Udash > 1.2), aes(x = x, y = y, colour = Udash), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
   ylim(-0.8, 0.8) +
@@ -115,17 +117,19 @@ ggplot () +
 # Plot of U'/Um, where Um is 1 x sin(theta)
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentUm)) +
-  geom_point(data = filter(InterpTest1Long, percentUm < -150), aes(x = x, y = y, colour = P), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, percentUm < -150), aes(x = x, y = y, colour = percentUm), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, percentUm > 150), aes(x = x, y = y, colour = percentUm), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
   ylim(-0.8, 0.8) +
-  scale_colour_gradientn("U'/Um", colours = brewer.pal(11, "RdYlBu"), limits = c(-150, 150)) +
+  scale_colour_gradientn("U'/Um %", colours = brewer.pal(11, "RdYlBu"), limits = c(-150, 150)) +
   coord_fixed()
 
 # Plot of V' i.e. para to normal from the airfoil
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = Vdash)) +
-  geom_point(data = filter(InterpTest1Long, Vdash < -0.8), aes(x = x, y = y, colour = P), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, Vdash < -0.8), aes(x = x, y = y, colour = Vdash), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, Vdash > 0.8), aes(x = x, y = y, colour = Vdash), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
   ylim(-0.8, 0.8) +
@@ -135,16 +139,18 @@ ggplot () +
 # Plot of V'/Vm, where Vm is 1 x cos(theta)
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = percentVm)) +
-  geom_point(data = filter(InterpTest1Long, percentVm > 200), aes(x = x, y = y, colour = P), colour = "#3C4BA0") +
+  geom_point(data = filter(InterpTest1Long, percentVm < -200), aes(x = x, y = y, colour = percentVm), colour = "#BE2828") +
+  geom_point(data = filter(InterpTest1Long, percentVm > 200), aes(x = x, y = y, colour = percentVm), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
   ylim(-0.8, 0.8) +
-  scale_colour_gradientn("V'/Vm", colours = brewer.pal(11, "RdYlBu"), limits = c(-200, 200)) +
+  scale_colour_gradientn("V'/Vm %", colours = brewer.pal(11, "RdYlBu"), limits = c(-200, 200)) +
   coord_fixed()
 
 # Plot of Pressure
 ggplot () +
   geom_point(data = InterpTest1Long, aes(x = x, y = y, colour = P)) +
+  geom_point(data = filter(InterpTest1Long, P < -0.5), aes(x = x, y = y, colour = P), colour = "#3C4BA0") +
   geom_point(data = filter(InterpTest1Long, P > 0.5), aes(x = x, y = y, colour = P), colour = "#BE2828") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
