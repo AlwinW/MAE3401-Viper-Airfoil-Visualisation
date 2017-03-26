@@ -30,11 +30,7 @@ AoATransform <- function(data, AoA) {
 #--- Surface Coordinates for a NACA 4 digit airfoil ----
 AirfoilCurve <- function(x = 0, out = "all") {
   # Test if x is within range
-  # on = ifelse(x >= a - sign(a)*a*del & x <= (a + c) + sign(a + c)*(a + c)*del, 
-  # on = ifelse(x >= a & x <= (a + c),
-  #             TRUE, stop("x not on airfoil"))
-  on = ifelse(x >= a & x <= (a + c),
-              1, 2)
+  on = ifelse(x >= a & x <= (a + c), 1, 0) # allows for root-finding
   # Determine the camber line yc
   yc = ifelse(x < p * c + a, 
     m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2),
@@ -47,7 +43,7 @@ AirfoilCurve <- function(x = 0, out = "all") {
   )
   # Determine the magnitude and direction of the thickness
   theta = atan(dycdx)
-  yt = 5*t*(0.2969*sqrt((x-a)/c) - 0.1260*((x-a)/c) - 0.3516*((x-a)/c)^2 +
+  yt = 5*t*(0.2969*sqrt(abs((x-a)/c)) - 0.1260*((x-a)/c) - 0.3516*((x-a)/c)^2 +
               0.2843*((x-a)/c)^3 - 0.1036*((x-a)/c)^4)
   # Add the thickness to the camber line
   xU = x - yt*sin(theta)
@@ -56,35 +52,18 @@ AirfoilCurve <- function(x = 0, out = "all") {
   yL = yc - yt*cos(theta)
   # Output depending on the Out parameter
   if(out == "all")
-    return(data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL) * on)
+    summary = data.frame(x, yc, dycdx, theta, yt,  xU, yU,  xL, yL)
   else if(out == "coord")
-    return(data.frame(x, xU, yU, xL, yL)  * on)
+    summary = data.frame(x, xU, yU, xL, yL)
   else if (out == "upper")
-    return(data.frame(x = xU, y = yU)  * on)
+    summary = data.frame(x = xU, y = yU)
   else if (out == "lower")
-    return(data.frame(x = xL, y = yL)  * on)
+    summary = data.frame(x = xL, y = yL)
+  # Return the output
+  return(summary * on)
 }
 
-#--- Function for better sampling of points ----
-AirfoilSamp <- function(xvec, del = c*8e-6) {
-  # Sample according to a cubic function
-  xvec = -2*a/c^3 * (xvec - a)^3 + a
-  # # Replace x = a if need be
-  # if (xvec[1] == a)
-  #   # xvec[1] = a - sign(a)*abs(a)*del
-  #   xvec = xvec[2:length(xvec)]
-  # # Replace x = a+c if need be
-  
-  # xvec <- xvec[xvec >= a - sign(a)*abs(a)*del]
-  
-  if (xvec[1] == a)
-    xvec = xvec[2:length(xvec)]
-  if (xvec[length(xvec)] == a + c)
-    xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
-  return(xvec)
-}
-
-#--- Reshape Airfoil Points into (x,y) columns and AoA transform for plotting ----
+#--- Outputs Airfoil Points into (x,y) columns and AoA transform for plotting ----
 AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   # Cluster points around LE and TE
   xvec = abs(a) * sin(seq(xmin, xmax, length.out = res)*pi/c)
@@ -102,20 +81,53 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   return(coord)
 }
 
+#--- Function for better sampling of points ----
+AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
+  # xvec = seq(a, a+c, by = 0.01)
+  # Sample according to a cubic function
+  xvec = -2*a/c^3 * (xvec - a)^3 + a
+  # Add extra x values for interpolation
+  if (cylinder != FALSE & xvec[1] == a) {
+    # Determine the number of points from -theta_c to theta_c
+    xadd = seq(-thetac, -0.0001, 
+               length.out = ceiling(length(xvec[xvec < xsamp])/5 + 1))
+    xadd = xadd[-(xadd == -thetac)]
+    # 'encode it' and combine
+    xadd = a - abs(a) + xadd
+    # Return the result depending on what's required
+    if (cylinder == TRUE)
+      xvec = c(xadd, xvec)
+    if (cylinder == "only")
+      xvec = xadd
+    }
+    
+  # Remove any unecessary LE
+  LE = match(a, xvec)
+ 
+  # xvec[LE] = a - sign(a)*abs(a)*del
+  # if (!is.na(LE) & xvec[LE] > xvec[LE +1])
+  #   xvec = xvec[-LE]
+  if (xvec[LE] == a)
+    xvec = xvec[-LE]
+  # Adjust the TE value
+  if (xvec[length(xvec)] == a + c)
+    xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
+
+  return(xvec)
+}
+
 #--- Find the xL or XU value for a given x ----
-Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, del = c*1e-8, out = "x") {
+Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
   # Use the rooting finding in {stats} to find the root
-  
-  root <- ifelse(xO < a - sign(a)*abs(a)*del*100, xO,
-                 uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
+  rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
           lower = a, upper = a + c,
-          tol = tol)$root)
+          tol = tol)
   if(out == "x")
-    return(root)
-  # else if(out ==  "all")
-  #   return(rootfind)
-  # else if(out == "str")
-  #   return(str(rootfind))
+    return(rootfind$root)
+  else if(out ==  "all")
+    return(rootfind)
+  else if(out == "str")
+    return(str(rootfind))
 }
 
 #--- Helper functions for finding the gradient ----
@@ -123,7 +135,6 @@ AirfoilGradNACA <- function(xO, surf, del) {
   # Determine the value of x for xO on the airfoil and neighbours
   x = Airfoilx(xO, surf = surf)
   x = c(x-del, x, x + del)
-  ## MODEL THE FRONT AS A CYLINDER??
   # Determine the values
   surfval = AirfoilCurve(x, out = surf)
   
@@ -146,23 +157,16 @@ AirfoilGradNACA <- function(xO, surf, del) {
 }
 
 AirfoilGradCyl <- function(xO, surf, del) {
-  # Equivalent radius of the cylinder 
-  r = 1.1019*t^2*c
-  # Find cylinder centre
-  # rootfind <- uniroot(function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
-  #                     lower = a, upper = a + p*c,
-  #                     tol = 1e-9)
-  xc <- a - sign(a) * r
-  yc <- 0
-  # Find the gradient of the normal
-  theta = acos(abs(xO - xc)/r)
-  mN = ifelse(surf == "upper", -1, 1) * tan(theta) # Normal ALREADY
+  thetaO = xO - a + abs(a)
+  thetaO = ifelse(surf == "upper", 1, -1) * thetaO
+  mN = tan(thetaO)
+  
   # Generate the output
   out <- list(out = data.frame(
     surf = surf,
     eq = c("tan", "norm"),
-    x = xO,
-    y = yc + mN * (xO - xc),
+    x = xc -r*cos(thetaO),
+    y = yc -r*sin(thetaO),
     m = c(-1/mN, mN)) %>%
     mutate(c = -m*x + y)
   )
@@ -171,7 +175,10 @@ AirfoilGradCyl <- function(xO, surf, del) {
 
 #--- Determine the gradient of the airfoil at x ----
 AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
-  out <- ifelse(xO < a - sign(a)*abs(a)*del*100,
+  # out <- ifelse(xO < a - sign(a)*abs(a)*del*100,
+  #               AirfoilGradCyl(xO, surf, del),
+  #               AirfoilGradNACA(xO, surf, del))
+  out <- ifelse(xO < a,
                 AirfoilGradCyl(xO, surf, del),
                 AirfoilGradNACA(xO, surf, del))
   out <- out[[1]]
