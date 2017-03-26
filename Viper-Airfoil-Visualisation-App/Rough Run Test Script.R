@@ -13,7 +13,7 @@ filedata <- LoadData("test.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 0 ## CHANGE THIS TO YOUR AoA
+AoA = 10 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -25,15 +25,17 @@ ggplot(airfoilcoord, aes(x = x, y = y, colour = surf)) +
   coord_fixed()
 
 #--- Sample Plot of Normals to the Airfoil ----
-xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = "only")
+xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
 
 focusdist = 0.05; totaldist = 0.5; len = 21
 normalplot <- ggplot () +
   geom_path(data = AoATransform(AirfoilCoord(), AoA = AoA), aes(x = x, y = y), size = 1.2)
 for (x in xvec) {
   # x value
-  normalplot = normalplot +
-    geom_vline(xintercept = x, colour = "grey")
+  if (AoA == 1 & x >= a) {
+    normalplot = normalplot +
+      geom_vline(xintercept = x, colour = "grey")
+  }
   # acutal plot
   for (surf in c("upper", "lower")) {
     normalplot = normalplot +
@@ -68,10 +70,10 @@ out <- by(data = airfoilmeshlong, INDICES = airfoilmeshlong$var, FUN = function(
 do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
 # Along a perpendicular lines ----
-xvec = AirfoilSamp(seq(a, a+c, by = 0.02), cylinder = TRUE)
+xvec = AirfoilSamp(seq(a, a+c, by = 0.025), cylinder = TRUE)
 
 # Quicker run
-xvec = c(head(xvec, 30), tail(xvec, 1))
+# xvec = c(head(xvec, 30), tail(xvec, 1))
 
 InterpTest1U <- pblapply(xvec, function(x) {
   list(

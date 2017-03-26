@@ -90,7 +90,7 @@ AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
   if (cylinder != FALSE & xvec[1] == a) {
     # Determine the number of points from -theta_c to theta_c
     xadd = seq(-thetac, -0.0001, 
-               length.out = ceiling(length(xvec[xvec < xsamp])/4 + 1))
+               length.out = ceiling(length(xvec[xvec < xsamp])/5 + 1))
     xadd = xadd[-(xadd == -thetac)]
     # 'encode it' and combine
     xadd = a - abs(a) + xadd
@@ -103,8 +103,11 @@ AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
     
   # Remove any unecessary LE
   LE = match(a, xvec)
-  xvec[LE] = a - sign(a)*abs(a)*del
-  if (!is.na(LE) & xvec[LE] > xvec[LE +1])
+ 
+  # xvec[LE] = a - sign(a)*abs(a)*del
+  # if (!is.na(LE) & xvec[LE] > xvec[LE +1])
+  #   xvec = xvec[-LE]
+  if (xvec[LE] == a)
     xvec = xvec[-LE]
   # Adjust the TE value
   if (xvec[length(xvec)] == a + c)
