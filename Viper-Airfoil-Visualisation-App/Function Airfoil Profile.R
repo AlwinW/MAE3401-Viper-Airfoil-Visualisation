@@ -87,22 +87,29 @@ AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
   # Sample according to a cubic function
   xvec = -2*a/c^3 * (xvec - a)^3 + a
   # Add extra x values for interpolation
-  if (cylinder == TRUE & xvec[1] == a) {
+  if (cylinder != FALSE & xvec[1] == a) {
     # Determine the number of points from -theta_c to theta_c
-    xadd = seq(-thetac, 0, 
+    xadd = seq(-thetac, -0.0001, 
                length.out = ceiling(length(xvec[xvec < xsamp])/4 + 1))
+    xadd = xadd[-(xadd == -thetac)]
     # 'encode it' and combine
     xadd = a - abs(a) + xadd
-    xvec = c(xadd, xvec)
-  }
+    # Return the result depending on what's required
+    if (cylinder == TRUE)
+      xvec = c(xadd, xvec)
+    if (cylinder == "only")
+      xvec = xadd
+    }
+    
   # Remove any unecessary LE
   LE = match(a, xvec)
   xvec[LE] = a - sign(a)*abs(a)*del
-  if (xvec[LE] > xvec[LE +1])
+  if (!is.na(LE) & xvec[LE] > xvec[LE +1])
     xvec = xvec[-LE]
   # Adjust the TE value
   if (xvec[length(xvec)] == a + c)
     xvec[length(xvec)] = a + c - sign(a + c)*abs(a + c)*del
+
   return(xvec)
 }
 
