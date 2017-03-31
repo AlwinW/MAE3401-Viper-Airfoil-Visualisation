@@ -20,7 +20,8 @@ InterpPath <- function(omesh,
     lmeshv <- suppressWarnings(
       as.data.frame(interpp(x = omesh$x, y = omesh$y, z = omesh[[var]],
                             xo = lvec$x, yo = lvec$y,
-                            linear = linear)))
+                            linear = linear,
+                            extrap = TRUE)))
     lmesh <- cbind(lmesh, lmeshv[3])
   }
   # Give the columns meaningful names

@@ -71,10 +71,10 @@ do.call(grid.arrange, out) # NEEDS TO BE FIXED ----
 
 # Along a perpendicular lines ----
 omesh = filedata
-xvec = AirfoilSamp(seq(a, a+c, by = 0.1), cylinder = TRUE)
+xvec = AirfoilSamp(seq(a, a+c, by = 0.025), cylinder = TRUE)
 
 # Quicker run
-xvec = c(head(xvec, 3), tail(xvec, 1))
+xvec = c(head(xvec, 30), tail(xvec, 1))
 
 InterpTest1U <- pblapply(xvec, function(x) {
   list(
