@@ -9,11 +9,11 @@ source("Function Airfoil Profile.R")
 source("Function Interpolation.R")
 
 #--- Initial Data ----
-filedata <- LoadData("test.dat") ## CHANGE THIS TO YOUR FILE
+filedata <- LoadData("test000.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 10 ## CHANGE THIS TO YOUR AoA
+AoA = 0 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -22,7 +22,7 @@ airfoilcoord <- AirfoilCoord(AoA = AoA, res = 100)
 
 # Along a perpendicular lines ----
 omesh = filedata
-xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
+xvec = AirfoilSamp(seq(a, a+c, by = 0.015), cylinder = TRUE)
 
 # Quicker run
 # xvec = c(head(xvec, 30), tail(xvec, 1))
@@ -42,6 +42,32 @@ print(max(BLtest$dist[which.max(BLtest$Udash)]))
 # ggplot(BLtest) + 
 #   geom_path(aes(x = dist, y = 1 - Udash, colour = "1-U'"))
 
+surf = "lower"
+blggplotoverlay <- ggplot()
+for (x in xvec) {
+  interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
+  # Find the row for max 
+  bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
+  blggplotoverlay <-  blggplotoverlay + 
+    geom_point(data = interp[1:bl,], aes(x = Udash/Um, y = dist, colour = x[1]))
+  # # Find the thicknesses
+  # # This assumes an integral that extends all the way to infinity
+  # # Alternatively, Ur = U / U(BL) and sum from 0 to dist(bl)
+  # thickness <- interp[1:bl,] %>%
+  #   mutate(Ur = Udash / interp$Udash[bl]) %>%
+  #   mutate(dispth = 1 - Ur,
+  #          mometh = Ur*(1 - Ur),
+  #          kineth = Ur*(1 - (Ur)^2)) %>%
+  #   select(dist, dispth, mometh, kineth) %>%
+  #   mutate(dispth = 1/2 * (dispth + lag(dispth,1)) * (dist - lag(dist,1)),
+  #          mometh = 1/2 * (mometh + lag(mometh,1)) * (dist - lag(dist,1)),
+  #          kineth = 1/2 * (kineth + lag(kineth,1)) * (dist - lag(dist,1)))
+  # thickness <- thickness[2:nrow(thickness),]
+  print(bl)
+}
+blggplotoverlay
+
+
 
 BLValues <- function(omesh, xvec, surf = "upper") {
   # Apply a function across each x in xvec
@@ -49,13 +75,14 @@ BLValues <- function(omesh, xvec, surf = "upper") {
     # Find the interpolations
     interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
     # Find the row for max 
-    bl <- min(which(interp$Udash >= 0.99 * max(interp$Udash[!is.na(interp$Udash)])))
+    bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
+    # ggplot(interp[1:bl,]) + geom_point(aes(x = Udash/Um, y = dist)) + ylim(0,NA)
     # Find the thicknesses
     # This assumes an integral that extends all the way to infinity
     # Alternatively, Ur = U / U(BL) and sum from 0 to dist(bl)
     thickness <- interp[1:bl,] %>%
       mutate(Ur = Udash / interp$Udash[bl]) %>%
-      mutate(dispth = 1 - Udash/Um,
+      mutate(dispth = 1 - Ur,
              mometh = Ur*(1 - Ur),
              kineth = Ur*(1 - (Ur)^2)) %>%
       select(dist, dispth, mometh, kineth) %>%
@@ -95,8 +122,12 @@ BLLong <- function(interpval, out = "BL") {
 }
 
 
-asdf <- BLValues(omesh, xvec, surf = "lower")
-asdfL <- BLLong(asdf)
+asdfU <- BLValues(omesh, xvec, surf = "upper")
+asdfUL <- BLLong(asdfU)
+asdfL <- BLValues(omesh, xvec, surf = "lower")
+asdfLL <- BLLong(asdfL)
+
+asdfL = cbind(asdfU, asdfL)
 # Plot of U' i.e. perp to the normal from the airfoil
 ggplot () +
   geom_point(data = asdfL$interp, aes(x = x, y = y, colour = Udash)) +
