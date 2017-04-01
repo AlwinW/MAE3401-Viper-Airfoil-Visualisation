@@ -42,30 +42,17 @@ print(max(BLtest$dist[which.max(BLtest$Udash)]))
 # ggplot(BLtest) + 
 #   geom_path(aes(x = dist, y = 1 - Udash, colour = "1-U'"))
 
-surf = "lower"
-blggplotoverlay <- ggplot()
-for (x in xvec) {
-  interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
-  # Find the row for max 
-  bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
-  blggplotoverlay <-  blggplotoverlay + 
-    geom_point(data = interp[1:bl,], aes(x = Udash/Um, y = dist, colour = x[1]))
-  # # Find the thicknesses
-  # # This assumes an integral that extends all the way to infinity
-  # # Alternatively, Ur = U / U(BL) and sum from 0 to dist(bl)
-  # thickness <- interp[1:bl,] %>%
-  #   mutate(Ur = Udash / interp$Udash[bl]) %>%
-  #   mutate(dispth = 1 - Ur,
-  #          mometh = Ur*(1 - Ur),
-  #          kineth = Ur*(1 - (Ur)^2)) %>%
-  #   select(dist, dispth, mometh, kineth) %>%
-  #   mutate(dispth = 1/2 * (dispth + lag(dispth,1)) * (dist - lag(dist,1)),
-  #          mometh = 1/2 * (mometh + lag(mometh,1)) * (dist - lag(dist,1)),
-  #          kineth = 1/2 * (kineth + lag(kineth,1)) * (dist - lag(dist,1)))
-  # thickness <- thickness[2:nrow(thickness),]
-  print(bl)
-}
-blggplotoverlay
+# surf = "lower"
+# blggplotoverlay <- ggplot()
+# for (x in xvec) {
+#   interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
+#   # Find the row for max 
+#   bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
+#   blggplotoverlay <-  blggplotoverlay + 
+#     geom_point(data = interp[1:bl,], aes(x = Udash/Um, y = dist, colour = x[1]))
+#   print(bl)
+# }
+# blggplotoverlay
 
 
 
@@ -127,7 +114,10 @@ asdfUL <- BLLong(asdfU)
 asdfL <- BLValues(omesh, xvec, surf = "lower")
 asdfLL <- BLLong(asdfL)
 
-asdfL = cbind(asdfU, asdfL)
+asdfLong = list(
+  summary = rbind(asdfUL$summary, asdfLL$summary),
+  interp = rbind(asdfUL$interp, asdfLL$interp)
+)
 # Plot of U' i.e. perp to the normal from the airfoil
 ggplot () +
   geom_point(data = asdfL$interp, aes(x = x, y = y, colour = Udash)) +
