@@ -9,11 +9,11 @@ source("Function Airfoil Profile.R")
 source("Function Interpolation.R")
 
 #--- Initial Data ----
-filedata <- LoadData("test000.dat") ## CHANGE THIS TO YOUR FILE
+filedata <- LoadData("test-40.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 0 ## CHANGE THIS TO YOUR AoA
+AoA = -400 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 
@@ -37,22 +37,27 @@ ggplot(BLtest) +
   ylim(c(0,1))
 print(max(BLtest$dist[which.max(BLtest$Udash)]))
 
-# ggplot(BLtest) + 
+# ggplot(BLtest) +
 #   geom_path(aes(x = dist, y = 1 - Udash/Um, colour = "1-U'/Um"))
-# ggplot(BLtest) + 
+# ggplot(BLtest) +
 #   geom_path(aes(x = dist, y = 1 - Udash, colour = "1-U'"))
 
-# surf = "lower"
-# blggplotoverlay <- ggplot()
-# for (x in xvec) {
-#   interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
-#   # Find the row for max 
-#   bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
-#   blggplotoverlay <-  blggplotoverlay + 
-#     geom_point(data = interp[1:bl,], aes(x = Udash/Um, y = dist, colour = x[1]))
-#   print(bl)
-# }
-# blggplotoverlay
+surf = "lower"
+blggplotoverlay <- ggplot()
+blggplotoverlayall <- ggplot()
+for (x in xvec) {
+  interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
+  # Find the row for max
+  blU <- max(interp$Udash[c(rep(FALSE, 4),!is.na(interp$Udash[5:nrow(interp)]))])
+  bl <- min(which(interp$Udash[5:nrow(interp)] >= blU - abs(blU)*0.02))
+  blggplotoverlay <-  blggplotoverlay +
+    geom_point(data = interp[1:bl,], aes(x = Udash/Um, y = dist, colour = x[1]))
+  blggplotoverlayall <-  blggplotoverlayall +
+    geom_point(data = interp, aes(x = Udash/Um, y = dist, colour = x[1]))
+  print(bl)
+}
+blggplotoverlay
+blggplotoverlayall
 
 
 
@@ -62,7 +67,8 @@ BLValues <- function(omesh, xvec, surf = "upper") {
     # Find the interpolations
     interp <- InterpPerpLine(omesh, x, AoA = AoA, surf = surf)
     # Find the row for max 
-    bl <- min(which(interp$Udash >= 0.98 * max(interp$Udash[!is.na(interp$Udash)])))
+    blU <- max(interp$Udash[c(rep(FALSE, 4),!is.na(interp$Udash[5:nrow(interp)]))])
+    bl <- min(which(interp$Udash[5:nrow(interp)] >= blU - abs(blU)*0.02))
     # ggplot(interp[1:bl,]) + geom_point(aes(x = Udash/Um, y = dist)) + ylim(0,NA)
     # Find the thicknesses
     # This assumes an integral that extends all the way to infinity
@@ -120,9 +126,9 @@ asdfLong = list(
 )
 # Plot of U' i.e. perp to the normal from the airfoil
 ggplot () +
-  geom_point(data = asdfL$interp, aes(x = x, y = y, colour = Udash)) +
-  geom_point(data = filter(asdfL$interp, Udash < -1.2), aes(x = x, y = y, colour = Udash), colour = "#BE2828") +
-  geom_point(data = filter(asdfL$interp, Udash > 1.2), aes(x = x, y = y, colour = Udash), colour = "#3C4BA0") +
+  geom_point(data = asdfLong$interp, aes(x = x, y = y, colour = Udash)) +
+  geom_point(data = filter(asdfLong$interp, Udash < -1.2), aes(x = x, y = y, colour = Udash), colour = "#BE2828") +
+  geom_point(data = filter(asdfLong$interp, Udash > 1.2), aes(x = x, y = y, colour = Udash), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(-1.2, 0.8) +
   ylim(-0.8, 0.8) +
@@ -130,16 +136,16 @@ ggplot () +
   coord_fixed()
 
 # BL PLOT
-asdfbl <- filter(asdfL$summary, dispth > 0)
+asdfbl <- filter(asdfLong$summary, dispth > 0)
 xmin = min(c(asdfbl$xbl, airfoilcoord$x))
 xmax = max(c(asdfbl$xbl, airfoilcoord$x))
 ymin = min(c(asdfbl$ybl, airfoilcoord$y))
 ymax = max(c(asdfbl$ybl, airfoilcoord$y))
 ggplot() + 
-  geom_path(data = asdfbl, aes(x = xbl, y = ybl)) +
-  geom_point(data = asdfL$interp, aes(x = x, y = y, colour = Udash)) +
-  geom_point(data = filter(asdfL$interp, Udash < -1.2), aes(x = x, y = y, colour = Udash), colour = "#BE2828") +
-  geom_point(data = filter(asdfL$interp, Udash > 1.2), aes(x = x, y = y, colour = Udash), colour = "#3C4BA0") +
+  geom_path(data = asdfbl, aes(x = xbl, y = ybl), size = 2) +
+  geom_point(data = asdfLong$interp, aes(x = x, y = y, colour = Udash)) +
+  geom_point(data = filter(asdfLong$interp, Udash < -1.2), aes(x = x, y = y, colour = Udash), colour = "#BE2828") +
+  geom_point(data = filter(asdfLong$interp, Udash > 1.2), aes(x = x, y = y, colour = Udash), colour = "#3C4BA0") +
   geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
   xlim(xmin, xmax) +
   ylim(ymin, ymax) +
