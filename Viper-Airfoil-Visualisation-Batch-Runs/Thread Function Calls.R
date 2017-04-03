@@ -52,13 +52,13 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   
   interpvalU <- pblapply(xvec, function(x) {
     # Find the interpolations
-    lvec = NormalPoint(x, dist, surf = "upper")
+    lvec = NormalPoint(x, dist, AoA, surf = "upper")
     interp <- InterpProj(omesh, lvec)
     return(interp)
   })
   interpvalL <- pblapply(xvec, function(x) {
     # Find the interpolations
-    lvec = NormalPoint(x, dist, surf = "lower")
+    lvec = NormalPoint(x, dist, AoA, surf = "lower")
     interp <- InterpProj(omesh, lvec)
     return(interp)
   })
@@ -67,8 +67,8 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   
   plot_Udash_Rough <- ggplot () +
     geom_point(data = interpvalLong, aes(x = xp, y = yp, colour = Udash)) +
-    geom_point(data = filter(interpvalLong, Udash < -1.2), aes(x = xp, y = yp, colour = Udash), colour = "#BE2828") +
-    geom_point(data = filter(interpvalLong, Udash > 1.2), aes(x = xp, y = yp, colour = Udash), colour = "#3C4BA0") +
+    geom_point(data = filter(interpvalLong, Udash < -1.2), aes(x = xp, y = yp), colour = "#BE2828") +
+    geom_point(data = filter(interpvalLong, Udash > 1.2), aes(x = xp, y = yp), colour = "#3C4BA0") +
     geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
     xlim(-1.2, 0.8) +
     ylim(-0.8, 0.8) +
@@ -76,5 +76,18 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
     coord_fixed() +
     labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: U'"))
   ggsave(paste0(ID, "_Udash_Rough.png"), plot = plot_Udash_Rough, path = savepath,
+         width = 5, height = 4, scale = 1.2, dpi = 300)
+  
+  plot_Vdash_Rough <- ggplot () +
+    geom_point(data = interpvalLong, aes(x = xp, y = yp, colour = Vdash)) +
+    geom_point(data = filter(interpvalLong, Udash < -1.2), aes(x = xp, y = yp), colour = "#BE2828") +
+    geom_point(data = filter(interpvalLong, Udash > 1.2), aes(x = xp, y = yp), colour = "#3C4BA0") +
+    geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+    xlim(-1.2, 0.8) +
+    ylim(-0.8, 0.8) +
+    scale_colour_gradientn("V'", colours = brewer.pal(11, "RdYlBu"), limits = c(-1.2, 1.2)) +
+    coord_fixed() +
+    labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: V'"))
+  ggsave(paste0(ID, "_Vdash_Rough.png"), plot = plot_Vdash_Rough, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
 }
