@@ -51,7 +51,8 @@ AirfoilGradNACA <- function(xO, surf, del) {
   out <- list(out = data.frame(
     surf = surf,
     eq = c("tan", "norm"),
-    x = surfval$x[2],
+    # x = surfval$x[2],
+    x = xO,
     y = surfval$y[2],
     m = c(dydx, -1/dydx)) %>%
       mutate(c = -m*x + y)
@@ -88,6 +89,14 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
                 AirfoilGradNACA(xO, surf, del))
   out <- out[[1]]
   return(out)
+}
+
+
+#--- Creating dist vector for interp ----
+NormalSamp <- function(dist, polyn = 3) {
+  distmax = max(dist)^(polyn-1)
+  dist = dist^polyn /(distmax)
+  return(dist)
 }
 
 

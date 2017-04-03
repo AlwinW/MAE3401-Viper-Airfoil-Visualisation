@@ -77,13 +77,13 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
   # Cluster points around LE and TE
   xvec = abs(a) * sin(seq(xmin, xmax, length.out = res)*pi/c)
   # Generate coordinates in a tidy format
-  coord = AirfoilCurve(xvec, out = "coord") %>%
+  coord <-  AirfoilCurve(xvec, out = "coord") %>%
     rename(xO = x) %>%
     gather(key, value, -xO) %>%
     mutate(coord = substr(key,1,1), surf = substr(key, 2,2)) %>%
     select(-key) %>%
     spread(coord, value) %>%
-    mutate(surf = factor(surf, levels = c("U", "L"))) %>%
+    mutate(surf = factor(surf, levels = c("L", "U"))) %>%
     arrange(surf, xO * ifelse(surf == "U", 1, -1)) %>%
     select(x, y, surf)
   coord = AoATransform(coord, AoA = AoA)

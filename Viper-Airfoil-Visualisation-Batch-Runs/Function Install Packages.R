@@ -5,14 +5,14 @@
 #--- Packages to Install ----
 packages <- c(
   "parallel",
-  "MASS",
   "gridExtra",
   "tidyr",
   "dplyr",
   "purrr",
   "pbapply",
   "ggplot2",
-  "RColorBrewer"
+  "RColorBrewer",
+  "akima"
 )
 
 
