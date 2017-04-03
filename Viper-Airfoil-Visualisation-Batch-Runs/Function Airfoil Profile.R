@@ -1,6 +1,7 @@
-#----------------------------
+#---------------------------->
 #--- Functions for Airfoil Calculations
-#============================
+#--- Alwin Wang MAE3401
+#============================>
 
 #--- Transform (x,y) based on AoA ----
 # Takes the original data and assumes col 1 is x and col 2 is y
@@ -87,4 +88,21 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
     select(x, y, surf)
   coord = AoATransform(coord, AoA = AoA)
   return(coord)
+}
+
+
+#--- Find xO for req xL or xU ----
+# Using root finding techniques, the value of x for xO = xL, xU is found
+Airfoilx <- function(xO,  surf = "upper", tol = 1e-9, out = "x") {
+  # Use the rooting finding in {stats} to find the root
+  rootfind <- uniroot(function(x) AirfoilCurve(x, out = surf)$x - xO,
+                      lower = a, upper = a + c,
+                      tol = tol)
+  # Ouput depending on out parameter
+  if(out == "x")
+    return(rootfind$root)
+  else if(out ==  "all")
+    return(rootfind)
+  else if(out == "str")
+    return(str(rootfind))
 }

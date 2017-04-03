@@ -1,6 +1,7 @@
-#----------------------------
+#---------------------------->
 #--- Thread Function Calls
-#============================
+#--- Alwin Wang MAE3401
+#============================>
 
 #--- Full functionality ----
 # This thread goes through each of the main functions
