@@ -4,22 +4,17 @@
 
 #--- Packages to Install ----
 packages <- c(
-  # "shiny",
-  # "shinyAce",
-  # "rsconnect",
   "parallel",
   "MASS",
-  # "lazyeval",
   "gridExtra",
   "tidyr",
   "dplyr",
   "purrr",
   "pbapply",
   "ggplot2",
-  "RColorBrewer" #,
-  # "reshape2",
-  # "akima"
+  "RColorBrewer"
 )
+
 
 #--- Install Missing Packages ----
 LoadPackages <- function() {
@@ -31,9 +26,3 @@ LoadPackages <- function() {
   # Load packages
   temp <- lapply(packages, require, character.only = TRUE)
 }
-
-
-#--- ggplot Theme ----
-# theme_set(theme_linedraw())
-theme_set(theme_bw())
-options(scipen = 10)

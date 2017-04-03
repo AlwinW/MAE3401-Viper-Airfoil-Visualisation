@@ -13,7 +13,7 @@ filedata <- LoadData("test.dat") ## CHANGE THIS TO YOUR FILE
 NACA = 4412
 a = -0.5
 c = 1
-AoA = 10 ## CHANGE THIS TO YOUR AoA
+AoA = -40 ## CHANGE THIS TO YOUR AoA
 Re = 50
 airfoildata <- AirfoilData(NACA, a, c)
 

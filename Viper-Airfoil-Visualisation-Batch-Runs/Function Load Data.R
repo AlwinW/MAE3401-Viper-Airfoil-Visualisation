@@ -29,6 +29,8 @@ LoadFile <- function(filename, foldername = NULL) {
   colnames(filedata) <- c("x", "y", "U", "V", "P", "vort_xy_plane")
   # Combind the filedata and metadata into one list
   filedata <- list(
+    ID = paste("Re", sprintf("%04d", Re), 
+               "AoA", sprintf("%03d", AoA), sep = ""),    
     Re = Re,
     AoA = AoA,
     filepath = filepath,
@@ -38,6 +40,7 @@ LoadFile <- function(filename, foldername = NULL) {
   return(filedata)
 }
 
+
 #--- Load Data in a Folder ----
 # This takes a folder name and reads the list of files.
 # Each of the files is then read by calling the "LoadFile" function
@@ -46,13 +49,15 @@ LoadFolder <- function(foldername = "Input_Data") {
   filelist <- list.files(path = foldername, pattern = "*.dat")
   # Load the data for each file using parallel cores
   parallelCluster <- parallel::makeCluster(parallel::detectCores())
-  folderdata <- parallel::parLapply(
-    parallelCluster, filelist, LoadFile, foldername = foldername)
+  folderdata <- pblapply(
+    filelist, 
+    LoadFile, foldername = foldername,
+    cl = parallelCluster
+  )
   stopCluster(parallelCluster)
   # Recombine Re and AoA since the order may have been shifted around
   #   during the parallel work
-  listnames <- unlist(lapply(folderdata, function(x) 
-    paste("Re", sprintf("%04d", x$Re), "AoA", sprintf("%03d", x$AoA), sep = "")
+  listnames <- unlist(lapply(folderdata, function(x) x$ID
     ))
   # Set the names of folderdata and then reorder them
   names(folderdata) <- listnames
@@ -61,7 +66,8 @@ LoadFolder <- function(foldername = "Input_Data") {
   return(folderdata)
 }
 
-#--- Summarise Critical Airfoil Data ----
+
+#--- Summarise Airfoil Data ----
 # Given a NACA, it puts the important information into the global environment
 AirfoilData <- function(NACA, a, c, env = FALSE) {
   # Max camber; Location of max; Thickness
