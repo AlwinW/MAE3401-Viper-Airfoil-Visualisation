@@ -1,9 +1,6 @@
-# History files
-.Rhistory
-.Rapp.history
+# History files .Rhistory .Rapp.history
 
-# Session Data files
-.RData
+# Session Data files .RData
 
 # Example code in package build process
 *-Ex.R
