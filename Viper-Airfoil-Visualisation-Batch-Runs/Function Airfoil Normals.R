@@ -91,3 +91,27 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
 }
 
 
+#--- (x,y) distance dist from xO ----
+# Given: xO and surf
+# Finds: (x, y) at a normal distance away from the surface
+NormalPoint <- function(xO, dist, AoA = 0, surf = "upper", eq = "norm") {
+  # Find the gradient at the xO point
+  gradint <- AirfoilGrads(xO, surf = surf) # Note in AirfoilGrads it rootfinds for x already
+  # Determine the location of (xp, yp) for a given distance
+  gradint <- gradint %>%
+    filter(surf == get("surf") & eq == get("eq")) %>%
+    cbind(xO, ., dist) %>%
+    mutate(xdist = sign(m) * dist/sqrt(1+m^2) * ifelse(surf=="upper",1,-1)) %>%
+    mutate(xp = x + xdist,
+           yp = y + xdist * m)
+  # Transform the (xp, yp) and (x, y) coordinates and find the vector normal to the surface
+  lvec <- cbind(
+    AoATransform(distinct(gradint[c("xp", "yp")]), AoA),
+    AoATransform(distinct(gradint[c("x", "y")]), AoA),
+    gradint[c("xO", "dist", "surf", "eq")]
+  ) %>%
+    mutate(delx = xp - x, dely = yp - y)
+  return(lvec)
+}
+
+

@@ -6,13 +6,13 @@
 #--- Transform (x,y) based on AoA ----
 # Takes the original data and assumes col 1 is x and col 2 is y
 # x and y are transformed then joined back to the other original columns
-AoATransform <- function(data, AoA) {
+AoATransform <- function(odata, AoA) {
   # Store the input data and column names
-  odata <- data
-  ocolnames <- colnames(data)
-  colnames(data[c(1,2)]) <- c("x", "y")
+  ocolnames <- colnames(odata)
+  data <- odata[c(1,2)]
+  colnames(data) <- c("x", "y")
   # Apply the transformation
-  data <- select(data, x, y) %>%
+  data <- data %>%
     mutate(
       r = sqrt(x^2 + y^2),
       theta = atan(y/x),
