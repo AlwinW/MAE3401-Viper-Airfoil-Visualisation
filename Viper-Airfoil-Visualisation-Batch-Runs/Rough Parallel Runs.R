@@ -19,12 +19,33 @@ asdfasfd <- parallel::parLapply(
 stopCluster(parallelCluster)
 
 
+#--- PBAPPLY EXAMPLE
+set.seed(1234)
+n <- 2000
+x <- rnorm(n)
+y <- rnorm(n, crossprod(t(model.matrix(~ x)), c(0, 1)), sd = 0.5)
+d <- data.frame(y, x)
+mod <- lm(y ~ x, d)
+ndat <- model.frame(mod)
+B <- 5000
+bid <- sapply(1:B, function(i) sample(nrow(ndat), nrow(ndat), TRUE))
+fun <- function(z) {
+  if (missing(z))
+    z <- sample(nrow(ndat), nrow(ndat), TRUE)
+  coef(lm(mod$call$formula, data=ndat[z,]))
+}
+parallelCluster <- makeCluster(parallel::detectCores())
+clusterExport(parallelCluster, c("fun", "mod", "ndat", "bid"))
+system.time(res1cl <- parLapply(cl = parallelCluster, 1:B, function(i) fun(bid[,i])))
+pboptions(nout = 10)
+system.time(res1pbcl <- pblapply(1:B, function(i) fun(bid[,i]), cl = parallelCluster))
+pboptions(nout = 100)
+system.time(res1pbcl <- pblapply(1:B, function(i) fun(bid[,i]), cl = parallelCluster))
+stopCluster(parallelCluster)
+#--- END
 
-
-
-parallelCluster <- parallel::makeCluster(parallel::detectCores())
-asdfasfd <- parallel::parLapply(
-  parallelCluster,
+parallelCluster <- makeCluster(parallel::detectCores())
+a1 <- pblapply(
   folderdata,
   function(filedata) {
     
@@ -38,7 +59,8 @@ asdfasfd <- parallel::parLapply(
     }
     
     with(filedata, dummythread(Re, AoA))
-    }
+    },
+  cl = parallelCluster
   )
 stopCluster(parallelCluster)
 
