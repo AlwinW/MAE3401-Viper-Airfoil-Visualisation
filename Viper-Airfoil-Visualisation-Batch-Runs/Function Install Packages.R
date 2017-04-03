@@ -7,6 +7,7 @@ packages <- c(
   # "shiny",
   # "shinyAce",
   # "rsconnect",
+  "parallel",
   "MASS",
   # "lazyeval",
   "gridExtra",
