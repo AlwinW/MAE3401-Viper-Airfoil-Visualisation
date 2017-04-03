@@ -38,7 +38,7 @@ LoadFile <- function(filename, foldername = NULL) {
   return(filedata)
 }
 
-#--- Load a Folder ----
+#--- Load Data in a Folder ----
 # This takes a folder name and reads the list of files.
 # Each of the files is then read by calling the "LoadFile" function
 LoadFolder <- function(foldername = "Input_Data") {
@@ -61,5 +61,33 @@ LoadFolder <- function(foldername = "Input_Data") {
   return(folderdata)
 }
 
-
+#--- Summarise Critical Airfoil Data ----
+# Given a NACA, it puts the important information into the global environment
+AirfoilData <- function(NACA, a, c, env = FALSE) {
+  # Max camber; Location of max; Thickness
+  m = (NACA %/% 1000) / 100
+  p = (NACA %/% 100 %% 10) / 10
+  t = (NACA %% 100) / 100
+  # Chord; x-shift
+  c = 1
+  a = - 1/2
+  # Cylinder approximation of radius r and centre at (xc, yc) on the camber line
+  r = 1.1019*t^2*c
+  rootfind <- uniroot(
+    function(x) (m/p^2 * (2*p*((x-a)/c) - ((x-a)/c)^2))^2 + ((x-a)/c)^2 - r^2,
+    lower = a, upper = a + p*c,
+    tol = 1e-9)
+  xc = rootfind$root
+  yc = m/p^2 * (2*p*((xc-a)/c) - ((xc-a)/c)^2)
+  # Sampling with cylinder approximiation
+  thetac = atan(yc/(xc-a))      # Angle between the horizontal and raduis from (0,a) to (xc, yc)
+  xsamp = xc - r*cos(3*thetac)  # No. cyl points = No. points between a and xsamp 
+  # Output
+  airfoildata = list(
+    m = m, p = p, t = t, c = c, a = a,
+    r = r,xc = xc, yc = yc, thetac = thetac, xsamp = xsamp)
+  if (env == TRUE)
+    list2env(airfoildata, envir = .GlobalEnv)
+  return(airfoildata)
+}
 
