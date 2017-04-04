@@ -48,21 +48,29 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   
   #--- Interpolation on Normals
   xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
-  dist = NormalSamp(seq(0, 0.8, by = 0.1))
+  dist = NormalSamp(seq(0, 0.8, by = 0.05))
   
   interpvalU <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "upper")
-    interp <- InterpProj(omesh, lvec)
-    return(interp)
+    # interp <- InterpProj(omesh, lvec)
+    return(lvec)
   })
   interpvalL <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "lower")
-    interp <- InterpProj(omesh, lvec)
-    return(interp)
+    # interp <- InterpProj(omesh, lvec)
+    return(lvec)
   })
   interpvalLong <- bind_rows(c(interpvalU, interpvalL))
+  
+  ggplot () +
+    geom_point(data = interpvalLong, aes(x = xp, y = yp)) +
+    geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+    xlim(-1.2, 0.8) +
+    ylim(-0.8, 0.8) +
+    coord_fixed() +
+    labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: U'"))
   
   
   plot_Udash_Rough <- ggplot () +

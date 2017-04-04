@@ -34,30 +34,11 @@ BLThickOptim <- function(omesh, xO, surf, AoA) {
 }
 
 
-
-BLCalcs <- function(omesh, xO, surf, AoA) {
-  # Find the various gradients for the point of interest
-  gradint <- AirfoilGrads(xO, surf = surf)
-  # Determine the boundary value thickness
-  blthickness <- BLThickOptim(omesh, xO, surf, AoA)
-  thickness = blthickness$thickness
-  blU = blthickness$blU
-  
-  xvp <- NormalSamp(seq(0, blthickness$thickness * 1.5, by = 0.01))
-  lvecvp <- NormalPoint(xO, xvp, AoA, surf, gradint = gradint)
-  interpvp <- InterpProj(omesh, lvecvp, varnames = c("U", "V")) 
-  ggplot() + 
-    geom_path(data = interpvp, aes(x = Udash, y = dist))
-  
-  ggplot() + 
-    geom_path(data = interpvp, aes(x = 1 - Udash/blU, y = dist))
-  
-}
-
 #--- BL Integrals ----
+# Find the displacement and momentum thicknesses
 BLIntegrals <- function(omesh, xO, thickness, blU, surf, AoA) {
-  # Get the important data
-  dispthick = integrate(
+  # Displacment Thickness
+  dispthickint = integrate(
     function(dist) {
       lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
       interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
@@ -67,6 +48,43 @@ BLIntegrals <- function(omesh, xO, thickness, blU, surf, AoA) {
     lower = 0,
     upper = thickness
   )
+  dispthick = dispthickint$value
+  # Momentum Thickness
+  momethickint = integrate(
+    function(dist) {
+      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
+      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
+      integrand = interp$Udash/blU * (1 - interp$Udash / blU)
+      return(integrand)
+    },
+    lower = 0,
+    upper = thickness
+  )
+  momethick = momethickint$value
+  # Kinetic Thickness
+  kinethickint = integrate(
+    function(dist) {
+      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
+      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
+      integrand = interp$Udash/blU * (1 - (interp$Udash / blU)^2 )
+      return(integrand)
+    },
+    lower = 0,
+    upper = thickness
+  )
+  kinethick = kinethickint$value
+  return(data.frame(
+    dispthick = dispthick,
+    momethick = momethick
+  ))
 }
 
-
+#--- Combine to give BL Calcs ----
+BLCalcs <- function(omesh, xO, surf, AoA) {
+  # Find the various gradients for the point of interest
+  gradint <- AirfoilGrads(xO, surf = surf)
+  # Determine the boundary value thickness
+  blthickness <- BLThickOptim(omesh, xO, surf, AoA)
+  thickness = blthickness$thickness
+  blU = blthickness$blU
+}

@@ -27,4 +27,5 @@ LoadPackages <- function() {
   temp <- lapply(packages, require, character.only = TRUE)
 }
 
+#--- Call packages to load ----
 LoadPackages()
