@@ -9,19 +9,36 @@
 InterpPoint <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane"),
                         linear = TRUE, extrap = FALSE) {
   # Loop through each variable to interpolate
-  lmesh <- lvec
-  for (var in varnames) {
-    lmeshv <- suppressWarnings(
-      as.data.frame(interpp(x = omesh$x, y = omesh$y, z = omesh[[var]],
-                            xo = lvec[[1]], yo = lvec[[2]],
-                            linear = linear,
-                            extrap = extrap)))
-    lmesh <- cbind(lmesh, lmeshv[3])
-  }
-  # Give the columns meaningful names
-  colnames(lmesh) <- c(colnames(lvec), varnames)
+  suppressWarnings(
+  lmesh <- lapply(
+    varnames,
+    function(var) {
+      interpvar <- as.data.frame(interpp(
+                  x = omesh$x, y = omesh$y, z = omesh[[var]],
+                  xo = lvec[[1]], yo = lvec[[2]],
+                  linear = linear,
+                  extrap = extrap))
+      interpvar <- interpvar[3]
+      colnames(interpvar) <- var
+      return(interpvar)
+    })
+  )
+  # Append these interpolations to the original data
+  # lmesh <- cbind(lvec, bind_cols(lmesh))
+  lmesh <- bind_cols(lvec, lmesh)
+  # Return output
   return(lmesh)
 }
+
+
+# Interpoint Speed testing
+lvec = NormalPoint(-0.2, seq(0, 18, length.out = 10), AoA, "upper")
+lvectest = list()
+for (i in 1:50) {
+  lvectest[[i]] = lvec
+}
+system.time(test0 <- pblapply(lvectest, function(lvec) InterpPoint0(omesh, lvec)))
+system.time(test1 <- pblapply(lvectest, function(lvec) InterpPoint(omesh, lvec)))
 
 
 #--- Vector Proj of Interpolation ----
