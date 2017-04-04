@@ -31,10 +31,15 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
   lmesh <- InterpPoint(omesh, lvec, varnames, linear, extrap)
   # Use vector projection parallel to the normal
   lmesh <- lmesh %>%
+    mutate(surf = ifelse(surf == "upper" & dely > 0, "upper", "lower")) %>%
+    mutate(surf = ifelse(surf == "lower" & dely < 0, "lower", "upper")) %>%
+    # Udash and Vdash found by using vector projections
     mutate(Udash = sqrt((U - (delx*U + dely*V)/dist^2 * delx)^2 + (V - (delx*U + dely*V)/dist^2 * dely)^2),
            Vdash = (delx*U + dely*V)/dist) %>%
     mutate(Udash = ifelse(dist != 0, Udash, 0),
-           Vdash = ifelse(dist != 0, Vdash, 0))
+           Vdash = ifelse(dist != 0, Vdash, 0)) %>%
+    # sign of Udash found by cross product, upper vs lower
+    mutate(Udash = sign(dely*U - delx*V) * ifelse(surf == "upper", 1, -1) * Udash)
 }
 
 

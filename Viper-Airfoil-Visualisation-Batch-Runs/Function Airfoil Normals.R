@@ -87,7 +87,6 @@ AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
   out <- ifelse(xO < a,
                 AirfoilGradCyl(xO, surf, del),
                 AirfoilGradNACA(xO, surf, del))
-  out <- out[[1]]
   return(out)
 }
 
@@ -103,9 +102,11 @@ NormalSamp <- function(dist, polyn = 3) {
 #--- (x,y) distance dist from xO ----
 # Given: xO and surf
 # Finds: (x, y) at a normal distance away from the surface
-NormalPoint <- function(xO, dist, AoA = 0, surf = "upper", eq = "norm") {
+NormalPoint <- function(xO, dist, AoA = 0, surf = "upper", eq = "norm", gradint = NULL) {
   # Find the gradient at the xO point
-  gradint <- AirfoilGrads(xO, surf = surf) # Note in AirfoilGrads it rootfinds for x already
+  gradint <- ifelse(is.null(gradint), AirfoilGrads(xO, surf = surf), gradint) 
+  gradint <- gradint[[1]]
+    # Note in AirfoilGrads it rootfinds for x already
   # Determine the location of (xp, yp) for a given distance
   gradint <- gradint %>%
     filter(surf == get("surf") & eq == get("eq")) %>%

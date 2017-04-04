@@ -47,7 +47,7 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
   #--- Interpolation on Normals
-  xvec = AirfoilSamp(seq(a, a+c, by = 0.1), cylinder = TRUE)
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
   dist = NormalSamp(seq(0, 0.8, by = 0.1))
   
   interpvalU <- pblapply(xvec, function(x) {
