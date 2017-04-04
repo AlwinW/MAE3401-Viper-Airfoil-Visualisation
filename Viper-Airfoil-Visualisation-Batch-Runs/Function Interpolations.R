@@ -24,21 +24,10 @@ InterpPoint <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane"
     })
   )
   # Append these interpolations to the original data
-  # lmesh <- cbind(lvec, bind_cols(lmesh))
   lmesh <- bind_cols(lvec, lmesh)
   # Return output
   return(lmesh)
 }
-
-
-# Interpoint Speed testing
-lvec = NormalPoint(-0.2, seq(0, 18, length.out = 10), AoA, "upper")
-lvectest = list()
-for (i in 1:50) {
-  lvectest[[i]] = lvec
-}
-system.time(test0 <- pblapply(lvectest, function(lvec) InterpPoint0(omesh, lvec)))
-system.time(test1 <- pblapply(lvectest, function(lvec) InterpPoint(omesh, lvec)))
 
 
 #--- Vector Proj of Interpolation ----

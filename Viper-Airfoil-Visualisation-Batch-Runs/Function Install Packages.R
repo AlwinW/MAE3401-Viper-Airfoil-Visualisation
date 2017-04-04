@@ -26,3 +26,5 @@ LoadPackages <- function() {
   # Load packages
   temp <- lapply(packages, require, character.only = TRUE)
 }
+
+LoadPackages()

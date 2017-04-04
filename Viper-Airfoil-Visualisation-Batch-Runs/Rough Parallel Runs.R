@@ -23,30 +23,3 @@ stopCluster(parallelCluster)
 
 
 
-
-
-
-
-
-
-#---------------- Tests
-# This function would go in another source file!
-dummythread <- function(Re, AoA) {
-  list2env(airfoildata, envir = .GlobalEnv)
-  
-  out = Re + AoA + r*100
-  return(out)
-}
-
-source("Thread Function Calls.R")
-
-parallelCluster <- makeCluster(parallel::detectCores())
-clusterExport(parallelCluster, c("airfoildata", "dummythread"))
-
-a1 <- pblapply(
-  folderdata,
-  function(filedata) {
-    with(filedata, dummythread(Re, AoA))},
-  cl = parallelCluster
-  )
-stopCluster(parallelCluster)
