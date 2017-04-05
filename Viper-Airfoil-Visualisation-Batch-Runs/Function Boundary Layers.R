@@ -14,48 +14,21 @@ OptimDom <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 18, length
     loc = which.max(interp$Udash)
   else
     loc = which.min(abs(interp$Udash - target))
-  return(dist[c(loc-1, loc+1)])
+  # Optim
+  optim = select(interp[loc,], dist, Udash)
+  return(optim)
 }
 
 #--- BL Thickness (optim) ----
 # Uses the optim command to find the maximum and then 99% of that
-BLThickOptim <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 18, optimdom = TRUE) {
-
+BLThickOptim <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 18) {
   # Find the maximum value for U'
-  if (optimdom)
-    interval = OptimDom(omesh, xO, surf, AoA, gradint = gradint, upper = upper, target = 0)
-  else
-    interval = c(0, upper)
-  # Find the maxmum U' in this interval
-  blresult <- optimise(
-    function(dist) {
-      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
-      interp <- InterpProj(omesh, lvec, varnames = c("U", "V"))
-print(interp$Udash)
-      return(interp$Udash)
-    },
-    interval = interval,
-    maximum = TRUE)
-  # Determine the 99% Um value
-  blU = blresult$objective - abs(blresult$objective)*0.01
+  blresult = OptimDom(omesh, xO, surf, AoA, gradint = gradint, upper = upper, target = 0)
+  blU = blresult$Udash - abs(blresult$Udash)*0.01
   
   # Find the distance for 99%
-  if (optimdom)
-    interval = OptimDom(omesh, xO, surf, AoA, gradint = gradint, upper = blresult$maximum, target = blU)
-  else
-    interval = c(0, blresult$maximum)
-  # Find the value of dist
-  result <- optimise(
-    function(dist) {
-      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
-      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
-print(paste(dist, interp$Udash))
-      return(abs(interp$Udash - blU))
-    },
-    interval = interval,
-    maximum = FALSE)
-  # Summarise results
-  thickness = result$minimum
+  result = OptimDom(omesh, xO, surf, AoA, gradint = gradint, upper = blresult$dist, target = blU)
+  thickness = result$dist
   return(data.frame(thickness, blU))
 }
 
@@ -111,7 +84,7 @@ BLCalcs <- function(omesh, xO, surf, AoA) {
   # Find the various gradients for the point of interest
   gradint <- AirfoilGrads(xO, surf = surf)
   # Determine the boundary value thickness
-  system.time(blthickness <- BLThickOptim(omesh, xO, surf = surf, AoA, gradint = gradint, optimdom = TRUE))
+  system.time(blthickness <- BLThickOptim(omesh, xO, surf = surf, AoA, gradint = gradint))
   thickness = blthickness$thickness
   blU = blthickness$blU
   # Determine the integral values
