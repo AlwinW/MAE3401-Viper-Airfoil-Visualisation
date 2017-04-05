@@ -46,6 +46,10 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
            Vdash = ifelse(dist != 0, Vdash, 0)) %>%
     # sign of Udash found by cross product, upper vs lower
     mutate(Udash = sign(dely*U - delx*V) * ifelse(surf == "upper", 1, -1) * Udash)
+  
+  print(paste(lmesh$dist, lmesh$Udash))
+  
+  return(lmesh)
 }
 
 

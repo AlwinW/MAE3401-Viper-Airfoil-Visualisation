@@ -14,6 +14,7 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   source("Function Airfoil Profile.R")
   source("Function Airfoil Normals.R")
   source("Function Interpolations.R")
+  source("Function Boundary Layers.R")
   
   #--- Manipulate input data ----
   # Expand the airfoil data into the current thread environment
@@ -37,7 +38,7 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   ggsave(paste0(ID, "_Airfoil.png"), plot = plot_airfoil, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
-  #--- Interpolation on Airfoil
+  #--- Interpolation on Airfoil ----
   airfoilmesh <- InterpPoint(omesh, airfoilcoord)
   plot_pressure = ggplot(airfoilmesh, aes(x = x, y = P, colour = surf)) +
     geom_path(size = 1.2) +
@@ -46,33 +47,25 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   ggsave(paste0(ID, "_Pressure.png"), plot = plot_pressure, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
-  #--- Interpolation on Normals
+  #--- Interpolation on Normals ----
   xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
   dist = NormalSamp(seq(0, 0.8, by = 0.05))
-  
+  # Upper Surface
   interpvalU <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "upper")
-    # interp <- InterpProj(omesh, lvec)
-    return(lvec)
+    interp <- InterpProj(omesh, lvec)
+    return(interp)
   })
+  #Lower Surface
   interpvalL <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "lower")
-    # interp <- InterpProj(omesh, lvec)
-    return(lvec)
+    interp <- InterpProj(omesh, lvec)
+    return(interp)
   })
   interpvalLong <- bind_rows(c(interpvalU, interpvalL))
-  
-  ggplot () +
-    geom_point(data = interpvalLong, aes(x = xp, y = yp)) +
-    geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
-    xlim(-1.2, 0.8) +
-    ylim(-0.8, 0.8) +
-    coord_fixed() +
-    labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: U'"))
-  
-  
+  #U' Plot
   plot_Udash_Rough <- ggplot () +
     geom_point(data = interpvalLong, aes(x = xp, y = yp, colour = Udash)) +
     geom_point(data = filter(interpvalLong, Udash < -1.2), aes(x = xp, y = yp), colour = "#BE2828") +
@@ -85,7 +78,7 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
     labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: U'"))
   ggsave(paste0(ID, "_Udash_Rough.png"), plot = plot_Udash_Rough, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
-  
+  # V'plot
   plot_Vdash_Rough <- ggplot () +
     geom_point(data = interpvalLong, aes(x = xp, y = yp, colour = Vdash)) +
     geom_point(data = filter(interpvalLong, Udash < -1.2), aes(x = xp, y = yp), colour = "#BE2828") +
@@ -97,5 +90,15 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
     coord_fixed() +
     labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: V'"))
   ggsave(paste0(ID, "_Vdash_Rough.png"), plot = plot_Vdash_Rough, path = savepath,
+         width = 5, height = 4, scale = 1.2, dpi = 300)
+  
+  
+  #--- Boundary Layer Thicknesses ----
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.25), cylinder = TRUE)
+  # Upper Surface
+    scale_color_discrete("BL Distance") +
+    coord_fixed() +
+    labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: Boundary Layer"))
+  ggsave(paste0(ID, "_BL_Rough.png"), plot = plot_BL_Rough, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
 }

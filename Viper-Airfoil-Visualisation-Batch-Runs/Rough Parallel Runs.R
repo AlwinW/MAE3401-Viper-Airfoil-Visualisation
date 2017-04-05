@@ -10,7 +10,7 @@ folderdata <- LoadFolder()
 source("Thread Function Calls.R")
 
 
-parallelCluster <- makeCluster(parallel::detectCores())
+parallelCluster <- makeCluster(detectCores())
 clusterExport(parallelCluster, c("airfoildata", "ThreadAll"))
 
 a1 <- pblapply(
