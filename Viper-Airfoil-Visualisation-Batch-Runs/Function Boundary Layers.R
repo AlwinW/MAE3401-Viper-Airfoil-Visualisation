@@ -4,7 +4,7 @@
 #============================>
 
 #--- Optim Domain ----
-OptimDom <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 18, length.out = 2e5, target = 0) {
+OptimDom <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 15, length.out = 2e5, target = 0) {
   # Determine Udash (single function call, quicker than Optim)
   dist = NormalSamp(seq(0, upper, length.out = length.out))
   lvec = NormalPoint(xO, dist, AoA, surf, gradint = gradint)
@@ -35,64 +35,54 @@ BLThickOptim <- function(omesh, xO, surf, AoA, gradint = gradint, upper = 18) {
 
 #--- BL Integrals ----
 # Find the displacement, momentum and kinetic thicknesses
-BLIntegrals <- function(omesh, xO, thickness, blU, surf, AoA, gradint = gradint) {
-  # Displacment Thickness
-  dispthickint = integrate(
-    function(dist) {
-      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
-      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
-      integrand = 1 - interp$Udash / blU
-      return(integrand)
-    },
-    lower = 0,
-    upper = thickness
-  )
-  dispthick = dispthickint$value
-  # Momentum Thickness
-  momethickint = integrate(
-    function(dist) {
-      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
-      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
-      integrand = interp$Udash/blU * (1 - interp$Udash / blU)
-      return(integrand)
-    },
-    lower = 0,
-    upper = thickness
-  )
-  momethick = momethickint$value
-  # Kinetic Thickness
-  kinethickint = integrate(
-    function(dist) {
-      lvec <- NormalPoint(xO, dist, AoA, surf, gradint = gradint)
-      interp <- InterpProj(omesh, lvec, varnames = c("U", "V")) 
-      integrand = interp$Udash/blU * (1 - (interp$Udash / blU)^2 )
-      return(integrand)
-    },
-    lower = 0,
-    upper = thickness
-  )
-  kinethick = kinethickint$value
-  return(data.frame(
-    dispthick = dispthick,
-    momethick = momethick,
-    kinethick = kinethick
-  ))
+BLIntegrals <- function(omesh, xO, thickness, blU, surf, AoA, gradint = gradint, length.out = 2e5) {
+  # Use Simpson's 3/8 Rule
+  length.out = length.out + (4 - length.out%% 3)
+  # Interpolate
+  dist = seq(0, thickness, length.out = length.out)
+  lvec = NormalPoint(xO, dist, AoA, surf, gradint = gradint)
+  interp = InterpProj(omesh, lvec, varnames = c("U", "V"))
+  # Find the integrands
+  integrand <- interp %>%
+    mutate(dispthick = 1 - Udash/blU,
+           momethick = Udash/blU * (1 - Udash / blU),
+           kinethick = Udash/blU * (1 - (Udash / blU)^2)) %>%
+    select(dispthick, momethick, kinethick)
+  
+  # # Using 3/8 rule
+  # distances <- 3/8* (
+  #   3 * apply(integrand, 2, sum) -
+  #   apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = length.out),], 2, sum) -
+  #   1 * integrand[1,] -
+  #   1 * integrand[length.out,]) *
+  #   thickness/length.out
+  
+  # Using trapezium rule
+  distances <- (
+    apply(integrand, 2, sum) -
+    1/2 * integrand[1,] -
+    1/2 * integrand[length.out,]) *
+    thickness/length.out
+  
+  return(distances)
 }
 
 #--- Combine to give BL Calcs ----
-BLCalcs <- function(omesh, xO, surf, AoA) {
+BLCalcs <- function(omesh, xO, surf, AoA, Re) {
   # Find the various gradients for the point of interest
   gradint <- AirfoilGrads(xO, surf = surf)
   # Determine the boundary value thickness
-  system.time(blthickness <- BLThickOptim(omesh, xO, surf = surf, AoA, gradint = gradint))
+  blthickness <- BLThickOptim(omesh, xO, surf = surf, AoA, gradint = gradint)
   thickness = blthickness$thickness
   blU = blthickness$blU
+  # Determine the theoretical flow
+  theory = 5 * (xO - a) / sqrt(Re * (xO - a))
   # Determine the integral values
-  system.time(blintegrals <- BLIntegrals(omesh, xO, thickness, blU, surf = surf, AoA, gradint = gradint))
+  blintegrals <- BLIntegrals(omesh, xO, thickness, blU, surf = surf, AoA, gradint = gradint)
   # Combine all the data
   blvals <- data.frame(
-    bldist = c(thickness, with(blintegrals, c(dispthick, momethick, kinethick))),
-    bldistname = c("Thickness", "Dislacement Thickness", "Momentum Thickness", "Kinetic Energy Thickness")
+    bldist = c(thickness, theory, with(blintegrals, c(dispthick, momethick, kinethick))),
+    bldistname = c("Thickness", "Theory", "Dislacement Thickness", "Momentum Thickness", "Kinetic Energy Thickness")
   )
   # Add additional information for plotting
   blvals <- cbind(blvals, NormalPoint(xO, blvals$bldist, AoA, surf, gradint = gradint))
