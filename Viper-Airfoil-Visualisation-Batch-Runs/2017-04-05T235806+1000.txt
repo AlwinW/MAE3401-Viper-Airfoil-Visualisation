@@ -1,0 +1,62 @@
+starting worker pid=9244 on localhost:11963 at 23:58:07.254
+starting worker pid=4068 on localhost:11963 at 23:58:08.234
+starting worker pid=8536 on localhost:11963 at 23:58:09.831
+starting worker pid=9648 on localhost:11963 at 23:58:11.040
+-------------------------------------------
+->localhost:11963 9244 : Re0050AoA-40 11:58:14 PM | Files Loaded 
+-------------------------------------------
+->localhost:11963 9648 : Re0050AoA040 11:58:14 PM | Files Loaded 
+-------------------------------------------
+->localhost:11963 8536 : Re0050AoA010 11:58:14 PM | Files Loaded 
+-------------------------------------------
+->localhost:11963 4068 : Re0050AoA000 11:58:14 PM | Files Loaded 
+->localhost:11963 8536 : Re0050AoA010 11:58:16 PM | Airfoil Coordinates Plotted 
+->localhost:11963 4068 : Re0050AoA000 11:58:16 PM | Airfoil Coordinates Plotted 
+->localhost:11963 9244 : Re0050AoA-40 11:58:16 PM | Airfoil Coordinates Plotted 
+->localhost:11963 9648 : Re0050AoA040 11:58:16 PM | Airfoil Coordinates Plotted 
+->localhost:11963 4068 : Re0050AoA000 11:58:22 PM | Pressure on Airfoil Plotted 
+->localhost:11963 9244 : Re0050AoA-40 11:58:22 PM | Pressure on Airfoil Plotted 
+->localhost:11963 9648 : Re0050AoA040 11:58:22 PM | Pressure on Airfoil Plotted 
+->localhost:11963 8536 : Re0050AoA010 11:58:22 PM | Pressure on Airfoil Plotted 
+->localhost:11963 9244 : Re0050AoA-40 12:01:52 AM | U' and V' Calculated 
+->localhost:11963 9648 : Re0050AoA040 12:01:52 AM | U' and V' Calculated 
+->localhost:11963 8536 : Re0050AoA010 12:01:53 AM | U' and V' Calculated 
+->localhost:11963 4068 : Re0050AoA000 12:01:53 AM | U' and V' Calculated 
+->localhost:11963 9244 : Re0050AoA-40 12:01:54 AM | U' and V' Plotted 
+->localhost:11963 9648 : Re0050AoA040 12:01:55 AM | U' and V' Plotted 
+->localhost:11963 8536 : Re0050AoA010 12:01:55 AM | U' and V' Plotted 
+->localhost:11963 4068 : Re0050AoA000 12:01:56 AM | U' and V' Plotted 
+->localhost:11963 4068 : Re0050AoA000 12:36:07 AM | Boundary Layers Calculated 
+->localhost:11963 8536 : Re0050AoA010 12:36:08 AM | Boundary Layers Calculated 
+->localhost:11963 4068 : Re0050AoA000 12:36:09 AM | Boundary Layers Plotted 
+->localhost:11963 8536 : Re0050AoA010 12:36:10 AM | Boundary Layers Plotted 
+->localhost:11963 9244 : Re0050AoA-40 12:36:13 AM | Boundary Layers Calculated 
+->localhost:11963 9244 : Re0050AoA-40 12:36:14 AM | Boundary Layers Plotted 
+->localhost:11963 9648 : Re0050AoA040 12:36:23 AM | Boundary Layers Calculated 
+->localhost:11963 9648 : Re0050AoA040 12:36:26 AM | Boundary Layers Plotted 
+-------------------------------------------
+->localhost:11963 9244 : Re0500AoA000 12:36:26 AM | Files Loaded 
+->localhost:11963 9244 : Re0500AoA000 12:36:29 AM | Airfoil Coordinates Plotted 
+->localhost:11963 9244 : Re0500AoA000 12:36:39 AM | Pressure on Airfoil Plotted 
+->localhost:11963 9244 : Re0500AoA000 12:42:07 AM | U' and V' Calculated 
+->localhost:11963 9244 : Re0500AoA000 12:42:10 AM | U' and V' Plotted 
+Error in unserialize(node$con) : error reading from connection
+Calls: <Anonymous> ... doTryCatch -> recvData -> recvData.SOCKnode -> unserialize
+In addition: Warning message:
+In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+Execution halted
+Error in unserialize(node$con) : error reading from connection
+Calls: <Anonymous> ... doTryCatch -> recvData -> recvData.SOCKnode -> unserialize
+In addition: Warning message:
+In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+Execution halted
+Error in unserialize(node$con) : error reading from connection
+Calls: <Anonymous> ... doTryCatch -> recvData -> recvData.SOCKnode -> unserialize
+In addition: Warning message:
+In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+Execution halted
+Error in unserialize(node$con) : error reading from connection
+Calls: <Anonymous> ... doTryCatch -> recvData -> recvData.SOCKnode -> unserialize
+In addition: Warning message:
+In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+Execution halted

@@ -32,13 +32,13 @@ InterpPoint <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane"
 
 #--- Vector Proj of Interpolation ----
 InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane"),
-                       linear = TRUE, extrap = FALSE) {
+                       linear = TRUE, extrap = FALSE, plotsurf = FALSE) {
   # Interpolate  to find the varibles
   lmesh <- InterpPoint(omesh, lvec, varnames, linear, extrap)
   # Use vector projection parallel to the normal
   lmesh <- lmesh %>%
-    mutate(surf = ifelse(surf == "upper" & dely > 0, "upper", "lower")) %>%
-    mutate(surf = ifelse(surf == "lower" & dely < 0, "lower", "upper")) %>%
+    mutate(surf = ifelse(plotsurf == FALSE & surf == "upper" & dely > 0, "upper", "lower")) %>%
+    mutate(surf = ifelse(plotsurf == FALSE & surf == "lower" & dely < 0, "lower", "upper")) %>%
     # Udash and Vdash found by using vector projections
     mutate(Udash = sqrt((U - (delx*U + dely*V)/dist^2 * delx)^2 + (V - (delx*U + dely*V)/dist^2 * dely)^2),
            Vdash = (delx*U + dely*V)/dist) %>%

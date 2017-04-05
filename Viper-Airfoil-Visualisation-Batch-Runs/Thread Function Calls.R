@@ -37,8 +37,8 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   
   
   
-  cat("-------------------------------------------\n")
   PrintThread("Files Loaded") # Print----
+  cat("---------------------------------------------------------------\n")
   
   #--- Airfoil profile and plot ----
   # Airfoil coordinates
@@ -63,7 +63,7 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   plot_pressure = ggplot(airfoilmesh, aes(x = x, y = P, colour = surf)) +
     geom_path(size = 1.2) +
     geom_point() +
-    # scale_y_reverse() +    
+    scale_y_reverse() +
     scale_color_manual("Surface", values = c("#F8766D", "#00BBCC"), labels = c("Lower","Upper")) +
     labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: Pressure on Airfoil"))
   ggsave(paste0(ID, "_Pressure.png"), plot = plot_pressure, path = savepath,
@@ -79,14 +79,14 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   interpvalU <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "upper")
-    interp <- InterpProj(omesh, lvec)
+    interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
     return(interp)
   })
   #Lower Surface
   interpvalL <- pblapply(xvec, function(x) {
     # Find the interpolations
     lvec = NormalPoint(x, dist, AoA, surf = "lower")
-    interp <- InterpProj(omesh, lvec)
+    interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
     return(interp)
   })
   interpvalLong <- bind_rows(c(interpvalU, interpvalL))

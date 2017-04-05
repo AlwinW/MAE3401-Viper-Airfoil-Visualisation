@@ -30,8 +30,8 @@ LoadFile <- function(filename, foldername = NULL) {
   colnames(filedata) <- c("x", "y", "U", "V", "P", "vort_xy_plane")
   # Combind the filedata and metadata into one list
   filedata <- list(
-    ID = paste("Re", sprintf("%04d", Re), 
-               "AoA", sprintf("%03d", AoA), sep = ""),    
+    ID = paste0("Re", sprintf("%04d", Re), 
+               "AoA", sprintf("%03d", AoA)),    
     Re = Re,
     AoA = AoA,
     filepath = filepath,
