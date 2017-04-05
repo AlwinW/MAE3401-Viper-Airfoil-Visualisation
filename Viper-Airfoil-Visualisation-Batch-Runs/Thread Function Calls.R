@@ -3,6 +3,12 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+threaddata = folderdata[[1]]
+list2env(threaddata, envir = .GlobalEnv)
+omesh = filedata
+
+
+
 #--- Full functionality ----
 # This thread goes through each of the main functions
 ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
@@ -16,9 +22,11 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   source("Function Interpolations.R")
   source("Function Boundary Layers.R")
   
-  #--- Manipulate input data ----
+    #--- Manipulate input data ----
   # Expand the airfoil data into the current thread environment
   list2env(airfoildata, envir = .GlobalEnv)
+  
+  print("Files Loaded") # Print----
   
   #--- Airfoil profile and plot ----
   # Airfoil coordinates
@@ -38,6 +46,8 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   ggsave(paste0(ID, "_Airfoil.png"), plot = plot_airfoil, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
+  print("Airfoil COordinates Plotted") # Print----
+  
   #--- Interpolation on Airfoil ----
   airfoilmesh <- InterpPoint(omesh, airfoilcoord)
   plot_pressure = ggplot(airfoilmesh, aes(x = x, y = P, colour = surf)) +
@@ -47,7 +57,10 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   ggsave(paste0(ID, "_Pressure.png"), plot = plot_pressure, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
+  print("Pressure on Airfoil Plotted") # Print----
+  
   #--- Interpolation on Normals ----
+  # xvec by = 0.05 and dist = 0.05 approx 2min for U and 2min for L on my laptop
   xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
   dist = NormalSamp(seq(0, 0.8, by = 0.05))
   # Upper Surface
@@ -92,13 +105,37 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   ggsave(paste0(ID, "_Vdash_Rough.png"), plot = plot_Vdash_Rough, path = savepath,
          width = 5, height = 4, scale = 1.2, dpi = 300)
   
+  print("U' and V' Plotted") # Print----
   
-  #--- Boundary Layer Thicknesses ----
-  xvec = AirfoilSamp(seq(a, a+c, by = 0.25), cylinder = TRUE)
+#--- Boundary Layer Thicknesses ----
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = FALSE)
   # Upper Surface
+  blvalU <- pblapply(xvec, function(x) {
+    # Find the thicknesses
+    blval = BLCalcs(omesh, x, surf = "upper", AoA, Re)
+    return(blval)
+  })
+  # Lower Surface
+  blvalL <- pblapply(xvec, function(x) {
+    # Find the thicknesses
+    blval = BLCalcs(omesh, x, surf = "lower", AoA, Re)
+    return(blval)
+  })
+  blvalLong <- bind_rows(c(blvalU, blvalL))
+
+  # Upper Surface
+  plot_BL_Rough <- ggplot() +
+    geom_path(data = blvalLong,
+              aes(x = xp, y = yp, colour = bldistname,
+              group = interaction(bldistname, surf))) +
+    geom_path(data = airfoilcoord, aes(x = x, y = y), size = 1.2) +
+    xlim(-1.2, 0.8) +
+    ylim(-0.8, 0.8) +
     scale_color_discrete("BL Distance") +
     coord_fixed() +
     labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: Boundary Layer"))
   ggsave(paste0(ID, "_BL_Rough.png"), plot = plot_BL_Rough, path = savepath,
-         width = 5, height = 4, scale = 1.2, dpi = 300)
+         width = 6, height = 4, scale = 1.2, dpi = 300)
+  
+  print("Boundary Layers Plotted") # Print----
 }
