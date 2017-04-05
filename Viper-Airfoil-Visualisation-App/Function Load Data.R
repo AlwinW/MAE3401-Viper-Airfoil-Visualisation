@@ -36,7 +36,7 @@ AirfoilData <- function(NACA, a, c) {
   xc = rootfind$root
   yc = m/p^2 * (2*p*((xc-a)/c) - ((xc-a)/c)^2)
   thetac = atan(yc/(xc-a)) # Angle between the horizontal and raduis from (0,a) to (xc, yc)
-  xsamp = xc + r*cos(3*thetac)
+  xsamp = xc - r*cos(3*thetac)
   # Output
   airfoildata = list(m = m, p = p, t = t, c = c, a = a,
                      r = r,xc = xc, yc = yc, thetac = thetac, xsamp = xsamp)
