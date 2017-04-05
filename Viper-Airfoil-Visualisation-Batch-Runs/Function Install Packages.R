@@ -24,7 +24,8 @@ LoadPackages <- function() {
   if (length(newpackages))
     install.packages(newpackages)
   # Load packages
-  temp <- lapply(packages, require, character.only = TRUE)
+  suppressWarnings(suppressMessages(
+    temp <- lapply(packages, require, character.only = TRUE)))
 }
 
 #--- Call packages to load ----
