@@ -77,21 +77,20 @@ thread <- pblapplycl( #pbapply::pblapply( #
     ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Lower Surface Calculated")
     interpvalLong <- bind_rows(c(interpvalU, interpvalL))
     
+    lvec = rbind(NormalPoint(x, dist, AoA, surf = "upper"),
+                 NormalPoint(x, dist, AoA, surf = "lower"))
     
     
-    JUB! DO THE LVEC, THEN COMBINE, THEN INTERP
-    interpLongLong <- data.frame(
-      xO = rep(xvec, each = length(dist)),
-      dist = rep(dist, times = length(xvec))
-    )
-    interpLongLong <- cbind(
-      rbind(interpLongLong, interpLongLong),
-      surf = rep(c("upper", "lower"), each = nrow(interpLongLong))
-    )
+    lvec <- rbind(
+      bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
+      bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
+    interpLongLong <- InterpProj(omesh, lvec, plotsurf = TRUE)
     
-    
-    
-    asdf <- NormalPoint(interpLongLong$xO, dist = interpLongLong$dist, AoA, surf = interpLongLong$surf)
+    # Testing accuracy
+    unlist(lapply(select(interpvalLong, -surf, -eq), sum)) -
+      unlist(lapply(select(interpLongLong, -surf, -eq), sum))
+    unlist(lapply(select(interpvalLong, -surf, -eq), sd)) -
+      unlist(lapply(select(interpLongLong, -surf, -eq), sd))
     
   },
   cl = cl,
