@@ -1,6 +1,6 @@
 # Set working directory when run from RStudio
 # setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-setwd("//ad.monash.edu/home/User032/awan39/Documents/GitHub/MAE3401-Viper-Airfoil-Visualisation/Viper-Airfoil-Visualisation-Batch-Runs")
+# setwd("//ad.monash.edu/home/User032/awan39/Documents/GitHub/MAE3401-Viper-Airfoil-Visualisation/Viper-Airfoil-Visualisation-Batch-Runs")
 
 #--- Load MINIMAL source files for use ----
 source("Function Load Packages.R")
@@ -35,7 +35,7 @@ thread <- pblapplycl( #pbapply::pblapply( #
     #--- Print Progress ----
     source("Function pblapply.R")           # For PrintThreadProgress
     threadname <- ThreadName()
-
+    
     #--- Load ALL file information  ----
     source("Function Load Data.R")          # For fn "Load File"
     # Load the filedata and unlist it
@@ -76,6 +76,22 @@ thread <- pblapplycl( #pbapply::pblapply( #
     )
     ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Lower Surface Calculated")
     interpvalLong <- bind_rows(c(interpvalU, interpvalL))
+    
+    
+    
+    JUB! DO THE LVEC, THEN COMBINE, THEN INTERP
+    interpLongLong <- data.frame(
+      xO = rep(xvec, each = length(dist)),
+      dist = rep(dist, times = length(xvec))
+    )
+    interpLongLong <- cbind(
+      rbind(interpLongLong, interpLongLong),
+      surf = rep(c("upper", "lower"), each = nrow(interpLongLong))
+    )
+    
+    
+    
+    asdf <- NormalPoint(interpLongLong$xO, dist = interpLongLong$dist, AoA, surf = interpLongLong$surf)
     
   },
   cl = cl,
