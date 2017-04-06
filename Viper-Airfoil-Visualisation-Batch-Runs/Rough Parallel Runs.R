@@ -1,5 +1,5 @@
 # Set working directory when run from RStudio
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 #--- Load MINIMAL source files for use ----
 source("Function Load Packages.R")
@@ -28,30 +28,36 @@ clusterExport(cl, c("airfoildata", "foldername"))                 # add airfoild
 thread <- pblapplycl( #pbapply::pblapply( #
   filelist, 
   function(filename) {                      # filename = filelist[1] for debugging
+    #--- Load Packages ----
     source("Function Load Packages.R")      # For required packages
-    #--- Load ALL the information from the file contents and name ----
+    
+    #--- Print Progress ----
+    source("Function pblapply.R")           # For PrintThreadProgress
+    threadname <- ThreadName()
+
+    #--- Load ALL file information  ----
     source("Function Load Data.R")          # For fn "Load File"
     # Load the filedata and unlist it
     filedata <- LoadFile(filename, foldername)
     list2env(filedata, envir = environment()); rm(filedata)       # N.B: local so must be passed as fn input
     
-    print(paste(ID, "File Data Loaded"))
+    ThreadProgress(threadname, ID, "File Data Loaded")
         
     #--- Run Airfoil Calculations ----
     source("Function Airfoil Profile.R")      # For fn "AirfoilCoord", etc
     list2env(airfoildata, envir = .GlobalEnv)                     # N.B: global so all fn can find it
     airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
     
-    print(paste(ID, "Airfoil Coordinaes Calculated"))
+    ThreadProgress(threadname, ID, "Airfoil Coordinaes Calculated")
     
     #--- Interpolation on the airfoil----
     source("Function Interpolations.R")       # For fn "InterpPoint", etc
     airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
     
-    print(paste(ID, "Airfoil Surface Interpolation Calculated"))
-    
+    ThreadProgress(threadname, ID, "Airfoil Surface Interpolation Calculated")
   },
-  cl = cl
+  cl = cl,
+  log = logfile
 )
 
 stopCluster(cl)

@@ -3,10 +3,40 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+#--- Functions for the Thread ----
+ThreadName <- function() {
+  set <- getAllConnections()
+  thread <-  unlist(summary.connection(set[length(set)]))[1]
+  threadname = paste(thread, sprintf("%04d", Sys.getpid()), ":")
+  threadname = gsub("->", "  ", threadname)
+  return(threadname)
+}
 
+ThreadProgress <- function(threadname = "", ID = "", msg) {
+  cat(paste(threadname, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
+}
+
+#--- Custom pblapply for parallel ----
 # This is the cluster case for the parallel::pblapply function
-pblapplycl <- function (X, FUN, ..., msg = NULL, cl = NULL) 
+pblapplycl <- function (X, FUN, ..., cl = NULL, log = NULL) 
 {
+  # Function to write to external file
+  system = Sys.info()[4]
+  PrintProgress <- function(i, B, start.t, log) {
+    if (!is.null(log)) {
+      # Print to console
+      cat("\n")
+      print(proc.time() - start.t)
+      # Write to file
+      cat(paste(system, "Progress", round(i/B * 100, 0), "%","\n"), 
+          file = log, append = TRUE)
+    }
+  }
+  
+  # Start Timing
+  start.t = proc.time()
+  PrintProgress(0, 1, start.t, log)
+  
   #--- Manipulate the function ----
   # Rename the function to FUN
   FUN <- match.fun(FUN)
@@ -54,6 +84,7 @@ pblapplycl <- function (X, FUN, ..., msg = NULL, cl = NULL)
       # Update the progress bar
       setpb(pb, i)
       # WRITE OUT PROGRESS
+      PrintProgress(i, B, start.t, log)
     }
   }
   # Forking not available on windows
@@ -73,6 +104,7 @@ pblapplycl <- function (X, FUN, ..., msg = NULL, cl = NULL)
                                          FUN, ..., mc.cores = as.integer(cl)))
       setpb(pb, i)
       # WRITE OUT PROGRESS
+      PrintProgress(i, B, start.t, log)
     }
   }
   # Recombine the result(s)
@@ -84,13 +116,7 @@ pblapplycl <- function (X, FUN, ..., msg = NULL, cl = NULL)
 
 
 
-#--- Functions for the Thread ----
-set <- getAllConnections()
-thread <-  unlist(summary.connection(set[length(set)]))[1]
-thread <- paste(thread, sprintf("%04d", Sys.getpid()), ":")
-PrintThread <- function(msg, thread = thread, ID = ID) {
-  cat(paste(thread, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
-}
+
 
 # The purpose of this function is to print progress to
 # an exernal file
