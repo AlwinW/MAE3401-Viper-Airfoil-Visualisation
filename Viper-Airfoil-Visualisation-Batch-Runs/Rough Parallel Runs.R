@@ -9,12 +9,28 @@ NACA = 4412
 airfoildata <- AirfoilData(NACA, -0.5, 1)
 folderdata <- LoadFolder()
 
+source("Function pblapply.R")
 source("Thread Function Calls.R")
 
+# --- Trial Run
+parallelCluster <- 
+  makeCluster(detectCores(), outfile = paste0(format(Sys.time(), "%Y-%m-%dT%H.%M%.S%z"), ".txt"))
+clusterExport(parallelCluster, c("airfoildata", "ThreadLoopTest"))
 
+a1 <- pbapply::pblapply(
+  folderdata,
+  function(threaddata) {
+   ThreadLoopTest(threaddata)
+    # print(filedata$ID)
+    # lapply(filedata, function(x) print(class(x)))
+  }, cl = parallelCluster
+)
+stopCluster(parallelCluster)
+
+
+# --- Full Run
 parallelCluster <- 
   makeCluster(detectCores(), outfile = paste0(format(Sys.time(), "%Y-%m-%dT%H%M%S%z"), ".txt"))
-
 clusterExport(parallelCluster, c("airfoildata", "ThreadAll"))
 
 a1 <- pblapply(
@@ -25,18 +41,3 @@ a1 <- pblapply(
 )
 stopCluster(parallelCluster)
 
-
-
-parallelCluster <- makeCluster(detectCores(), outfile = paste0("parallel", ".txt"))
-source("Function Install Packages.R")
-a1 <- pblapply(
-  1:10,
-  function(filedata) {
-    set <- getAllConnections()
-    ans <-  unlist(summary.connection(set[length(set)]))[1]
-    cat(paste(ans, Sys.getpid(), "\n"))
-    # cat(getpb(pb), "\n")
-  },
-  cl = parallelCluster
-)
-stopCluster(parallelCluster)

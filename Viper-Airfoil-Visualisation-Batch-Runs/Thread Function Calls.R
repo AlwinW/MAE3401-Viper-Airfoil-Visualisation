@@ -8,18 +8,9 @@
 # omesh = filedata
 
 
-
-#--- Full functionality ----
-# This thread goes through each of the main functions
-ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
-  #--- Functions for the Thread ----
-  set <- getAllConnections()
-  thread <-  unlist(summary.connection(set[length(set)]))[1]
-  thread <- paste(thread, sprintf("%04d", Sys.getpid()), ":")
-  PrintThread <- function(msg) {
-    cat(paste(thread, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
-  }
-  
+ThreadLoopTest <- function(threaddata) {
+  list2env(threaddata, envir = environment())
+  omesh = filedata
   
   #--- Required files ----
   source("Function Install Packages.R")
@@ -30,10 +21,67 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
   source("Function Airfoil Normals.R")
   source("Function Interpolations.R")
   source("Function Boundary Layers.R")
+  source("Function pblapply.R")
+  
+  list2env(airfoildata, envir = environment())
+  PrintThread("Files Loaded")
+  cat("---------------------------------------------------------------\n")
+  #
+  airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
+  PrintThread("Airfoil Coordinates Plotted")
+  #
+  airfoilmesh <- InterpPoint(omesh, airfoilcoord)
+  PrintThread("Pressure on Airfoil Plotted")
+  #
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.2), cylinder = TRUE)
+  dist = NormalSamp(seq(0, 0.8, by = 0.05))
+  interpvalU <- pblapply(xvec, function(x) {
+    lvec = NormalPoint(x, dist, AoA, surf = "upper")
+    interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
+    return(interp)
+  })
+  interpvalL <- pblapply(xvec, function(x) {
+    lvec = NormalPoint(x, dist, AoA, surf = "lower")
+    interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
+    return(interp)
+  })
+  interpvalLong <- bind_rows(c(interpvalU, interpvalL))
+  #
+  PrintThread("U' and V' Calculated") 
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.2), cylinder = FALSE)
+  blvalU <- pblapply(xvec, function(x) {
+    blval = BLCalcs(omesh, x, surf = "upper", AoA, Re)
+    return(blval)
+  })
+  blvalL <- pblapply(xvec, function(x) {
+    blval = BLCalcs(omesh, x, surf = "lower", AoA, Re)
+    return(blval)
+  })
+  blvalLong <- bind_rows(c(blvalU, blvalL))
+  PrintThread("Boundary Layers Calculated") 
+  #
+  return(NULL)
+}
+
+
+#--- Full functionality ----
+# This thread goes through each of the main functions
+ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
+
+  #--- Required files ----
+  source("Function Install Packages.R")
+  LoadPackages()
+  source("Plot Settings.R")
+  savepath = "Output_Data"
+  source("Function Airfoil Profile.R")
+  source("Function Airfoil Normals.R")
+  source("Function Interpolations.R")
+  source("Function Boundary Layers.R")
+  source("Function pblapply.R")
   
   #--- Manipulate input data ----
   # Expand the airfoil data into the current thread environment
-  list2env(airfoildata, envir = .GlobalEnv)
+  list2env(airfoildata, envir = environment())
   
   
   
@@ -166,4 +214,6 @@ ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
          width = 6, height = 4, scale = 1.2, dpi = 300)
   
   PrintThread("Boundary Layers Plotted") # Print----
+  
+  return(NULL)
 }

@@ -3,11 +3,26 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+#--- Functions for the Thread ----
+set <- getAllConnections()
+thread <-  unlist(summary.connection(set[length(set)]))[1]
+thread <- paste(thread, sprintf("%04d", Sys.getpid()), ":")
+PrintThread <- function(msg, thread = thread, ID = ID) {
+  cat(paste(thread, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
+}
+
 # The purpose of this function is to print progress to
 # an exernal file
 
-pblapply <- function (X, FUN, ..., cl = NULL) 
+pblapply <- function (X, FUN, ..., msg = NULL, cl = NULL) 
 {
+  set <- getAllConnections()
+  thread <-  unlist(summary.connection(set[length(set)]))[1]
+  thread <- paste(thread, sprintf("%04d", Sys.getpid()), ":")
+  PrintThread <- function(msg) {
+    cat(paste(thread, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
+  }
+  
   # Rename the function to FUN
   FUN <- match.fun(FUN)
   # Ensure X is a list
@@ -44,6 +59,10 @@ pblapply <- function (X, FUN, ..., cl = NULL)
     for (i in seq_len(B)) {
       rval[i] <- list(lapply(X[Split[[i]]], FUN, ...))
       setpb(pb, i)
+      # WRITE OUT PROGRESS
+      if (!is.null(msg)) {
+        PrintThread(paste(msg, pb, "%"))
+      }
       # I want to drop a line here!
     }
   }
@@ -61,6 +80,10 @@ pblapply <- function (X, FUN, ..., cl = NULL)
         rval[i] <- list(parallel::parLapply(cl, X[Split[[i]]], 
                                             FUN, ...))
         setpb(pb, i)
+        # WRITE OUT PROGRESS
+        if (!is.null(msg)) {
+          PrintThread(paste(msg, pb, "%"))
+        }
       }
     }
     else {
@@ -75,6 +98,10 @@ pblapply <- function (X, FUN, ..., cl = NULL)
         rval[i] <- list(parallel::mclapply(X[Split[[i]]], 
                                            FUN, ..., mc.cores = as.integer(cl)))
         setpb(pb, i)
+        # WRITE OUT PROGRESS
+        if (!is.null(msg)) {
+          PrintThread(paste(msg, pb, "%"))
+        }
       }
     }
   }
