@@ -9,6 +9,7 @@
 # reshapes the long format into a table of:
 #   x | y | U | V | P | vort_xy_plane
 LoadFile <- function(filename, foldername = NULL) {
+  # Note: Future dev: time
   # Determine the metadata
   Re = as.numeric(
     unlist(strsplit(unlist(strsplit(filename, "Re"))[2], "AoA"))[1])
@@ -17,6 +18,7 @@ LoadFile <- function(filename, foldername = NULL) {
   # Concatenate to find the correct filename
   if (!is.null(foldername)) {}
     filepath = paste(foldername, filename, sep = "/")
+  # print(filepath)
   # Determine the starting and ending lines
   rstart = grep("DT=", readLines(filepath))[1]
   rend = grep(" 1 ", readLines(filepath))[1]
@@ -31,46 +33,20 @@ LoadFile <- function(filename, foldername = NULL) {
   # Combind the filedata and metadata into one list
   filedata <- list(
     ID = paste0("Re", sprintf("%04d", Re), 
-               "AoA", sprintf("%03d", AoA)),    
+                "AoA", sprintf("%03d", AoA)),    
     Re = Re,
     AoA = AoA,
     filepath = filepath,
-    filedata = filedata
+    omesh = filedata
   )
   # Return the data from the file
   return(filedata)
 }
 
 
-#--- Load Data in a Folder ----
-# This takes a folder name and reads the list of files.
-# Each of the files is then read by calling the "LoadFile" function
-LoadFolder <- function(foldername = "Input_Data") {
-  # Get a list of the files
-  filelist <- list.files(path = foldername, pattern = "*.dat")
-  # Load the data for each file using parallel cores
-  parallelCluster <- parallel::makeCluster(parallel::detectCores())
-  folderdata <- pblapply(
-    filelist, 
-    LoadFile, foldername = foldername,
-    cl = parallelCluster
-  )
-  stopCluster(parallelCluster)
-  # Recombine Re and AoA since the order may have been shifted around
-  #   during the parallel work
-  listnames <- unlist(lapply(folderdata, function(x) x$ID
-    ))
-  # Set the names of folderdata and then reorder them
-  names(folderdata) <- listnames
-  folderdata <- folderdata[order(listnames)]
-  # Return the list
-  return(folderdata)
-}
-
-
 #--- Summarise Airfoil Data ----
 # Given a NACA, it puts the important information into the global environment
-AirfoilData <- function(NACA, a, c, env = FALSE) {
+LoadAirfoil <- function(NACA, a, c, env = FALSE) {
   # Max camber; Location of max; Thickness
   m = (NACA %/% 1000) / 100
   p = (NACA %/% 100 %% 10) / 10

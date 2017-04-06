@@ -13,7 +13,7 @@ ThreadLoopTest <- function(threaddata) {
   omesh = filedata
   
   #--- Required files ----
-  source("Function Install Packages.R")
+  source("Function Load Packages.R")
   LoadPackages()
   source("Plot Settings.R")
   savepath = "Output_Data"
@@ -69,7 +69,7 @@ ThreadLoopTest <- function(threaddata) {
 ThreadAll <- function(ID, Re, AoA, filepath, omesh, airfoildata) {
 
   #--- Required files ----
-  source("Function Install Packages.R")
+  source("Function Load Packages.R")
   LoadPackages()
   source("Plot Settings.R")
   savepath = "Output_Data"

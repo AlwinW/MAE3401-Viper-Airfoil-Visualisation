@@ -1,3 +1,14 @@
+# =========================
+# Custom
+# =========================
+
+# Past Log files
+/Viper-Airfoil-Visualisation-Batch-Runs/Past Logs/*.txt
+
+# =========================
+# Generated
+# =========================
+
 # History files .Rhistory .Rapp.history
 
 # Session Data files .RData
