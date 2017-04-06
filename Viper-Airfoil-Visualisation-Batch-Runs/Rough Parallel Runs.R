@@ -22,7 +22,7 @@ source("Function pblapply.R")
 #--- Initialise the cluster ----
 logfile = paste0(format(Sys.time(), "%Y-%m-%dT%H.%M.%S"), ".txt") # logfile
 cl <- makeCluster(detectCores(), outfile = logfile)               # start the cluster
-clusterExport(cl, c("airfoildata", "foldername"))                 # add airfoildata to the cluster threads
+clusterExport(cl, c("airfoildata", "foldername", "logfile"))      # add airfoildata to the cluster threads
 
 #--- Thread calculation ----
 thread <- pblapplycl( #pbapply::pblapply( #
@@ -55,6 +55,10 @@ thread <- pblapplycl( #pbapply::pblapply( #
     airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
     
     ThreadProgress(threadname, ID, "Airfoil Surface Interpolation Calculated")
+    
+    print(logfile)
+    print(ID)
+    pblapplycl(rep(0.1, 10), Sys.sleep, log = logfile, msgID = ID, msg = "sleep")
   },
   cl = cl,
   log = logfile

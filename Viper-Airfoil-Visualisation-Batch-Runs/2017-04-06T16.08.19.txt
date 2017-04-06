@@ -1,0 +1,36 @@
+starting worker pid=7200 on localhost:11891 at 16:08:20.238
+starting worker pid=8956 on localhost:11891 at 16:08:21.073
+starting worker pid=2180 on localhost:11891 at 16:08:22.295
+starting worker pid=6980 on localhost:11891 at 16:08:22.890
+  localhost:11891 8956 : Re0050AoA-40 4:08:27 PM | File Data Loaded 
+  localhost:11891 7200 : Re0500AoA000 4:08:27 PM | File Data Loaded 
+  localhost:11891 2180 : Re0050AoA000 4:08:27 PM | File Data Loaded 
+  localhost:11891 7200 : Re0500AoA000 4:08:27 PM | Airfoil Coordinaes Calculated 
+  localhost:11891 8956 : Re0050AoA-40 4:08:27 PM | Airfoil Coordinaes Calculated 
+  localhost:11891 2180 : Re0050AoA000 4:08:27 PM | Airfoil Coordinaes Calculated 
+  localhost:11891 6980 : Re0050AoA010 4:08:27 PM | File Data Loaded 
+  localhost:11891 6980 : Re0050AoA010 4:08:27 PM | Airfoil Coordinaes Calculated 
+  localhost:11891 7200 : Re0500AoA000 4:08:29 PM | Airfoil Surface Interpolation Calculated 
+[1] "2017-04-06T16.08.19.txt"
+[1] "Re0500AoA000"
+
+  localhost:11891 8956 : Re0050AoA-40 4:08:29 PM | Airfoil Surface Interpolation Calculated 
+[1] "2017-04-06T16.08.19.txt"
+[1] "Re0050AoA-40"
+
+  localhost:11891 2180 : Re0050AoA000 4:08:29 PM | Airfoil Surface Interpolation Calculated 
+[1] "2017-04-06T16.08.19.txt"
+[1] "Re0050AoA000"
+
+  localhost:11891 6980 : Re0050AoA010 4:08:30 PM | Airfoil Surface Interpolation Calculated 
+[1] "2017-04-06T16.08.19.txt"
+[1] "Re0050AoA010"
+
+DESKTOP-1B1U6C0 Progress 50 % 
+  localhost:11891 7200 : Re0050AoA040 4:08:35 PM | File Data Loaded 
+  localhost:11891 7200 : Re0050AoA040 4:08:35 PM | Airfoil Coordinaes Calculated 
+  localhost:11891 7200 : Re0050AoA040 4:08:39 PM | Airfoil Surface Interpolation Calculated 
+[1] "2017-04-06T16.08.19.txt"
+[1] "Re0050AoA040"
+
+DESKTOP-1B1U6C0 Progress 100 % 
