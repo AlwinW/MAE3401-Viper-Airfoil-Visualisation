@@ -1,0 +1,43 @@
+starting worker pid=5608 on localhost:11929 at 19:43:57.111
+starting worker pid=8408 on localhost:11929 at 19:43:57.241
+starting worker pid=1412 on localhost:11929 at 19:43:57.379
+starting worker pid=9028 on localhost:11929 at 19:43:57.510
+
+011-E152-017WL Progress 0 % 
+  localhost:11929  9028 : Re  50 AoA 10 7:43:58 PM | File Data Loaded 
+  localhost:11929  9028 : Re  50 AoA 10 7:43:58 PM | Airfoil Coordinates Calculated 
+  localhost:11929  1412 : Re  50 AoA  0 7:43:58 PM | File Data Loaded 
+  localhost:11929  5608 : Re 500 AoA  0 7:43:58 PM | File Data Loaded 
+  localhost:11929  8408 : Re  50 AoA-40 7:43:58 PM | File Data Loaded 
+  localhost:11929  1412 : Re  50 AoA  0 7:43:58 PM | Airfoil Coordinates Calculated 
+  localhost:11929  5608 : Re 500 AoA  0 7:43:58 PM | Airfoil Coordinates Calculated 
+  localhost:11929  8408 : Re  50 AoA-40 7:43:58 PM | Airfoil Coordinates Calculated 
+  localhost:11929  9028 : Re  50 AoA 10 7:43:59 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11929  1412 : Re  50 AoA  0 7:43:59 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11929  5608 : Re 500 AoA  0 7:43:59 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11929  8408 : Re  50 AoA-40 7:43:59 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11929  9028 : Re  50 AoA 10 7:44:00 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11929  1412 : Re  50 AoA  0 7:44:01 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11929  5608 : Re 500 AoA  0 7:44:01 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11929  8408 : Re  50 AoA-40 7:44:01 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11929  5608 : Re 500 AoA  0 7:44:18 PM | Boundary Layers Calculated 
+  localhost:11929  1412 : Re  50 AoA  0 7:44:18 PM | Boundary Layers Calculated 
+  localhost:11929  9028 : Re  50 AoA 10 7:44:19 PM | Boundary Layers Calculated 
+  localhost:11929  8408 : Re  50 AoA-40 7:44:19 PM | Boundary Layers Calculated 
+
+011-E152-017WL Progress 50 % 
+  localhost:11929  5608 : Re  50 AoA 40 7:44:19 PM | File Data Loaded 
+  localhost:11929  5608 : Re  50 AoA 40 7:44:19 PM | Airfoil Coordinates Calculated 
+  localhost:11929  5608 : Re  50 AoA 40 7:44:19 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11929  5608 : Re  50 AoA 40 7:44:21 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11929  5608 : Re  50 AoA 40 7:44:34 PM | Boundary Layers Calculated 
+
+011-E152-017WL Progress 100 % 
+Warning messages:
+Warning message:
+Warning message:
+In bind_rows_(x, .id) :1: equal factor levels: coercing to character
+In bind_rows_(x, .id) :In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+ Unequal factor levels: coercing to character
+In bind_rows_(x, .id) : Unequal factor levels: coercing to character
+2: In bind_rows_(x, .id) : Unequal factor levels: coercing to character

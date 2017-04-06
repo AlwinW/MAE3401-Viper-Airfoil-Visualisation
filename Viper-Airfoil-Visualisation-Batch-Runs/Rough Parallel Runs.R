@@ -61,37 +61,30 @@ thread <- pblapplycl( #pbapply::pblapply( #
     source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
     dist = NormalSamp(seq(0, 0.8, by = 0.05))
-    # Upper Surface
-    interpvalU <- pblapply(xvec, function(x) {
-      lvec = NormalPoint(x, dist, AoA, surf = "upper")
-      interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
-      return(interp)}
-    )
-    ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Upper Surface Calculated")
-    # Lower Surface
-    interpvalL <- pblapply(xvec, function(x) {
-      lvec = NormalPoint(x, dist, AoA, surf = "lower")
-      interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
-      return(interp)}
-    )
-    ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Lower Surface Calculated")
-    interpvalLong <- bind_rows(c(interpvalU, interpvalL))
-    
-    lvec = rbind(NormalPoint(x, dist, AoA, surf = "upper"),
-                 NormalPoint(x, dist, AoA, surf = "lower"))
-    
-    
+    # Find the combined lvec for 
     lvec <- rbind(
       bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
       bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
     interpLongLong <- InterpProj(omesh, lvec, plotsurf = TRUE)
     
-    # Testing accuracy
-    unlist(lapply(select(interpvalLong, -surf, -eq), sum)) -
-      unlist(lapply(select(interpLongLong, -surf, -eq), sum))
-    unlist(lapply(select(interpvalLong, -surf, -eq), sd)) -
-      unlist(lapply(select(interpLongLong, -surf, -eq), sd))
+    ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
     
+    #--- Boundary Layer Calculations ----
+    source("Function Boundary Layers.R")
+    xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = FALSE)
+    
+    blvalU <- pblapply(xvec, function(x) {
+      blval = BLCalcs(omesh, x, surf = "upper", AoA, Re)
+      return(blval)
+    })
+    blvalL <- pblapply(xvec, function(x) {
+      blval = BLCalcs(omesh, x, surf = "lower", AoA, Re)
+      return(blval)
+    })
+    blvalLong <- bind_rows(c(blvalU, blvalL))
+    ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
+    
+    return(paste(ID, "Completed"))
   },
   cl = cl,
   log = logfile

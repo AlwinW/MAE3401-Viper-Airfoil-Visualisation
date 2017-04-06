@@ -48,16 +48,6 @@ BLIntegrals <- function(omesh, xO, thickness, blU, surf, AoA, gradint = gradint,
            momethick = Udash/blU * (1 - Udash / blU),
            kinethick = Udash/blU * (1 - (Udash / blU)^2)) %>%
     select(dispthick, momethick, kinethick)
-  
-  # # Using 3/8 rule
-  # distances <- 3/8* (
-  #   3 * apply(integrand, 2, sum) -
-  #   apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = length.out),], 2, sum) -
-  #   1 * integrand[1,] -
-  #   1 * integrand[length.out,]) *
-  #   thickness/length.out
-  
-  # Using trapezium rule
   distances <- (
     apply(integrand, 2, sum) -
     1/2 * integrand[1,] -
