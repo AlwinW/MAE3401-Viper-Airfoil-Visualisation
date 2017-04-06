@@ -81,10 +81,12 @@ thread <- pblapplycl( #pbapply::pblapply( #
           # NOTE: Combine into BL Calc Laterz
           # Search along all normals to get 100% thickness
           dist = NormalSamp(seq(0, 18, length.out = 1e6))
+          h = dist[2] - dist[1]
           lvec <- rbind(
             bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
             bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
           blthickness = BLThickness(omesh, lvec)
+          
           # Determine BL values
           dist = seq(0, max(blthickness$dist), length.out = 1e6)
           lvec <- rbind(
@@ -113,6 +115,8 @@ thread <- pblapplycl( #pbapply::pblapply( #
     })
     blvalLong <- bind_rows(c(blvalU, blvalL))
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
+    
+    space.usage <- sort(sapply(ls(), function(x) format(object.size(get(x)), units = "auto")))
     
     return(paste(ID, "Completed"))
   },
