@@ -45,13 +45,22 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
     # Udash and Vdash found by using vector projections
     mutate(Udash = sqrt((U - (delx*U + dely*V)/dist^2 * delx)^2 + (V - (delx*U + dely*V)/dist^2 * dely)^2),
            Vdash = (delx*U + dely*V)/dist) %>%
+    # Correct values at the surface
+    mutate(Udash = ifelse(dist != 0, Udash, 0),
+           Vdash = ifelse(dist != 0, Vdash, 0)) %>%
     mutate(Udash = ifelse(dist != 0, Udash, 0),
            Vdash = ifelse(dist != 0, Vdash, 0)) %>%
     # sign of Udash found by cross product, upper vs lower
     mutate(Udash = sign(dely*U - delx*V) * ifelse(surf == "upper", 1, -1) * Udash,
-           Umdash = sign(dely) * ifelse(surf == "upper", 1, -1) * Umdash)
+           Umdash = sign(dely) * ifelse(surf == "upper", 1, -1) * Umdash) %>%
+    # Normalised velocity ratio
+    mutate(UUmdash = Udash/Umdash,
+           VVmdash = Vdash/Vmdash)
   
   # print(paste(lmesh$dist, lmesh$Udash))
+  
+  # Group lmesh by xO
+  lmesh = group_by(lmesh, surf, xO, add = TRUE)
   
   return(lmesh)
 }

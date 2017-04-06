@@ -60,18 +60,47 @@ thread <- pblapplycl( #pbapply::pblapply( #
     #--- Interpolation on Normals ----
     source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
-    dist = NormalSamp(seq(0, 0.8, by = 0.05))
+    dist = NormalSamp(seq(0, 1.5, by = 0.05))
     # Find the combined lvec for 
     lvec <- rbind(
       bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
       bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
-    interpLongLong <- InterpProj(omesh, lvec, plotsurf = TRUE)
+    interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
+    
+    # SAVE INTERPVAL then delete it!
     
     ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
     
     #--- Boundary Layer Calculations ----
     source("Function Boundary Layers.R")
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = FALSE)
+    
+    
+    bl <- pblapply(xvec,
+        function (x) {
+          # Search along all normals to get 100% thickness
+          dist = NormalSamp(seq(0, 18, length.out = 1e6))
+          lvec <- rbind(
+            bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
+            bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
+          blthickness = BLThickness(omesh, lvec)
+          # Determine BL values
+          dist = seq(0, max(blthickness$dist), length.out = 1e6)
+          lvec <- rbind(
+            bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
+            bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
+          blvalues = BLValues(omesh, lvec, blthickness)
+        return(lvec)
+      }
+    )
+    
+    
+    interpval <- InterpProj(omesh, lvec, plotsurf = FALSE)
+    
+    
+    
+    
+    #-------
     
     blvalU <- pblapply(xvec, function(x) {
       blval = BLCalcs(omesh, x, surf = "upper", AoA, Re)
