@@ -45,29 +45,41 @@ thread <- pblapplycl( #pbapply::pblapply( #
     ThreadProgress(threadname, Re, AoA, "File Data Loaded")
         
     #--- Run Airfoil Calculations ----
-    source("Function Airfoil Profile.R")      # For fn "AirfoilCoord", etc
+    source("Function Airfoil Profile.R")    # For fn "AirfoilCoord", etc
     list2env(airfoildata, envir = .GlobalEnv)                     # N.B: global so all fn can find it
     airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
     
     ThreadProgress(threadname, Re, AoA, "Airfoil Coordinates Calculated")
     
     #--- Interpolation on the airfoil----
-    source("Function Interpolations.R")       # For fn "InterpPoint", etc
+    source("Function Interpolations.R")     # For fn "InterpPoint", etc
     airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
     
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
     
-    #print(logfile)
-    #print(ID)
-    #pblapplycl(rep(0.1, 10), Sys.sleep, log = logfile, msgID = ID, msg = "sleep")
+    #--- Interpolation on Normals ----
+    source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
+    xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+    dist = NormalSamp(seq(0, 0.8, by = 0.05))
+    # Upper Surface
+    interpvalU <- pblapply(xvec, function(x) {
+      lvec = NormalPoint(x, dist, AoA, surf = "upper")
+      interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
+      return(interp)}
+    )
+    ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Upper Surface Calculated")
+    # Lower Surface
+    interpvalL <- pblapply(xvec, function(x) {
+      lvec = NormalPoint(x, dist, AoA, surf = "lower")
+      interp <- InterpProj(omesh, lvec, plotsurf = TRUE)
+      return(interp)}
+    )
+    ThreadProgress(threadname, Re, AoA, "Interpolation along Normals to Lower Surface Calculated")
+    interpvalLong <- bind_rows(c(interpvalU, interpvalL))
+    
   },
   cl = cl,
   log = logfile
 )
 
 stopCluster(cl)
-
-
-
-
-
