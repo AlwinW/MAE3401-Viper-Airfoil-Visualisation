@@ -1,5 +1,6 @@
 # Set working directory when run from RStudio
 # setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd("//ad.monash.edu/home/User032/awan39/Documents/GitHub/MAE3401-Viper-Airfoil-Visualisation/Viper-Airfoil-Visualisation-Batch-Runs")
 
 #--- Load MINIMAL source files for use ----
 source("Function Load Packages.R")
@@ -41,24 +42,24 @@ thread <- pblapplycl( #pbapply::pblapply( #
     filedata <- LoadFile(filename, foldername)
     list2env(filedata, envir = environment()); rm(filedata)       # N.B: local so must be passed as fn input
     
-    ThreadProgress(threadname, ID, "File Data Loaded")
+    ThreadProgress(threadname, Re, AoA, "File Data Loaded")
         
     #--- Run Airfoil Calculations ----
     source("Function Airfoil Profile.R")      # For fn "AirfoilCoord", etc
     list2env(airfoildata, envir = .GlobalEnv)                     # N.B: global so all fn can find it
     airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
     
-    ThreadProgress(threadname, ID, "Airfoil Coordinaes Calculated")
+    ThreadProgress(threadname, Re, AoA, "Airfoil Coordinates Calculated")
     
     #--- Interpolation on the airfoil----
     source("Function Interpolations.R")       # For fn "InterpPoint", etc
     airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
     
-    ThreadProgress(threadname, ID, "Airfoil Surface Interpolation Calculated")
+    ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
     
-    print(logfile)
-    print(ID)
-    pblapplycl(rep(0.1, 10), Sys.sleep, log = logfile, msgID = ID, msg = "sleep")
+    #print(logfile)
+    #print(ID)
+    #pblapplycl(rep(0.1, 10), Sys.sleep, log = logfile, msgID = ID, msg = "sleep")
   },
   cl = cl,
   log = logfile

@@ -7,13 +7,16 @@
 ThreadName <- function() {
   set <- getAllConnections()
   thread <-  unlist(summary.connection(set[length(set)]))[1]
-  threadname = paste(thread, sprintf("%04d", Sys.getpid()), ":")
+  threadname = paste0(thread, sprintf("% 6d", Sys.getpid()), " :")
   threadname = gsub("->", "  ", threadname)
   return(threadname)
 }
 
-ThreadProgress <- function(threadname = "", ID = "", msg) {
-  cat(paste(threadname, ID, format(Sys.time(), "%X"), "|", msg, "\n"))
+ThreadProgress <- function(threadname = "", Re, AoA, msg) {
+  cat(paste(threadname, 
+	paste0("Re", sprintf("% 4d", Re)),
+	paste0("AoA", sprintf("% 3d", AoA)),
+	format(Sys.time(), "%X"), "|", msg, "\n"))
 }
 
 #--- Custom pblapply for parallel ----
@@ -28,7 +31,7 @@ pblapplycl <- function (X, FUN, ..., cl = NULL, log = NULL, msgID = NULL, msg = 
       cat("\n")
       print(proc.time() - start.t)
       # Write to file
-      cat(paste(system, "Progress", round(i/B * 100, 0), "%","\n"), 
+      cat(paste(paste0("\n", system), "Progress", round(i/B * 100, 0), "%","\n"), 
           file = log, append = TRUE)
     }
   }
@@ -105,9 +108,8 @@ pblapplycl <- function (X, FUN, ..., cl = NULL, log = NULL, msgID = NULL, msg = 
   else {
     # Start Timing
     start.t = proc.time()
-    # Print to console
-    cat("\n")
-    print(proc.time() - start.t)
+    # WRITE OUT PROGRESS
+    PrintProgress(0, 1, start.t, log)
     
     # Forking available on Windows
     if (inherits(cl, "cluster")) {
