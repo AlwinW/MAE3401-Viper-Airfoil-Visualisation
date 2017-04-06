@@ -3,6 +3,87 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+
+# This is the cluster case for the parallel::pblapply function
+pblapplycl <- function (X, FUN, ..., msg = NULL, cl = NULL) 
+{
+  #--- Manipulate the function ----
+  # Rename the function to FUN
+  FUN <- match.fun(FUN)
+  # Ensure X is a list
+  if (!is.vector(X) || is.object(X)) {
+    X <- as.list(X)}
+  
+  #---- Determine the cluster type ----
+  # Set the cluster if specified
+  if (!is.null(cl)) {
+    if (.Platform$OS.type == "windows") {
+      if (!inherits(cl, "cluster")) 
+        cl <- NULL
+    }
+    else {
+      if (inherits(cl, "cluster")) {
+        if (length(cl) < 2L) 
+          cl <- NULL
+      }
+      else {
+        if (cl < 2) 
+          cl <- NULL
+      }
+    }
+  }
+  
+  #--- Cluster Code ----
+  # Get the number of times the progress bar is updated - typ 100
+  nout <- as.integer(getOption("pboptions")$nout)
+  # Forking available on Windows
+  if (inherits(cl, "cluster")) {
+    # No progress bar, apply a normal parLapply (parallel)
+    if (!dopb()) 
+      return(parallel::parLapply(cl, X, FUN, ...))
+    # Progress bar
+    Split <- splitpb(length(X), length(cl), nout = nout)
+    B <- length(Split)
+    pb <- startpb(0, B)
+    on.exit(closepb(pb), add = TRUE)
+    # Split the input X into components for parallel running and update the pb
+    rval <- vector("list", B)
+    for (i in seq_len(B)) {
+      rval[i] <- list(parallel::parLapply(cl, X[Split[[i]]], 
+                                          FUN, ...))
+      # Update the progress bar
+      setpb(pb, i)
+      # WRITE OUT PROGRESS
+    }
+  }
+  # Forking not available on windows
+  else {
+    # No progress bar, apply a normal mclapply (parallel)
+    if (!dopb()) 
+      return(parallel::mclapply(X, FUN, ..., mc.cores = as.integer(cl)))
+    # Progress bar
+    Split <- splitpb(length(X), as.integer(cl), nout = nout)
+    B <- length(Split)
+    pb <- startpb(0, B)
+    on.exit(closepb(pb), add = TRUE)
+    # Split the input X into components for parallel running and update the pb
+    rval <- vector("list", B)
+    for (i in seq_len(B)) {
+      rval[i] <- list(parallel::mclapply(X[Split[[i]]], 
+                                         FUN, ..., mc.cores = as.integer(cl)))
+      setpb(pb, i)
+      # WRITE OUT PROGRESS
+    }
+  }
+  # Recombine the result(s)
+  rval <- do.call(c, rval, quote = TRUE)
+  names(rval) <- names(X)
+  # Return the result
+  rval
+}
+
+
+
 #--- Functions for the Thread ----
 set <- getAllConnections()
 thread <-  unlist(summary.connection(set[length(set)]))[1]
@@ -14,7 +95,7 @@ PrintThread <- function(msg, thread = thread, ID = ID) {
 # The purpose of this function is to print progress to
 # an exernal file
 
-pblapply <- function (X, FUN, ..., msg = NULL, cl = NULL) 
+pblapply_test <- function (X, FUN, ..., msg = NULL, cl = NULL) 
 {
   set <- getAllConnections()
   thread <-  unlist(summary.connection(set[length(set)]))[1]

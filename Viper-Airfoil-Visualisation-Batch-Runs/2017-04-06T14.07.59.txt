@@ -1,0 +1,32 @@
+starting worker pid=5260 on localhost:11891 at 14:08:00.165
+starting worker pid=5312 on localhost:11891 at 14:08:00.833
+starting worker pid=6952 on localhost:11891 at 14:08:02.318
+starting worker pid=3572 on localhost:11891 at 14:08:03.199
+[1] "Re0050AoA-40 File Data Loaded"
+[1] "Re0050AoA000 File Data Loaded"
+[1] "Re0500AoA000 File Data Loaded"
+[1] "Re0050AoA000 Airfoil Coordinaes Calculated"
+[1] "Re0500AoA000 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA-40 Airfoil Coordinaes Calculated"
+[1] "Re5000AoA010 File Data Loaded"
+[1] "Re5000AoA010 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA000 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA-40 Airfoil Surface Interpolation Calculated"
+[1] "Re0500AoA000 Airfoil Surface Interpolation Calculated"
+[1] "Re5000AoA010 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA040 File Data Loaded"
+[1] "Re0050AoA010 File Data Loaded"
+[1] "Re0050AoA040 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA010 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA010 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA040 Airfoil Surface Interpolation Calculated"
+Warning messages:
+1: In rm(airfoildata) : object 'airfoildata' not found
+2: Warning message:
+In rm(airfoildata) : object 'airfoildata' not found
+In rm(airfoildata) : object 'airfoildata' not found
+Warning message:
+In rm(airfoildata) : object 'airfoildata' not found
+Warning messages:
+1: In rm(airfoildata) : object 'airfoildata' not found
+2: In rm(airfoildata) : object 'airfoildata' not found

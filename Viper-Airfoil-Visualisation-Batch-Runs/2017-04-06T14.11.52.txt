@@ -1,0 +1,19 @@
+starting worker pid=1652 on localhost:11891 at 14:11:53.590
+starting worker pid=4264 on localhost:11891 at 14:11:54.349
+starting worker pid=7588 on localhost:11891 at 14:11:55.299
+starting worker pid=6924 on localhost:11891 at 14:11:55.989
+[1] "Re0050AoA-40 File Data Loaded"
+[1] "Re0050AoA000 File Data Loaded"
+[1] "Re0050AoA-40 Airfoil Coordinaes Calculated"
+[1] "Re0500AoA000 File Data Loaded"
+[1] "Re0050AoA010 File Data Loaded"
+[1] "Re0050AoA000 Airfoil Coordinaes Calculated"
+[1] "Re0500AoA000 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA010 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA-40 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA000 Airfoil Surface Interpolation Calculated"
+[1] "Re0500AoA000 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA010 Airfoil Surface Interpolation Calculated"
+[1] "Re0050AoA040 File Data Loaded"
+[1] "Re0050AoA040 Airfoil Coordinaes Calculated"
+[1] "Re0050AoA040 Airfoil Surface Interpolation Calculated"
