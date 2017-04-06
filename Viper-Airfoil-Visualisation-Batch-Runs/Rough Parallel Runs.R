@@ -78,6 +78,7 @@ thread <- pblapplycl( #pbapply::pblapply( #
     
     bl <- pblapply(xvec,
         function (x) {
+          # NOTE: Combine into BL Calc Laterz
           # Search along all normals to get 100% thickness
           dist = NormalSamp(seq(0, 18, length.out = 1e6))
           lvec <- rbind(
@@ -90,7 +91,7 @@ thread <- pblapplycl( #pbapply::pblapply( #
             bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
             bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
           blvalues = BLValues(omesh, lvec, blthickness)
-        return(lvec)
+        return(blvalues)
       }
     )
     
