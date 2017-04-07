@@ -61,7 +61,7 @@ thread <- pblapplycl( # pbapply::pblapply( #
     source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
     dist = NormalSamp(seq(0, 1.5, by = 0.05))
-    # Find the combined lvec for
+    # Find the combined lvec for interpolation
     lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
     interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
 
@@ -70,12 +70,11 @@ thread <- pblapplycl( # pbapply::pblapply( #
     ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
 
     #--- Boundary Layer Calculations ----
-    source("Function Boundary Layers.R")
+    source("Function Boundary Layers.R")    # For "BLCalcs", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+    blvalues = BLCalcs(omesh, xvec, AoA, Re)
+    bltheory = 
     
-    blvals = BLCalcs(omesh, xvec, AoA, Re)
-    
-
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
 
     # #--- Velocity Profile Calculations ----

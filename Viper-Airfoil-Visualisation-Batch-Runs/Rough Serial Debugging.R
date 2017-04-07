@@ -57,10 +57,8 @@ ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
 source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
 xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
 dist = NormalSamp(seq(0, 1.5, by = 0.05))
-# Find the combined lvec for 
-lvec <- rbind(
-  bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
-  bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
+# Find the combined lvec for interpolation
+lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
 interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
 
 # SAVE INTERPVAL then delete it!
@@ -68,5 +66,6 @@ interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
 ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
 
 #--- Boundary Layer Calculations ----
-source("Function Boundary Layers.R")
-xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = FALSE)
+source("Function Boundary Layers.R")    # For "BLCalcs", etc
+xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+blvalues = BLCalcs(omesh, xvec, AoA, Re)

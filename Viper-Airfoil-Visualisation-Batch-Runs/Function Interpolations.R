@@ -60,7 +60,9 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
   # print(paste(lmesh$dist, lmesh$Udash))
   
   # Group lmesh by xO
-  lmesh = group_by(lmesh, surf, xO, add = TRUE)
+  lmesh = lmesh %>%
+    group_by(surf, xO, add = TRUE) %>%
+    arrange(surf, xO)
   
   return(lmesh)
 }

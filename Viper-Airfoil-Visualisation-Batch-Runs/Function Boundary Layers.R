@@ -116,14 +116,13 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
 
 
 #--- Combine to give BL Calcs ----
+# This gives the thickness etc of a boundary layer
 BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
   # NOTE: Combine into BL Calc Laterz
   # Search using a distance step
   h1 = 0.01
   dist1 = NormalSamp(seq(0, 18, by = h1))
-  lvec <- bind_rows(pblapply(
-    c("upper", "lower"),
-    function(surfval) bind_rows(lapply(xvec, NormalPoint, dist = dist1, AoA = AoA, surf = surfval))))
+  lvec <- NormalLvec(xvec, dist1, AoA, c("upper", "lower"))
   rm(dist1)
   
   blthickness = BLThickness(omesh, lvec)
@@ -137,9 +136,7 @@ BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
   dom = apply(dom, 1, sum)
   dom = ifelse(dom != 0, TRUE, FALSE)
   dist2 = dist2[dom]
-  lvec <- bind_rows(pblapply(
-    c("upper", "lower"),
-    function(surfval) bind_rows(lapply(xvec, NormalPoint, dist = dist2, AoA = AoA, surf = surfval))))
+  lvec <- NormalLvec(xvec, dist2, AoA, c("upper", "lower"))
   rm(dist2)
   
   blthickness = BLThickness(omesh, lvec)
@@ -150,13 +147,28 @@ BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
   length.out = round(max(blthickness$dist)/h)
   length.out = length.out + (4 - length.out%% 3)
   dist = seq(0, max(blthickness$dist), length.out = length.out)
-  lvec <- bind_rows(pblapply(
-    c("upper", "lower"),
-    function(surfval) bind_rows(lapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = surfval))))
+  lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
   rm(dist)
-  
   
   blvalues = BLValues(omesh, lvec, blthickness)
   
   return(blvalues)
+}
+
+
+#--- Theoretical Distance ----
+# Find the theoretical distance
+BLTheory <- function(xvec, AoA, Re, varnames = c("U", "V")) {
+  # Theoretical Distance
+  dist = 5 * xvec / sqrt(Re)
+  
+  lvec = NormalPoint(xvec, dist, AoA, surf = "upper")
+  
+  lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
+  interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
+    select(xO, dist, surf, Udash, Vdash, UUmdash)
+  
+  bltheory = data.frame(
+    xO = xvec, dist = theory, surf = "lower", 
+  )
 }
