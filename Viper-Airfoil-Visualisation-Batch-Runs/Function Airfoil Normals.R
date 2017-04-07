@@ -125,3 +125,17 @@ NormalPoint <- function(xO, dist, AoA = 0, surf = "upper", eq = "norm", gradint 
 }
 
 
+#--- Combine x and surf into one lvec ----
+NormalLvec <- function(xvec, dist, AoA = 0, surf = c("upper", "lower")) {
+  # Combine various x and surfvals efficiently using lapply and single gradint call
+  suppressWarnings(
+  lvec <- bind_rows(pblapply(
+    surf,
+    function(surfval) {
+      bind_rows(lapply(xvec, NormalPoint, 
+                       dist = dist, AoA = AoA, surf = surfval))
+      }
+    ))
+  )
+  return(lvec)
+}

@@ -26,7 +26,7 @@ cl <- makeCluster(detectCores(), outfile = logfile)               # start the cl
 clusterExport(cl, c("airfoildata", "foldername", "logfile"))      # add airfoildata to the cluster threads
 
 #--- Thread calculation ----
-thread <- pblapplycl( #pbapply::pblapply( #
+thread <- pblapplycl( # pbapply::pblapply( #
   filelist, 
   function(filename) {                      # filename = filelist[1] for debugging
     #--- Load Packages ----
@@ -61,24 +61,25 @@ thread <- pblapplycl( #pbapply::pblapply( #
     source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
     dist = NormalSamp(seq(0, 1.5, by = 0.05))
-    # Find the combined lvec for 
-    lvec <- rbind(
-      bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "upper")),
-      bind_rows(pblapply(xvec, NormalPoint, dist = dist, AoA = AoA, surf = "lower")))
+    # Find the combined lvec for
+    lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
     interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
-    
+
     # SAVE INTERPVAL then delete it!
-    
+
     ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
-    
+
     #--- Boundary Layer Calculations ----
     source("Function Boundary Layers.R")
-    xvec = seq(a + 0.1, a + c - 0.1, by = 0.1)
+    xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+    
+    blvals = BLCalcs(omesh, xvec, AoA, Re)
+    
 
-    system.time(BLCalcs(omesh, xvec))
-    
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
-    
+
+    # #--- Velocity Profile Calculations ----
+
     space.usage <- sort(sapply(ls(), function(x) format(object.size(get(x)), units = "auto")))
     
     return(paste(ID, "Completed"))
@@ -88,3 +89,4 @@ thread <- pblapplycl( #pbapply::pblapply( #
 )
 
 stopCluster(cl)
+

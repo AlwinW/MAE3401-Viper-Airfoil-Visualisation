@@ -85,6 +85,7 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
     spread(coord, value) %>%
     mutate(surf = factor(surf, levels = c("L", "U"))) %>%
     arrange(surf, xO * ifelse(surf == "U", 1, -1)) %>%
+    mutate(surf = as.character(surf)) %>%
     select(x, y, surf)
   coord = AoATransform(coord, AoA = AoA)
   return(coord)
