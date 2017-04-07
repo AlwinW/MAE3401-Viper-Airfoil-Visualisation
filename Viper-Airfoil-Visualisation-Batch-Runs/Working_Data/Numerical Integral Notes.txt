@@ -54,3 +54,6 @@ system.time(blintegrals <- BLIntegrals(omesh, xO, thickness, blU, surf = surf, A
 blintegrals
 
 lt, lw diff, lw neg
+
+   user  system elapsed 
+ 563.53  178.51  743.49

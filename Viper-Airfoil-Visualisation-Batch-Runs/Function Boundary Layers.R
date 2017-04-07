@@ -51,6 +51,8 @@ BLThickness <- function(omesh, lvec, varnames = c("U", "V")) {
   # Output of thicknesses (100%)
   blthickness = rbind(blthickmax, blthicktp, blthickuum, blthickmag) %>%
     group_by(method, add = TRUE)
+  
+  return(blthickness)
 }
 
 
@@ -61,8 +63,8 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
     select(xO, dist, surf, Udash, Vdash, UUmdash)
   #--- Determine the distances ----
-  blvalues = data.frame()
-  for (i in 1:length(blthickness)) {
+  blvalues = list()
+  for (i in 1:nrow(blthickness)) {
     soln <- interpval %>%
       ungroup() %>%
       filter(xO == blthickness$xO[i],
@@ -71,24 +73,27 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
              Udash < blthickness$Udash[i] * 0.99) %>%
       slice(which.max(dist))
     
-    thickness = soln$dist
-    blU = soln$Udash
-    
     integrand <- interpval %>%
       ungroup() %>%
-      filter(dist <= soln$dist) %>%
-      mutate(dispthick = 1 - Udash/blU,
-             momethick = Udash/blU * (1 - Udash / blU),
-             kinethick = Udash/blU * (1 - (Udash / blU)^2)) %>%
-      select(dist, dispthick, momethick, kinethick)
+      filter(xO == blthickness$xO[i],
+             surf == blthickness$surf[i],
+             dist <= soln$dist) %>%
+      mutate(Ur = Udash / soln$Udash,
+             dispthick = 1 - Ur,
+             momethick = Ur * (1 - Ur),
+             kinethick = Ur * (1 - (Ur)^2)) %>%
+      select(dispthick, momethick, kinethick)
+    
     distances <- (
       apply(integrand, 2, sum) -
         1/2 * integrand[1,] -
         1/2 * integrand[nrow(integrand),]) *
-      thickness/nrow(integrand)
+      soln$dist/(nrow(integrand)/2)
     
-    blvalues <- rbind(cbind(soln, distances, method = blthickness$method))
+    blvalues[[i]] <- cbind(
+      soln, thickness = soln$dist, distances, method = blthickness$method[i])
   }
+  blvalues = bind_rows(blvalues)
   return(blvalues)
 }
 
