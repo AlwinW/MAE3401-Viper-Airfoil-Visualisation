@@ -98,25 +98,39 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
 }
 
 
-# #--- Combine to give BL Calcs ----
-# BLCalcs <- function(omesh, xO, surf, AoA, Re) {
-#   # Find the various gradients for the point of interest
-#   gradint <- AirfoilGrads(xO, surf = surf)
-#   # Determine the boundary value thickness
-#   blthickness <- BLThickOptim(omesh, xO, surf = surf, AoA, gradint = gradint)
-#   thickness = blthickness$thickness
-#   blU = blthickness$blU
-#   # Determine the theoretical flow
-#   theory = 5 * (xO - a) / sqrt(Re * (xO - a))
-#   # Determine the integral values
-#   blintegrals <- BLIntegrals(omesh, xO, thickness, blU, surf = surf, AoA, gradint = gradint)
-#   # Combine all the data
-#   blvals <- data.frame(
-#     bldist = c(thickness, theory, with(blintegrals, c(dispthick, momethick, kinethick))),
-#     bldistname = c("Thickness", "Theory", "Dislacement Thickness", "Momentum Thickness", "Kinetic Energy Thickness")
-#   )
-#   # Add additional information for plotting
-#   blvals <- cbind(blvals, NormalPoint(xO, blvals$bldist, AoA, surf, gradint = gradint))
-#   # Return as a dataframe
-#   return(blvals)
-# }
+#--- Combine to give BL Calcs ----
+BLCalcs <- function (omesh, x, varnames = c("U", "V")) {
+  # NOTE: Combine into BL Calc Laterz
+  # Search using a distance step
+  h1 = 0.01
+  dist1 = NormalSamp(seq(0, 18, by = h1))
+  lvec <- bind_rows(pblapply(
+    c("upper", "lower"),
+    function(surfval) bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = surfval))))
+  
+  blthickness = BLThickness(omesh, lvec)
+  
+  # Search along a smaller distance step
+  h2 = 2e-5
+  dist2 = seq(min(blthickness$dist) - h1, max(blthickness$dist)  + h1, by = h2)
+  dom <- as.matrix(sapply(blthickness$dist,
+                          function(dist) dist2 > (dist - h1) & dist2 < (dist + h1)))
+  dom = apply(dom, 1, sum)
+  dom = ifelse(dom != 0, TRUE, FALSE)
+  dist2 = dist2[dom]
+  lvec <- bind_rows(pblapply(
+    c("upper", "lower"),
+    function(surfval) bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = surfval))))
+  
+  blthickness = BLThickness(omesh, lvec)
+  
+  # Determine BL values
+  dist = seq(0, max(blthickness$dist), length.out = 1e6)
+  lvec <- bind_rows(pblapply(
+    c("upper", "lower"),
+    function(surfval) bind_rows(lapply(x, NormalPoint, dist = dist, AoA = AoA, surf = surfval))))
+  
+  blvalues = BLValues(omesh, lvec, blthickness)
+  
+  return(blvalues)
+}
