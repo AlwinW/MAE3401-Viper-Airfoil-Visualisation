@@ -6,9 +6,9 @@
 #--- Creating xvec for norms ----
 # Allows for better, more evened sampling of normals
 # A cyclinder approximation is used for the leading edge
-AirfoilSamp <- function(xvec, del = c*8e-6, cylinder = FALSE) {
+AirfoilSamp <- function(xvec, polyn = 3, del = c*8e-6, cylinder = FALSE) {
   # Sample according to a cubic function
-  xvec = -2*a/c^3 * (xvec - a)^3 + a
+  xvec = c * ((xvec - a)/c)^polyn + a
   # Add extra x values for interpolation if cylinder used
   if (cylinder != FALSE & xvec[1] == a) {
     # Determine the number of points from -theta_c to theta_c

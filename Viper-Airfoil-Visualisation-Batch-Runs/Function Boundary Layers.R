@@ -200,3 +200,6 @@ BLTheory <- function(omesh, xvec, AoA, Re, varnames = c("U", "V"),
     interpval, thickness = interpval$dist, method = factor("theory", levels = methodlevels)
   )
 }
+
+
+#--- 

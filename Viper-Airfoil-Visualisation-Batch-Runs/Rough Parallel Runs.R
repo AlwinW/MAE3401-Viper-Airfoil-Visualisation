@@ -71,14 +71,25 @@ thread <- pblapplycl( # pbapply::pblapply( #
 
     #--- Boundary Layer Calculations ----
     source("Function Boundary Layers.R")    # For "BLCalcs", etc
-    xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+    xvec = AirfoilSamp(seq(a, a+c, by = 0.05), polyn = 5, cylinder = TRUE)
     blvals = BLCalcs(omesh, xvec, AoA, Re)
     bltheory = BLTheory(omesh, xvec, AoA, Re)
+    blplot = bind_rows(blvals, bltheory)
+
     
-    bplot = bind_rows(blvals, bltheory)
+    theme_set(theme_bw())
+    options(scipen = 10)
     
+    testplot <- ggplot() +
+      geom_path(data = blplot, aes(x = xp, y = yp, group = interaction(surf,  method), colour = method), size = 0.9) +
+      geom_path(data = airfoilcoord, aes(x = x, y = y), size = 0.9) +
+      coord_fixed(xlim = c(-1.2, 0.8), ylim = c(-0.8, 0.8)) +
+      labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: Boundary Layer w/ Different Methods"))
     
-    # blplot = rbind(blvals, bltheory)
+    savepath = "Output_Data"
+    ggsave(paste0("Greg_", ID, "_Airfoil.png"), plot = testplot, path = savepath,
+           width = 6, height = 4, scale = 1.2, dpi = 300)
+    
     
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
 

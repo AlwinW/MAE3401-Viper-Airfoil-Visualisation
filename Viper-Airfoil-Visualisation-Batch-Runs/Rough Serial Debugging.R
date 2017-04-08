@@ -67,6 +67,13 @@ ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calcula
 
 #--- Boundary Layer Calculations ----
 source("Function Boundary Layers.R")    # For "BLCalcs", etc
-xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
 blvals = BLCalcs(omesh, xvec, AoA, Re)
 bltheory = BLTheory(omesh, xvec, AoA, Re)
+blplot = bind_rows(blvals, bltheory)
+
+
+ggplot() +
+  geom_path(data = blplot, aes(x = xp, y = yp, group = interaction(surf,  method), colour = method), size = 0.9) +
+  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 0.9) +
+  coord_fixed(xlim = c(-1, 0.6), ylim = c(-0.3, 0.3))
