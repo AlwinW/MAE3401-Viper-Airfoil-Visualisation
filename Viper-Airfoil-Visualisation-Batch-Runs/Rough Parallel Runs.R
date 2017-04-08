@@ -21,19 +21,20 @@ airfoildata <- LoadAirfoil(NACA, a = -0.5, c = 1)
 source("Function pblapply.R")
 
 #--- Location for Saving ----
-savepath = ""
+savepath = "Output_Data"
 logfile = paste0(format(Sys.time(), "%Y-%m-%dT%H.%M.%S"), ".txt") # logfile
 
 #--- Initialise the cluster ----
 cl <- makeCluster(detectCores(), outfile = logfile)               # start the cluster
-clusterExport(cl, c("airfoildata", "foldername", "logfile"))      # add airfoildata to the cluster threads
+clusterExport(cl, c("airfoildata", "foldername", 
+                    "logfile", "savepath"))                       # add airfoildata to the cluster threads
 
 #--- Thread calculation ----
 thread <- pblapplycl( # pbapply::pblapply( #
   filelist, 
   function(filename) {
     source("Thread All Functions.R")
-    outcome = TreadAll(filename, foldername, airfoildata)
+    outcome = TreadAll(filename, foldername, airfoildata, savepath)
     return(outcome)
   },
   cl = cl,
