@@ -58,7 +58,7 @@ source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
 xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
 dist = NormalSamp(seq(0, 1.5, by = 0.05))
 # Find the combined lvec for interpolation
-lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
+lvec <- NormalLvec(xvec, dist, AoA)
 interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
 
 # SAVE INTERPVAL then delete it!
@@ -67,13 +67,39 @@ ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calcula
 
 #--- Boundary Layer Calculations ----
 source("Function Boundary Layers.R")    # For "BLCalcs", etc
-xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
+xvec = AirfoilSamp(seq(a, a+c, by = 0.05), polyn = 5, cylinder = TRUE)
 blvals = BLCalcs(omesh, xvec, AoA, Re)
 bltheory = BLTheory(omesh, xvec, AoA, Re)
 blplot = bind_rows(blvals, bltheory)
 
 
-ggplot() +
-  geom_path(data = blplot, aes(x = xp, y = yp, group = interaction(surf,  method), colour = method), size = 0.9) +
-  geom_path(data = airfoilcoord, aes(x = x, y = y), size = 0.9) +
-  coord_fixed(xlim = c(-1, 0.6), ylim = c(-0.3, 0.3))
+#--- Velocity Profil Calculations ----
+# Domain for plotting
+sep = 0.1
+xvec = c(-0.497, seq(a + sep, a + c - sep, by = sep), 0.499)
+distmax = max(blvals$dist[blvals$xO == max(blvals$xO)]) * 1.2
+
+# Results (interpolation)
+lvec <- NormalLvec(xvec, NormalSamp(seq(0, distmax, length.out = 50)), AoA)
+interpval <- InterpProj(omesh, lvec, linear = TRUE)
+
+velprof <- interpval %>%
+  mutate(Uvp = x + (UUmdash) * 0.05,
+         distvp = ifelse(surf == "upper", 1, -1) * dist)
+
+ggplot(data = velprof, aes(group = interaction(surf, xO))) +
+  geom_path(aes(x = distvp, y = Uvp)) +
+  geom_point(aes(x = distvp, y = Uvp))  +
+  geom_ribbon(aes(x = distvp, ymin = x, ymax = Uvp), alpha = 0.2) +
+  geom_path(data = blvals, aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x, group = interaction(method, surf))) +
+  ylim(-0.6, 0.6) +
+  xlim(-distmax, distmax) + 
+  coord_flip()
+
+
+  geom_path(data = velprof, aes(x = distvp, y = Uvp, group = interaction(surf, xO))) +
+  geom_ribbon(data = velprof, aes(x = distvp, ymin = x, ymax = Uvp))
+
+
+
+

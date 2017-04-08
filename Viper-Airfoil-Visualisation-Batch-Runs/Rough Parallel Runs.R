@@ -57,12 +57,14 @@ thread <- pblapplycl( # pbapply::pblapply( #
     
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
     
+    # Plot cp AND vorticity
+    
     #--- Interpolation on Normals ----
     source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
     dist = NormalSamp(seq(0, 1.5, by = 0.05))
     # Find the combined lvec for interpolation
-    lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
+    lvec <- NormalLvec(xvec, dist, AoA)
     interpval <- InterpProj(omesh, lvec, plotsurf = TRUE)
 
     # SAVE INTERPVAL then delete it!
@@ -76,25 +78,14 @@ thread <- pblapplycl( # pbapply::pblapply( #
     bltheory = BLTheory(omesh, xvec, AoA, Re)
     blplot = bind_rows(blvals, bltheory)
 
-    
-    theme_set(theme_bw())
-    options(scipen = 10)
-    
-    testplot <- ggplot() +
-      geom_path(data = blplot, aes(x = xp, y = yp, group = interaction(surf,  method), colour = method), size = 0.9) +
-      geom_path(data = airfoilcoord, aes(x = x, y = y), size = 0.9) +
-      coord_fixed(xlim = c(-1.2, 0.8), ylim = c(-0.8, 0.8)) +
-      labs(title = paste("Re Number", Re, "and", "AoA", AoA, "deg: Boundary Layer w/ Different Methods"))
-    
-    savepath = "Output_Data"
-    ggsave(paste0("Greg_", ID, "_Airfoil.png"), plot = testplot, path = savepath,
-           width = 6, height = 4, scale = 1.2, dpi = 300)
-    
-    
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
 
     # #--- Velocity Profile Calculations ----
 
+    
+    
+    
+    
     space.usage <- sort(sapply(ls(), function(x) format(object.size(get(x)), units = "auto")))
     status = paste(ID, "Completed")
     

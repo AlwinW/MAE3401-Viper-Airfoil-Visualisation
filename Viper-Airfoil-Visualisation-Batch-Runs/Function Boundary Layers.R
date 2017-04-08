@@ -68,7 +68,7 @@ BLThickness <- function(omesh, lvec, varnames = c("U", "V"),
 BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
-    select(xp, yp, xO, dist, surf, Udash, Vdash, UUmdash)
+    select(xp, yp, x, xO, dist, surf, Udash, Vdash, UUmdash)
   #--- Determine the distances ----
   blvals = list()
   for (i in 1:nrow(blthickness)) {
