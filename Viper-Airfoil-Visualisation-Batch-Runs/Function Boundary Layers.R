@@ -202,4 +202,45 @@ BLTheory <- function(omesh, xvec, AoA, Re, varnames = c("U", "V"),
 }
 
 
-#--- 
+#--- Velocity Profile Points ----
+VelProfileLvec <- function(omesh, sep, blvals, AoA = 0, 
+      surf = factor(c("upper", "lower"), levels = c("lower", "upper"))) {
+  # Domain for plotting
+  xvec = c(-0.497, seq(a + sep, a + c - sep, by = sep), 0.499)
+  distmax = max(blvals$dist[blvals$xO == max(blvals$xO)]) * 1.2
+  # lvec for interpolation
+  lvec <- NormalLvec(xvec, NormalSamp(seq(0, distmax, length.out = 50)), AoA, surf)
+  return(list(distmax = distmax, xvec = xvec, lvec = lvec))
+}
+
+
+#--- Velocity Profile Calculations ----
+VelProfile <- function(blvals, xvec, lvec, omesh, AoA = 0, Re) {
+  # Results (interpolation)
+  velprofile <- InterpProj(omesh, lvec, linear = TRUE)
+  # Determine which part(s) are in the boundary layer
+  vpblvals = BLCalcs(omesh, xvec, AoA, Re)
+  vpbl = filter(vpblvals, method == "max") %>%
+    select(xO, surf, thickness)
+  velprofile <- right_join(velprofile, vpbl, by = c("xO", "surf")) %>%
+    mutate(bl = (dist <= thickness))
+  # Return the output
+  return(velprofile)
+}
+
+Blasius <- function(lvec, Re) {
+  # Blasius Soln
+  blasius <- data.frame(
+    eta = seq(0, 8, by = 0.5),
+    uU = c(0.000, 0.1659, 0.3298, 0.4868, 0.6298, 0.7513, 0.8461, 0.9131, 0.9555,
+           0.9795, 0.9916, 0.9969, 0.9990, 0.9997, 0.9999, 1.000, 1.000))
+  # Determine eta
+  lvec <- lvec %>%
+    mutate(eta = sqrt(Re * (x - a)) * dist/(x - a))
+  # Caculate Blasius for the various points
+  vptheory <- as.data.frame(spline(x = blasius$eta, y = blasius$uU, xout = lvec$eta))
+  vptheory <- data.frame(lvec, UUmblasius = vptheory$y) %>%
+    mutate(UUmblasius = ifelse(eta >= 8, 1, UUmblasius))
+  return(vptheory)
+}
+

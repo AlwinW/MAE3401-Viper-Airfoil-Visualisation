@@ -73,32 +73,56 @@ bltheory = BLTheory(omesh, xvec, AoA, Re)
 blplot = bind_rows(blvals, bltheory)
 
 
-#--- Velocity Profil Calculations ----
+#--- Velocity Profile Calculations ----
 # Domain for plotting
 sep = 0.1
 xvec = c(-0.497, seq(a + sep, a + c - sep, by = sep), 0.499)
 distmax = max(blvals$dist[blvals$xO == max(blvals$xO)]) * 1.2
-
 # Results (interpolation)
 lvec <- NormalLvec(xvec, NormalSamp(seq(0, distmax, length.out = 50)), AoA)
-interpval <- InterpProj(omesh, lvec, linear = TRUE)
+velprofile <- InterpProj(omesh, lvec, linear = TRUE)
+vpblvals = BLCalcs(omesh, xvec, AoA, Re)
+vpbl = filter(vpblvals, method == "max") %>%
+  select(xO, surf, thickness)
 
-velprof <- interpval %>%
-  mutate(Uvp = x + (UUmdash) * 0.05,
-         distvp = ifelse(surf == "upper", 1, -1) * dist)
+velprofile <- right_join(velprofile, vpbl, by = c("xO", "surf")) %>%
+  mutate(bl = (dist <= thickness))
 
-ggplot(data = velprof, aes(group = interaction(surf, xO))) +
-  geom_path(aes(x = distvp, y = Uvp)) +
-  geom_point(aes(x = distvp, y = Uvp))  +
-  geom_ribbon(aes(x = distvp, ymin = x, ymax = Uvp), alpha = 0.2) +
-  geom_path(data = blvals, aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x, group = interaction(method, surf))) +
-  ylim(-0.6, 0.6) +
+# Blasius Soln
+blasius <- data.frame(
+  eta = seq(0, 8, by = 0.5),
+  uU = c(0.000, 0.1659, 0.3298, 0.4868, 0.6298, 0.7513, 0.8461, 0.9131, 0.9555,
+         0.9795, 0.9916, 0.9969, 0.9990, 0.9997, 0.9999, 1.000, 1.000))
+lvec <- lvec %>%
+  mutate(eta = sqrt(Re * (x - a)) * dist/(x - a))
+vptheory <- as.data.frame(spline(x = blasius$eta, y = blasius$uU, xout = lvec$eta))
+vptheory <- data.frame(lvec, UUmblasius = vptheory$y) %>%
+  mutate(UUmblasius = ifelse(eta >= 8, 1, UUmblasius))
+
+
+ggplot(data = velprofile, 
+       aes(x = ifelse(surf == "upper", 1, -1) * dist,
+           ymin = x, ymax = x + UUmdash * sep / 1.5,
+           group = interaction(surf, xO))) +
+  geom_ribbon(aes(alpha = "out")) +
+  geom_ribbon(data = filter(velprofile, bl == TRUE), aes(alpha = "in")) +
+  coord_flip(xlim = c(-distmax, distmax), ylim = c(-0.6, 0.7)) +
+  theme(aspect.ratio = (2*distmax)/(0.6 + 0.7))
+
+ggplot(data = velprofile, aes(group = interaction(surf, xO))) +
+  # geom_path(aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x + UUmdash * 0.05)) +
+  # geom_point(aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x + UUmdash * 0.05))  +
+  geom_ribbon(aes(x = ifelse(surf == "upper", 1, -1) * dist, ymin = x, ymax = x + UUmdash * sep/1.5), alpha = 0.2) +
+  geom_path(data = vptheory, aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x + UUmblasius * sep/1.5)) +
+  # geom_path(data = blvals, aes(x = ifelse(surf == "upper", 1, -1) * dist, y = x, group = interaction(method, surf))) +
+  ylim(-0.6, 0.7) +
   xlim(-distmax, distmax) + 
   coord_flip()
 
+# GGPLOT: x = ifelse(surf == "upper", 1, -1) * dist
+# GGPLOT: y = x + UUmdash * sep/20
+# GGPLOT: coord_flip()
 
-  geom_path(data = velprof, aes(x = distvp, y = Uvp, group = interaction(surf, xO))) +
-  geom_ribbon(data = velprof, aes(x = distvp, ymin = x, ymax = Uvp))
 
 
 
