@@ -20,8 +20,11 @@ airfoildata <- LoadAirfoil(NACA, a = -0.5, c = 1)
 # Load the pblapply wrapper to use (for progress bar)
 source("Function pblapply.R")
 
-#--- Initialise the cluster ----
+#--- Location for Saving ----
+savepath = ""
 logfile = paste0(format(Sys.time(), "%Y-%m-%dT%H.%M.%S"), ".txt") # logfile
+
+#--- Initialise the cluster ----
 cl <- makeCluster(detectCores(), outfile = logfile)               # start the cluster
 clusterExport(cl, c("airfoildata", "foldername", "logfile"))      # add airfoildata to the cluster threads
 
