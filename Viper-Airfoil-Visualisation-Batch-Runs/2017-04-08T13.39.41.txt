@@ -1,0 +1,40 @@
+starting worker pid=928 on localhost:11257 at 13:39:41.659
+starting worker pid=8100 on localhost:11257 at 13:39:41.927
+starting worker pid=8880 on localhost:11257 at 13:39:42.205
+starting worker pid=924 on localhost:11257 at 13:39:42.456
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11257   928 : Re 500 AoA  0 1:39:45 PM | File Data Loaded 
+  localhost:11257  8100 : Re  50 AoA-40 1:39:45 PM | File Data Loaded 
+  localhost:11257  8100 : Re  50 AoA-40 1:39:45 PM | Airfoil Coordinates Calculated 
+  localhost:11257   928 : Re 500 AoA  0 1:39:45 PM | Airfoil Coordinates Calculated 
+  localhost:11257  8880 : Re  50 AoA  0 1:39:45 PM | File Data Loaded 
+  localhost:11257   924 : Re  50 AoA 10 1:39:45 PM | File Data Loaded 
+  localhost:11257  8880 : Re  50 AoA  0 1:39:45 PM | Airfoil Coordinates Calculated 
+  localhost:11257   924 : Re  50 AoA 10 1:39:45 PM | Airfoil Coordinates Calculated 
+  localhost:11257   928 : Re 500 AoA  0 1:39:48 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11257  8100 : Re  50 AoA-40 1:39:48 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11257  8880 : Re  50 AoA  0 1:39:48 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11257   924 : Re  50 AoA 10 1:39:48 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11257   928 : Re 500 AoA  0 1:39:54 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11257  8100 : Re  50 AoA-40 1:39:54 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11257   924 : Re  50 AoA 10 1:39:54 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11257  8880 : Re  50 AoA  0 1:39:54 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11257   928 : Re 500 AoA  0 1:40:08 PM | Boundary Layers Calculated 
+  localhost:11257   928 : Re 500 AoA  0 1:40:08 PM | Completed 
+  localhost:11257  8880 : Re  50 AoA  0 1:40:10 PM | Boundary Layers Calculated 
+  localhost:11257  8880 : Re  50 AoA  0 1:40:10 PM | Completed 
+  localhost:11257  8100 : Re  50 AoA-40 1:40:17 PM | Boundary Layers Calculated 
+  localhost:11257  8100 : Re  50 AoA-40 1:40:17 PM | Completed 
+  localhost:11257   924 : Re  50 AoA 10 1:40:17 PM | Boundary Layers Calculated 
+  localhost:11257   924 : Re  50 AoA 10 1:40:17 PM | Completed 
+
+DESKTOP-1B1U6C0 Progress 50 % 
+  localhost:11257   928 : Re  50 AoA 40 1:40:17 PM | File Data Loaded 
+  localhost:11257   928 : Re  50 AoA 40 1:40:18 PM | Airfoil Coordinates Calculated 
+  localhost:11257   928 : Re  50 AoA 40 1:40:21 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11257   928 : Re  50 AoA 40 1:40:29 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11257   928 : Re  50 AoA 40 1:41:17 PM | Boundary Layers Calculated 
+  localhost:11257   928 : Re  50 AoA 40 1:41:17 PM | Completed 
+
+DESKTOP-1B1U6C0 Progress 100 % 

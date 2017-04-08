@@ -73,17 +73,22 @@ thread <- pblapplycl( # pbapply::pblapply( #
     source("Function Boundary Layers.R")    # For "BLCalcs", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
     blvals = BLCalcs(omesh, xvec, AoA, Re)
-    bltheory = BLTheory(xvec, AoA, Re)
+    bltheory = BLTheory(omesh, xvec, AoA, Re)
     
-    blplot = rbind(blvals, bltheory)
+    bplot = bind_rows(blvals, bltheory)
+    
+    
+    # blplot = rbind(blvals, bltheory)
     
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
 
     # #--- Velocity Profile Calculations ----
 
     space.usage <- sort(sapply(ls(), function(x) format(object.size(get(x)), units = "auto")))
+    status = paste(ID, "Completed")
     
-    return(paste(ID, "Completed"))
+    ThreadProgress(threadname, Re, AoA, "Completed")
+    return(space.usage)
   },
   cl = cl,
   log = logfile

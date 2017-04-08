@@ -5,7 +5,8 @@
 
 #--- Find the BL Thickness ----
 # This method can be used on a single xO or a vector xvec
-BLThickness <- function(omesh, lvec, varnames = c("U", "V")) {
+BLThickness <- function(omesh, lvec, varnames = c("U", "V"), 
+                        methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
     select(xO, dist, surf, Udash, Vdash, UUmdash)
@@ -54,7 +55,7 @@ BLThickness <- function(omesh, lvec, varnames = c("U", "V")) {
   
   # Output of thicknesses (100%)
   blthickness = rbind(blthickmax, blthicktp, blthickuum, blthickmag) %>%
-    mutate(method = factor(method, levels = c("max", "tp", "UUm", "mag"))) %>%
+    mutate(method = factor(method, levels = methodlevels)) %>%
     group_by(method, add = TRUE) %>%
     arrange(surf, xO, method)
   
@@ -80,15 +81,10 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
              Udash < blthickness$Udash[i] * 0.99) %>%
       slice(which.max(dist))
     
-    if (length(soln$dist) != 1) {
-      # HANDLES EXCEPTION WHERE SOLUTION NOT FOUND, i.e. h too big!!
-      # blvals[[i]] <- data.frame(
-      #   xO = blthickness$xO[i], dist = NA, surf = blthickness$surf[i], Udash = NA, Vdash = NA, UUmdash = NA,
-      #   thickness = NA, dispthick = NA, momethick = NA, kinethick = NA,
-      #   method = blthickness$method[i])
-      next
-    }
+    # HANDLES EXCEPTION WHERE SOLUTION NOT FOUND, i.e. h too big!!
+    if (length(soln$dist) != 1) next
     
+    # Determinet the integrand for the integration
     integrand <- interpval %>%
       ungroup() %>%
       filter(xO == blthickness$xO[i],
@@ -100,61 +96,36 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
              kinethick = Ur * (1 - (Ur)^2)) %>%
       select(dispthick, momethick, kinethick)
     
-    # REPLACE with a 3/8 rule!
-    # distances <- (
-    #   apply(integrand, 2, sum) -
-    #     1/2 * integrand[1,] -
-    #     1/2 * integrand[nrow(integrand),]) *
-    #   soln$dist/(nrow(integrand)/2)
-    
-    # Using 3/8 rule
-    # n = nrow(integrand)
-    # h = soln$dist/n
-    # distances <- 3/8* (
-    #   3 * apply(integrand, 2, sum) -
-    #   apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = n),], 2, sum) -
-    #   1 * integrand[1,] -
-    #   1 * integrand[n,]) *
-    #   h
-    
-    
-    
+    # Values for numerical integration
     n = nrow(integrand)
     h = soln$dist/n     # NOTE: Clearly the input lvec must have had an equally spaced lvec
     
-    test = seq(1, 12, length.out = 100)
-    integrand = data.frame(lin = test, para = test^2, cubic = test^3, quartic = test^4, sin = sin(test))
-    n = nrow(integrand)
-    print(n)
-    h = test[2] - test[1]
-    
-    n38 = (n - 1) %/% 3 # Number of 3/8 rules to be applied
-    ntr = (n - 1) %% 3  # Number of trap rules to be applied (at the end)
-    
-    print(n38)
-    print(ntr)
-    
-    # 3/8 Rule
-    np38 = (3*n38 + 1)  # Number of points in the integrand for 3/8
-    integrand38 = integrand[1:np38,]
-    distances38 = 3/8 * h * 
-      (3 * apply(integrand38, 2, sum) -
-         apply(integrand38[rep(c(TRUE, FALSE, FALSE), length.out = n38),], 2, sum) -
-         integrand38[1,] -
-         integrand38[np38,])
-    distances = distances38
-    # Trap Rule
-    nptr = ntr
-    if (nptr != 0) {
-      integrandtr = integrand[(np38):(np38 + ntr),]
+    if (n >= 2) { # Enough points?
+      n38 = (n - 1) %/% 3 # Number of 3/8 rules to be applied
+      ntr = (n - 1) %% 3  # Number of trap rules to be applied (at the end)
+      
+      # Trap Rule
+      nptr = ntr
+      integrandtr = integrand[1:(nptr + 1),]
       distancestr = 1/2 * h *
         (2 * apply(integrandtr, 2, sum) - 
            integrandtr[1,] -
            integrandtr[ntr + 1,])
-      distances = distances + distancestr
+      # 3/8 Rule
+      np38 = (3*n38 + 1)  # Number of points in the integrand for 3/8
+      integrand38 = integrand[(nptr + 1):(nptr + np38),]
+      distances38 = 3/8 * h * 
+        (3 * apply(integrand38, 2, sum) -
+           apply(integrand38[rep(c(TRUE, FALSE, FALSE), length.out = np38),], 2, sum) -
+           integrand38[1,] -
+           integrand38[np38,])
+      # Sum the distances together
+      distances = distances38 + distancestr
+    } else { # Not enough points
+      distances = data.frame(
+        dispthick = 0, momethick = 0, kinethick = 0
+      )
     }
-    
-    print(distances)
     
     blvals[[i]] <- cbind(
       soln, thickness = soln$dist, distances, method = blthickness$method[i])
@@ -166,7 +137,8 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
 
 #--- Combine to give BL Calcs ----
 # This gives the thickness etc of a boundary layer
-BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
+BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V"), 
+                     methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # NOTE: Combine into BL Calc Laterz
   # Search using a distance step
   h1 = 0.01
@@ -205,7 +177,9 @@ BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
 
 #--- Theoretical Distance ----
 # Find the theoretical distance
-BLTheory <- function(xvec, AoA, Re, varnames = c("U", "V"), surf = c("upper", "lower")) {
+BLTheory <- function(omesh, xvec, AoA, Re, varnames = c("U", "V"), 
+                     surf = factor(c("upper", "lower"), levels = c("lower", "upper")), 
+                     methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # Remove x values from a cylindrical approximation
   xvec = xvec[xvec > a & xvec < a + c]
   # Determine the points for the theoretical distances
@@ -223,6 +197,6 @@ BLTheory <- function(xvec, AoA, Re, varnames = c("U", "V"), surf = c("upper", "l
     select(xp, yp, xO, dist, surf, Udash, Vdash, UUmdash)
   
   bltheory = data.frame(
-    interpval, thickness = interpval$dist, method =  "theory"
+    interpval, thickness = interpval$dist, method = factor("theory", levels = methodlevels)
   )
 }

@@ -68,4 +68,5 @@ ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calcula
 #--- Boundary Layer Calculations ----
 source("Function Boundary Layers.R")    # For "BLCalcs", etc
 xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
-blvalues = BLCalcs(omesh, xvec, AoA, Re)
+blvals = BLCalcs(omesh, xvec, AoA, Re)
+bltheory = BLTheory(omesh, xvec, AoA, Re)
