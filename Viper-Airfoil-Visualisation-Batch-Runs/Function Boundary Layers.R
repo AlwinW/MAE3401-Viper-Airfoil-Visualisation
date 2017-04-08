@@ -67,9 +67,9 @@ BLThickness <- function(omesh, lvec, varnames = c("U", "V")) {
 BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
-    select(xO, dist, surf, Udash, Vdash, UUmdash)
+    select(xp, yp, xO, dist, surf, Udash, Vdash, UUmdash)
   #--- Determine the distances ----
-  blvalues = list()
+  blvals = list()
   for (i in 1:nrow(blthickness)) {
     # print(i)
     soln <- interpval %>%
@@ -82,10 +82,10 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
     
     if (length(soln$dist) != 1) {
       # HANDLES EXCEPTION WHERE SOLUTION NOT FOUND, i.e. h too big!!
-      blvalues[[i]] <- data.frame(
-        xO = blthickness$xO[i], dist = NA, surf = blthickness$surf[i], Udash = NA, Vdash = NA, UUmdash = NA,
-        thickness = NA, dispthick = NA, momethick = NA, kinethick = NA,
-        method = blthickness$method[i])
+      # blvals[[i]] <- data.frame(
+      #   xO = blthickness$xO[i], dist = NA, surf = blthickness$surf[i], Udash = NA, Vdash = NA, UUmdash = NA,
+      #   thickness = NA, dispthick = NA, momethick = NA, kinethick = NA,
+      #   method = blthickness$method[i])
       next
     }
     
@@ -101,17 +101,27 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
       select(dispthick, momethick, kinethick)
     
     # REPLACE with a 3/8 rule!
-    distances <- (
-      apply(integrand, 2, sum) -
-        1/2 * integrand[1,] -
-        1/2 * integrand[nrow(integrand),]) *
-      soln$dist/(nrow(integrand)/2)
+    # distances <- (
+    #   apply(integrand, 2, sum) -
+    #     1/2 * integrand[1,] -
+    #     1/2 * integrand[nrow(integrand),]) *
+    #   soln$dist/(nrow(integrand)/2)
     
-    blvalues[[i]] <- cbind(
+    # Using 3/8 rule
+    n = nrow(integrand)
+    h = soln$dist/n
+    distances <- 3/8* (
+      3 * apply(integrand, 2, sum) -
+      apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = n),], 2, sum) -
+      1 * integrand[1,] -
+      1 * integrand[n,]) *
+      h
+    
+    blvals[[i]] <- cbind(
       soln, thickness = soln$dist, distances, method = blthickness$method[i])
   }
-  blvalues = bind_rows(blvalues)
-  return(blvalues)
+  blvals = bind_rows(blvals)
+  return(blvals)
 }
 
 
@@ -143,32 +153,39 @@ BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
   rm(lvec)
   
   # Determine BL Thickness values
-  h = 1e-3
+  h = 1e-4
   length.out = round(max(blthickness$dist)/h)
   length.out = length.out + (4 - length.out%% 3)
   dist = seq(0, max(blthickness$dist), length.out = length.out)
   lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
   rm(dist)
   
-  blvalues = BLValues(omesh, lvec, blthickness)
+  blvals = BLValues(omesh, lvec, blthickness)
   
-  return(blvalues)
+  return(blvals)
 }
 
 
 #--- Theoretical Distance ----
 # Find the theoretical distance
-BLTheory <- function(xvec, AoA, Re, varnames = c("U", "V")) {
-  # Theoretical Distance
-  dist = 5 * xvec / sqrt(Re)
+BLTheory <- function(xvec, AoA, Re, varnames = c("U", "V"), surf = c("upper", "lower")) {
+  # Remove x values from a cylindrical approximation
+  xvec = xvec[xvec > a & xvec < a + c]
+  # Determine the points for the theoretical distances
+  lvec <-suppressWarnings(
+      lvec <- bind_rows(pblapply(surf,
+        function(surfval) {
+          bind_rows(lapply(xvec,
+            function(x) {
+              dist = 5 * (x - a) / sqrt(Re * (x - a))
+              NormalPoint(x, dist, AoA, surf = surfval)
+            }))
+        })))
   
-  lvec = NormalPoint(xvec, dist, AoA, surf = "upper")
-  
-  lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
-    select(xO, dist, surf, Udash, Vdash, UUmdash)
+    select(xp, yp, xO, dist, surf, Udash, Vdash, UUmdash)
   
   bltheory = data.frame(
-    xO = xvec, dist = theory, surf = "lower", 
+    interpval, thickness = interpval$dist, method =  "theory"
   )
 }

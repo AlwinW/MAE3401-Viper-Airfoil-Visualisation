@@ -72,8 +72,10 @@ thread <- pblapplycl( # pbapply::pblapply( #
     #--- Boundary Layer Calculations ----
     source("Function Boundary Layers.R")    # For "BLCalcs", etc
     xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
-    blvalues = BLCalcs(omesh, xvec, AoA, Re)
-    bltheory = 
+    blvals = BLCalcs(omesh, xvec, AoA, Re)
+    bltheory = BLTheory(xvec, AoA, Re)
+    
+    blplot = rbind(blvals, bltheory)
     
     ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
 
