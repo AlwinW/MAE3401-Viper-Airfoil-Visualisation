@@ -108,14 +108,53 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
     #   soln$dist/(nrow(integrand)/2)
     
     # Using 3/8 rule
+    # n = nrow(integrand)
+    # h = soln$dist/n
+    # distances <- 3/8* (
+    #   3 * apply(integrand, 2, sum) -
+    #   apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = n),], 2, sum) -
+    #   1 * integrand[1,] -
+    #   1 * integrand[n,]) *
+    #   h
+    
+    
+    
     n = nrow(integrand)
-    h = soln$dist/n
-    distances <- 3/8* (
-      3 * apply(integrand, 2, sum) -
-      apply(integrand[rep(c(TRUE, FALSE, FALSE), length.out = n),], 2, sum) -
-      1 * integrand[1,] -
-      1 * integrand[n,]) *
-      h
+    h = soln$dist/n     # NOTE: Clearly the input lvec must have had an equally spaced lvec
+    
+    test = seq(1, 12, length.out = 100)
+    integrand = data.frame(lin = test, para = test^2, cubic = test^3, quartic = test^4, sin = sin(test))
+    n = nrow(integrand)
+    print(n)
+    h = test[2] - test[1]
+    
+    n38 = (n - 1) %/% 3 # Number of 3/8 rules to be applied
+    ntr = (n - 1) %% 3  # Number of trap rules to be applied (at the end)
+    
+    print(n38)
+    print(ntr)
+    
+    # 3/8 Rule
+    np38 = (3*n38 + 1)  # Number of points in the integrand for 3/8
+    integrand38 = integrand[1:np38,]
+    distances38 = 3/8 * h * 
+      (3 * apply(integrand38, 2, sum) -
+         apply(integrand38[rep(c(TRUE, FALSE, FALSE), length.out = n38),], 2, sum) -
+         integrand38[1,] -
+         integrand38[np38,])
+    distances = distances38
+    # Trap Rule
+    nptr = ntr
+    if (nptr != 0) {
+      integrandtr = integrand[(np38):(np38 + ntr),]
+      distancestr = 1/2 * h *
+        (2 * apply(integrandtr, 2, sum) - 
+           integrandtr[1,] -
+           integrandtr[ntr + 1,])
+      distances = distances + distancestr
+    }
+    
+    print(distances)
     
     blvals[[i]] <- cbind(
       soln, thickness = soln$dist, distances, method = blthickness$method[i])
@@ -154,9 +193,7 @@ BLCalcs <- function (omesh, xvec, AoA, Re, varnames = c("U", "V")) {
   
   # Determine BL Thickness values
   h = 1e-4
-  length.out = round(max(blthickness$dist)/h)
-  length.out = length.out + (4 - length.out%% 3)
-  dist = seq(0, max(blthickness$dist), length.out = length.out)
+  dist = seq(0, max(blthickness$dist), by = h)
   lvec <- NormalLvec(xvec, dist, AoA, c("upper", "lower"))
   rm(dist)
   
