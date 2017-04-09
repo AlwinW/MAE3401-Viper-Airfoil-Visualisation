@@ -1,0 +1,22 @@
+starting worker pid=6784 on localhost:11754 at 20:44:53.543
+starting worker pid=1732 on localhost:11754 at 20:44:54.265
+starting worker pid=9088 on localhost:11754 at 20:44:54.905
+starting worker pid=2480 on localhost:11754 at 20:44:55.710
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11754  6784 : Re 500 AoA  0 8:44:59 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  9088 : Re  50 AoA  0 8:45:00 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  6784 : Re 500 AoA  0 8:45:00 PM | Airfoil Coordinates Calculated 
+  localhost:11754  1732 : Re  50 AoA-40 8:45:00 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  2480 : Re  50 AoA 10 8:45:00 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  9088 : Re  50 AoA  0 8:45:00 PM | Airfoil Coordinates Calculated 
+  localhost:11754  1732 : Re  50 AoA-40 8:45:00 PM | Airfoil Coordinates Calculated 
+  localhost:11754  2480 : Re  50 AoA 10 8:45:00 PM | Airfoil Coordinates Calculated 
+  localhost:11754  9088 : Re  50 AoA  0 8:45:08 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6784 : Re 500 AoA  0 8:45:08 PM | Airfoil Surface Values Plotted 
+  localhost:11754  1732 : Re  50 AoA-40 8:45:08 PM | Airfoil Surface Values Plotted 
+  localhost:11754  2480 : Re  50 AoA 10 8:45:08 PM | Airfoil Surface Values Plotted 

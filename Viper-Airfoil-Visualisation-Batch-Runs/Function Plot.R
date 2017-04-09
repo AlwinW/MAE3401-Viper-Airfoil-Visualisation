@@ -8,7 +8,7 @@
 theme_set(theme_bw())
 options(scipen = 10)
 update_geom_defaults("path", list(size = 1))
-update_geom_defaults("polygon", list(fill = "white", colour = "black", size = 1))
+update_geom_defaults("polygon", list(fill = "white", colour = "grey", size = 1))
 
 #--- Save to external file ----
 PlotSave <- function(plot, path, ID, width, height) {
@@ -27,9 +27,9 @@ PlotAirfoil <- function(omesh, airfoilcoord, var, x, y, min, max,
   if(rev == TRUE) colours = rev(colours)
   plot <- 
     ggplot(data = omesh, aes_string(x = x, y = y)) + 
+    geom_polygon(data = airfoilcoord, aes(x = x, y = y)) +
     geom_point(data = omesh,
                aes_string(colour = aes_col)) +
-    geom_polygon(data = airfoilcoord, aes(x = x, y = y)) +
     coord_fixed(xlim = c(-1, 1), ylim = c(-1, 1)) +
     scale_colour_gradientn(paste(name, "\n"),
       colours = colours, limits = c(min, max)) +

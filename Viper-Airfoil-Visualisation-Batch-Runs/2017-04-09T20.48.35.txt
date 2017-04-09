@@ -1,0 +1,63 @@
+starting worker pid=6164 on localhost:11754 at 20:48:35.847
+starting worker pid=1516 on localhost:11754 at 20:48:36.553
+starting worker pid=3240 on localhost:11754 at 20:48:37.496
+starting worker pid=6980 on localhost:11754 at 20:48:38.087
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:41 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:41 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:41 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  3240 : Re  50 AoA  0 8:48:41 PM | Airfoil Coordinates Calculated 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:41 PM | Airfoil Coordinates Calculated 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:41 PM | Airfoil Coordinates Calculated 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:41 PM | Airfoil Coordinates Calculated 
+  localhost:11754  3240 : Re  50 AoA  0 8:48:48 PM | Airfoil Surface Values Plotted 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:48 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:48 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:48 PM | Airfoil Surface Values Plotted 
+  localhost:11754  3240 : Re  50 AoA  0 8:48:50 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:51 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:51 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:51 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11754  3240 : Re  50 AoA  0 8:48:54 PM | Airfoil Cp and Vort Plotted 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:54 PM | Airfoil Cp and Vort Plotted 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:54 PM | Airfoil Cp and Vort Plotted 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:54 PM | Airfoil Cp and Vort Plotted 
+  localhost:11754  3240 : Re  50 AoA  0 8:48:59 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11754  1516 : Re  50 AoA-40 8:48:59 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11754  6164 : Re 500 AoA  0 8:48:59 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11754  6980 : Re  50 AoA 10 8:48:59 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11754  3240 : Re  50 AoA  0 8:49:13 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6164 : Re 500 AoA  0 8:49:13 PM | Airfoil Surface Values Plotted 
+  localhost:11754  1516 : Re  50 AoA-40 8:49:14 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6980 : Re  50 AoA 10 8:49:14 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6164 : Re 500 AoA  0 8:49:27 PM | Boundary Layers Calculated 
+  localhost:11754  3240 : Re  50 AoA  0 8:49:28 PM | Boundary Layers Calculated 
+  localhost:11754  6980 : Re  50 AoA 10 8:49:35 PM | Boundary Layers Calculated 
+  localhost:11754  1516 : Re  50 AoA-40 8:49:38 PM | Boundary Layers Calculated 
+  localhost:11754  6164 : Re 500 AoA  0 8:49:47 PM | Velocity Profiles Calculated 
+  localhost:11754  6164 : Re 500 AoA  0 8:49:47 PM | Completed:  0.569412231445312 Mb 
+  localhost:11754  3240 : Re  50 AoA  0 8:49:56 PM | Velocity Profiles Calculated 
+  localhost:11754  3240 : Re  50 AoA  0 8:49:56 PM | Completed:  0.569000244140625 Mb 
+  localhost:11754  1516 : Re  50 AoA-40 8:50:14 PM | Velocity Profiles Calculated 
+  localhost:11754  1516 : Re  50 AoA-40 8:50:14 PM | Completed:  0.568229675292969 Mb 
+  localhost:11754  6980 : Re  50 AoA 10 8:50:22 PM | Velocity Profiles Calculated 
+  localhost:11754  6980 : Re  50 AoA 10 8:50:22 PM | Completed:  0.568603515625 Mb 
+
+DESKTOP-1B1U6C0 Progress 50 % 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:23 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:23 PM | Airfoil Coordinates Calculated 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:32 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:36 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:41 PM | Airfoil Cp and Vort Plotted 
+  localhost:11754  6164 : Re  50 AoA 40 8:50:48 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11754  6164 : Re  50 AoA 40 8:51:11 PM | Airfoil Surface Values Plotted 
+  localhost:11754  6164 : Re  50 AoA 40 8:51:49 PM | Boundary Layers Calculated 
+  localhost:11754  6164 : Re  50 AoA 40 8:52:49 PM | Velocity Profiles Calculated 
+  localhost:11754  6164 : Re  50 AoA 40 8:52:49 PM | Completed:  0.568359375 Mb 
+
+DESKTOP-1B1U6C0 Progress 100 % 
