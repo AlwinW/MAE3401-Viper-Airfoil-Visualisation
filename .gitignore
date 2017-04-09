@@ -8,7 +8,7 @@
 # Output_Data
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*/*
-/Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
+# /Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
 
 # =========================
 # Generated

@@ -1,0 +1,44 @@
+starting worker pid=7316 on localhost:11899 at 00:50:17.489
+starting worker pid=10276 on localhost:11899 at 00:50:17.726
+starting worker pid=11608 on localhost:11899 at 00:50:17.972
+starting worker pid=10864 on localhost:11899 at 00:50:18.220
+starting worker pid=20416 on localhost:11899 at 00:50:18.447
+starting worker pid=3884 on localhost:11899 at 00:50:18.680
+starting worker pid=13248 on localhost:11899 at 00:50:18.919
+starting worker pid=9372 on localhost:11899 at 00:50:19.161
+
+060-G11-015WL Progress 0 % 
+  localhost:11899  7316 : Re  50 AoA -5 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 10276 : Re  50 AoA-10 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 10864 : Re  50 AoA-20 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 11608 : Re  50 AoA-15 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 13248 : Re  50 AoA  5 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 20416 : Re  50 AoA-40 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899 10864 : Re  50 AoA-20 12:50:22 AM | Airfoil Coordinates Calculated 
+  localhost:11899  7316 : Re  50 AoA -5 12:50:22 AM | Airfoil Coordinates Calculated 
+  localhost:11899 13248 : Re  50 AoA  5 12:50:22 AM | Airfoil Coordinates Calculated 
+  localhost:11899 20416 : Re  50 AoA-40 12:50:22 AM | Airfoil Coordinates Calculated 
+  localhost:11899  9372 : Re  50 AoA 10 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899  3884 : Re  50 AoA  0 12:50:22 AM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11899  9372 : Re  50 AoA 10 12:50:22 AM | Airfoil Coordinates Calculated 
+  localhost:11899  3884 : Re  50 AoA  0 12:50:22 AM | Airfoil Coordinates Calculated 
+Warning messages:
+Warning messages:
+1: 1: In grDevices::png(..., res = dpi, units = "in") :In grDevices::png(..., res = dpi, units = "in") : unable to open file 'Output_Plot/Re0050AoA010_airfoil_P.png' for writing
+
+ 
+ 2: able to open file 'Output_Plot/Re0050AoA000_airfoil_P.png' for writing
+ unable to open file 'Output_Plot/Re0050AoA-15_airfoil_P.png' for writing
+ unable to open file 'Output_Plot/Re0050AoA005_airfoil_P.png' for writing
+ unable to open file 'Output_Plot/Re0050AoA-20_ai2: il_P.png' for writing
+2: ening device failed
+es = dpi, units = "in") :In grDevices::png(..., res = dpi, units = "in") :In grDevices::png(..., r2: grDevices::png(..., res = dpi, units = "in") : opening device failed
+In grDevices::png(..., res = dpi, units = "in") : opening device failed
