@@ -19,18 +19,20 @@ PlotSave <- function(plot, path, ID, width, height) {
 
 
 #--- Plot of airfoil on omesh ----
-PlotAirfoilSurf <- function(omesh, airfoilcoord, var, min, max, Re, AoA, name) {
+PlotAirfoil <- function(omesh, airfoilcoord, var, x, y, min, max,
+                            Re, AoA, name, rev = FALSE) {
   aes_col <- gsub('var', var, 'ifelse(var < min, min, ifelse(var > max, max, var))')
-  # title <- bquote(Re~Number~.(Re)~AoA~.(AoA) (degree): ~ .(name))
   title <- paste("Re Number", Re, "AoA", paste(AoA, "°:", sep = ""), name)
+  colours <- brewer.pal(9, "RdYlBu")
+  if(rev == TRUE) colours = rev(colours)
   plot <- 
-    ggplot(data = omesh, aes(x = x, y = y)) + 
+    ggplot(data = omesh, aes_string(x = x, y = y)) + 
     geom_point(data = omesh,
                aes_string(colour = aes_col)) +
-    geom_polygon(data = airfoilcoord) +
+    geom_polygon(data = airfoilcoord, aes(x = x, y = y)) +
     coord_fixed(xlim = c(-1, 1), ylim = c(-1, 1)) +
     scale_colour_gradientn(paste(name, "\n"),
-      colours = rev(brewer.pal(9, "RdYlBu")), limits = c(min, max)) +
+      colours = colours, limits = c(min, max)) +
       labs(title = title)
   return(plot)
 }
