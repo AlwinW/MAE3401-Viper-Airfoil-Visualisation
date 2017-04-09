@@ -6,8 +6,8 @@
 /Viper-Airfoil-Visualisation-Batch-Runs/Past Logs/*.txt
 
 # Output_Data
-/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*
-/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*/*
+/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*.*
+/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/old/*
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
 
 # =========================
