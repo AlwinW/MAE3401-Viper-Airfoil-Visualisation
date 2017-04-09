@@ -10,7 +10,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   #--- Load Packages ----
   source("Function Load Packages.R")      # For required packages
   source("Function Plot.R")               # Plot settings and functions
-  source("Function Save Load.R")         # For saving and loading data
+  source("Function Save Load.R")          # For saving and loading data
   
   #--- Custom pblapply ----
   source("Function pblapply.R")           # For PrintThreadProgress
@@ -21,7 +21,6 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   # Load the filedata and unlist it
   filedata <- LoadFile(filename, foldername)
   list2env(filedata, envir = environment()); rm(filedata)       # N.B: local so must be passed as fn input
-  
   # >> File Data Loaded ----
     ThreadProgress(threadname, Re, AoA, "File Data Loaded
       ---------------------------------------------------------------")
@@ -44,8 +43,8 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   # >> Plots Done ----
   ThreadProgress(threadname, Re, AoA, "Airfoil Surface Values Plotted")
   
-  # Save Data
-  ObjSave(airfoilsurfmesh, plot_airfoil_P, plot_airfoil_vort,
+  # >> Save Done ----
+  ObjSave(airfoilcoord, plot_airfoil_P, plot_airfoil_vort,
           path = savedata, ID = ID)
   
   
@@ -56,7 +55,14 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
   
   # Coeffients of pressure and vorticity
-  
+  plot_cp 
+  ggplot(airfoilsurfmesh, aes(x = x, y = P * 2, linetype = surf)) +
+    geom_path() +
+    scale_y_reverse() +
+    scale_linetype_manual("Surface",
+      values = c("twodash", "solid"), labels = c("Upper", "Lower")) +
+    
+      
   
   #--- Interpolation on Normals ----
   source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc

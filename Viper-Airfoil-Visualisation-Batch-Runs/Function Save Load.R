@@ -6,12 +6,12 @@
 
 #--- Save a R Data Object ----
 ObjSave <- function(..., path, ID) {
-  silent = lapply(
-    as.list(substitute(list(...)))[-1L],
-    function(object) {
-      filename = paste0(path, "/", ID, "_", deparse(substitute(object)), ".rds")
-      saveRDS(object, filename)
-         })
+  objects = list(...)
+  object_names <- sapply(substitute(list(...))[-1], deparse)
+  invisible(sapply(1:length(objects), function(i) {
+    filename = paste0(path, "/", ID, "_", object_names[i], ".rds")
+    saveRDS(objects[i], filename)
+  }))
 }
 
 # Objects
@@ -29,14 +29,12 @@ ObjSave(x, folder)  # Works fine. Output: x.rds
 
 # Save multiple objects
 ObjSave <- function(..., folder) {
-  l = list(...)
-  names(l) <- as.character(substitute(list(...)))[-1L]
-  invisible(lapply(
-    list(...),
-    function(object) {
-    filename = paste0(folder, "/", deparse(substitute(object)), ".rds")
-    saveRDS(object, filename)}
-  ))
+  objects <- list(...)
+  object_names <- sapply(substitute(list(...))[-1], deparse)
+  sapply(1:length(objects), function(i) {
+    filename = paste0(folder, "/", object_names[i], ".rds")
+    saveRDS(objects[i], filename)
+  })
 }
 ObjSave(x, y, folder = folder)
 # Creates a single object "X[[i]].rds"
