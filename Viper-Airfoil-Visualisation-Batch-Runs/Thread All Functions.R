@@ -7,7 +7,7 @@
 TreadAll <- function(filename, foldername, airfoildata, savepath) {
   #--- Load Packages ----
   source("Function Load Packages.R")      # For required packages
-  source("Function Plot.R")
+  source("Function Plot.R")               # Plot settings and functions
   
   #--- Custom pblapply ----
   source("Function pblapply.R")           # For PrintThreadProgress
@@ -37,30 +37,15 @@ TreadAll <- function(filename, foldername, airfoildata, savepath) {
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
   
   # Plots
-  varmin = -0.5; varmax = 0.5
-  var = "P"
-  aes_col <- gsub('var', var, 'ifelse(var < varmin, varmin, ifelse(var > varmax, varmax, var))')
-  plot <- 
-    ggplot(data = omesh, aes(x = x, y = y)) + 
-    geom_point(data = omesh,
-               aes(colour = ifelse(P < varmin, varmin, ifelse(P > varmax, varmax, P)))) +
-    geom_polygon(data = airfoilcoord) +
-    coord_fixed(xlim = c(-1, 1), ylim = c(-1, 1)) +
-    scale_colour_gradientn(var,
-      colours = rev(brewer.pal(9, "RdYlBu")), limits = c(varmin, varmax))
+  plot_airfoil_P = PlotAirfoilSurf("P", -0.2, 0.2, Re, AoA, "Pressure")
+  plot_airfoil_vort = PlotAirfoilSurf("vort_xy_plane", -0.2, 0.2, Re, AoA, "Vorticity")
   
-  varmin = -20; varmax = 20
-  var = "P"
-  plot <- 
-    ggplot(data = omesh, aes(x = x, y = y)) + 
-    geom_point(data = omesh,
-      aes(colour = ifelse(vort_xy_plane < varmin, varmin, ifelse(vort_xy_plane > varmax, varmax, vort_xy_plane)))) +
-    geom_polygon(data = airfoilcoord) +
-    coord_fixed(xlim = c(-1, 1), ylim = c(-1, 1)) +
-    scale_colour_gradientn(var,
-      colours = rev(brewer.pal(9, "RdYlBu")), limits = c(varmin, varmax))
+  PlotSave(plot_airfoil_P, savepath, ID, width = 5, height = 4)
+  PlotSave(plot_airfoil_vort, savepath, ID, width = 5, height = 4)
   # >> Airfoil Surface Values Plotted ----
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Values Plotted")
+  
+  
   
   #--- Interpolation on Normals ----
   source("Function Airfoil Normals.R")    # For "AirfoilGrads", etc
