@@ -203,25 +203,25 @@ BLTheory <- function(omesh, xvec, AoA, Re, varnames = c("U", "V"),
 
 
 #--- Velocity Profile Points ----
-VelProfileLvec <- function(omesh, sep, blvals, AoA = 0, 
+VelProfileLvec <- function(omesh, sep, blvals, AoA = 0, length.out = 100,
       surf = factor(c("upper", "lower"), levels = c("lower", "upper"))) {
   # Domain for plotting
   xvec = c(-0.497, seq(a + sep, a + c - sep, by = sep), 0.499)
   distmax = max(blvals$dist[blvals$xO == max(blvals$xO)]) * 1.2
   # lvec for interpolation
-  lvec <- NormalLvec(xvec, NormalSamp(seq(0, distmax, length.out = 50)), AoA, surf)
+  lvec <- NormalLvec(xvec, NormalSamp(seq(0, distmax, length.out = length.out)), AoA, surf)
   return(list(distmax = distmax, xvec = xvec, lvec = lvec))
 }
 
 
 #--- Velocity Profile Calculations ----
-VelProfile <- function(blvals, xvec, lvec, omesh, AoA = 0, Re) {
+VelProfile <- function(blvals, xvec, lvec, omesh, AoA = 0, Re, method = "max") {
   # Results (interpolation)
   velprofile <- InterpProj(omesh, lvec, linear = TRUE)
   # Determine which part(s) are in the boundary layer
   vpblvals = BLCalcs(omesh, xvec, AoA, Re)
-  vpbl = filter(vpblvals, method == "max") %>%
-    select(xO, surf, thickness)
+  vpbl = filter(vpblvals, method == method) %>%
+    select(xO, surf, thickness) ## I SHOULD ADD THIS ITO THE VELPROFILE I SO GET THE EXACT CROSSIGN POINT
   velprofile <- right_join(velprofile, vpbl, by = c("xO", "surf")) %>%
     mutate(bl = (dist <= thickness))
   # Return the output

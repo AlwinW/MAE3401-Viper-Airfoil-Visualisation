@@ -17,12 +17,15 @@ PlotSave <- function(plot, path, ID, width, height) {
          width = width, height = height, scale = 1.4, dpi = 600)
 }
 
+PlotTitle <- function(name) {
+  paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), name)
+}
 
 #--- Plot of airfoil on omesh ----
 PlotAirfoil <- function(omesh, airfoilcoord, var, x, y, min, max,
                             Re, AoA, name, rev = FALSE) {
   aes_col <- gsub('var', var, 'ifelse(var < min, min, ifelse(var > max, max, var))')
-  title <- paste("Re Number", Re, "AoA", paste(AoA, "°:", sep = ""), name)
+  title <- paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), name)
   colours <- brewer.pal(9, "RdYlBu")
   if(rev == TRUE) colours = rev(colours)
   plot <- 
