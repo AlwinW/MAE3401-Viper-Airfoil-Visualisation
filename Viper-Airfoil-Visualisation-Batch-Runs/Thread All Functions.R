@@ -3,11 +3,14 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+# filename = filelist[1]
+
 #--- Full Functionality ----
-TreadAll <- function(filename, foldername, airfoildata, savepath) {
+TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   #--- Load Packages ----
   source("Function Load Packages.R")      # For required packages
   source("Function Plot.R")               # Plot settings and functions
+  source("Function Save Load.R")         # For saving and loading data
   
   #--- Custom pblapply ----
   source("Function pblapply.R")           # For PrintThreadProgress
@@ -33,18 +36,21 @@ TreadAll <- function(filename, foldername, airfoildata, savepath) {
   #--- Interpolation on the airfoil----
   source("Function Interpolations.R")     # For fn "InterpPoint", etc
   airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
-  # >> Airfoil Surface Interpolation Calculated ----
+  # >> Calcs Done ----
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
   
   # Plots
-  plot_airfoil_P = PlotAirfoilSurf("P", -0.2, 0.2, Re, AoA, "Pressure")
-  plot_airfoil_vort = PlotAirfoilSurf("vort_xy_plane", -0.2, 0.2, Re, AoA, "Vorticity")
+  plot_airfoil_P = PlotAirfoilSurf(omesh, airfoilcoord, "P", -0.2, 0.2, Re, AoA, "Pressure")
+  plot_airfoil_vort = PlotAirfoilSurf(omesh, airfoilcoord, "vort_xy_plane", -20, 20, Re, AoA, "Vorticity")
   
-  PlotSave(plot_airfoil_P, savepath, ID, width = 5, height = 4)
-  PlotSave(plot_airfoil_vort, savepath, ID, width = 5, height = 4)
-  # >> Airfoil Surface Values Plotted ----
+  PlotSave(plot_airfoil_P, saveplot, ID, width = 5, height = 4)
+  PlotSave(plot_airfoil_vort, saveplot, ID, width = 5, height = 4)
+  # >> Plots Done ----
     ThreadProgress(threadname, Re, AoA, "Airfoil Surface Values Plotted")
   
+  # Save Data
+  ObjSave(airfoilsurfmesh, plot_airfoil_P, plot_airfoil_vort,
+          path = savedata, ID = ID)
   
   
   #--- Interpolation on Normals ----

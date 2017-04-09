@@ -5,6 +5,10 @@
 
 
 #--- Save a R Data Object ----
-ObjSave <- funtion(object, path) {
-  
+ObjSave <- function(..., path, ID) {
+  silent = lapply(list(...),
+                  function(object) {
+                    filename = paste0(path, "/", ID, "_", object, ".rds")
+                    saveRDS(object, filename)
+         })
 }

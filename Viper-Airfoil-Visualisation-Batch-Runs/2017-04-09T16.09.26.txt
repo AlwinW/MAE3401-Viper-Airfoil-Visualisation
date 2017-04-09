@@ -1,0 +1,55 @@
+starting worker pid=1580 on localhost:11424 at 16:09:27.924
+starting worker pid=7772 on localhost:11424 at 16:09:29.225
+starting worker pid=3524 on localhost:11424 at 16:09:29.905
+starting worker pid=3928 on localhost:11424 at 16:09:30.616
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11424  1580 : Re 500 AoA  0 4:09:33 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11424  3928 : Re  50 AoA 10 4:09:33 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11424  3524 : Re  50 AoA  0 4:09:33 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11424  1580 : Re 500 AoA  0 4:09:33 PM | Airfoil Coordinates Calculated 
+  localhost:11424  3928 : Re  50 AoA 10 4:09:33 PM | Airfoil Coordinates Calculated 
+  localhost:11424  3524 : Re  50 AoA  0 4:09:33 PM | Airfoil Coordinates Calculated 
+  localhost:11424  7772 : Re  50 AoA-40 4:09:33 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11424  7772 : Re  50 AoA-40 4:09:34 PM | Airfoil Coordinates Calculated 
+  localhost:11424  3524 : Re  50 AoA  0 4:09:36 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11424  1580 : Re 500 AoA  0 4:09:36 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11424  3928 : Re  50 AoA 10 4:09:36 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11424  7772 : Re  50 AoA-40 4:09:36 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11424  3928 : Re  50 AoA 10 4:09:44 PM | Airfoil Surface Values Plotted 
+  localhost:11424  3524 : Re  50 AoA  0 4:09:44 PM | Airfoil Surface Values Plotted 
+  localhost:11424  1580 : Re 500 AoA  0 4:09:44 PM | Airfoil Surface Values Plotted 
+  localhost:11424  7772 : Re  50 AoA-40 4:09:44 PM | Airfoil Surface Values Plotted 
+  localhost:11424  3928 : Re  50 AoA 10 4:09:50 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11424  3524 : Re  50 AoA  0 4:09:50 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11424  1580 : Re 500 AoA  0 4:09:50 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11424  7772 : Re  50 AoA-40 4:09:50 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11424  1580 : Re 500 AoA  0 4:10:06 PM | Boundary Layers Calculated 
+  localhost:11424  3524 : Re  50 AoA  0 4:10:08 PM | Boundary Layers Calculated 
+  localhost:11424  3928 : Re  50 AoA 10 4:10:16 PM | Boundary Layers Calculated 
+  localhost:11424  7772 : Re  50 AoA-40 4:10:20 PM | Boundary Layers Calculated 
+  localhost:11424  1580 : Re 500 AoA  0 4:10:31 PM | Velocity Profiles Calculated 
+  localhost:11424  1580 : Re 500 AoA  0 4:10:31 PM | Completed:  1.37942504882812 Mb 
+  localhost:11424  3524 : Re  50 AoA  0 4:10:43 PM | Velocity Profiles Calculated 
+  localhost:11424  3524 : Re  50 AoA  0 4:10:43 PM | Completed:  1.37899780273438 Mb 
+  localhost:11424  7772 : Re  50 AoA-40 4:10:54 PM | Velocity Profiles Calculated 
+  localhost:11424  7772 : Re  50 AoA-40 4:10:54 PM | Completed:  1.37825775146484 Mb 
+  localhost:11424  3928 : Re  50 AoA 10 4:11:01 PM | Velocity Profiles Calculated 
+  localhost:11424  3928 : Re  50 AoA 10 4:11:01 PM | Completed:  1.37861633300781 Mb 
+
+DESKTOP-1B1U6C0 Progress 50 % 
+  localhost:11424  1580 : Re  50 AoA 40 4:11:02 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11424  1580 : Re  50 AoA 40 4:11:02 PM | Airfoil Coordinates Calculated 
+  localhost:11424  1580 : Re  50 AoA 40 4:11:06 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11424  1580 : Re  50 AoA 40 4:11:18 PM | Airfoil Surface Values Plotted 
+  localhost:11424  1580 : Re  50 AoA 40 4:11:28 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11424  1580 : Re  50 AoA 40 4:12:20 PM | Boundary Layers Calculated 
+  localhost:11424  1580 : Re  50 AoA 40 4:13:28 PM | Velocity Profiles Calculated 
+  localhost:11424  1580 : Re  50 AoA 40 4:13:28 PM | Completed:  1.37837219238281 Mb 
+
+DESKTOP-1B1U6C0 Progress 100 % 

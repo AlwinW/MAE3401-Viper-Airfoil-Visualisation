@@ -1,0 +1,26 @@
+starting worker pid=7928 on localhost:11801 at 16:55:42.173
+starting worker pid=8552 on localhost:11801 at 16:55:42.840
+starting worker pid=6040 on localhost:11801 at 16:55:43.899
+starting worker pid=660 on localhost:11801 at 16:55:44.725
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11801  6040 : Re  50 AoA  0 4:55:48 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11801  7928 : Re 500 AoA  0 4:55:48 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11801  8552 : Re  50 AoA-40 4:55:48 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11801   660 : Re  50 AoA 10 4:55:48 PM | File Data Loaded
+      --------------------------------------------------------------- 
+  localhost:11801  6040 : Re  50 AoA  0 4:55:48 PM | Airfoil Coordinates Calculated 
+  localhost:11801  7928 : Re 500 AoA  0 4:55:48 PM | Airfoil Coordinates Calculated 
+  localhost:11801  8552 : Re  50 AoA-40 4:55:48 PM | Airfoil Coordinates Calculated 
+  localhost:11801   660 : Re  50 AoA 10 4:55:48 PM | Airfoil Coordinates Calculated 
+  localhost:11801  7928 : Re 500 AoA  0 4:55:50 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11801   660 : Re  50 AoA 10 4:55:50 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11801  8552 : Re  50 AoA-40 4:55:50 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11801  6040 : Re  50 AoA  0 4:55:50 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11801  7928 : Re 500 AoA  0 4:55:57 PM | Airfoil Surface Values Plotted 
+  localhost:11801   660 : Re  50 AoA 10 4:55:57 PM | Airfoil Surface Values Plotted 
+  localhost:11801  8552 : Re  50 AoA-40 4:55:57 PM | Airfoil Surface Values Plotted 
+  localhost:11801  6040 : Re  50 AoA  0 4:55:57 PM | Airfoil Surface Values Plotted 
