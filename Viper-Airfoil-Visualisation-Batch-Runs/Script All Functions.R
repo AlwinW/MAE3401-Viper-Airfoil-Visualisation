@@ -7,6 +7,8 @@ packages <- c(
   "parallel",
   "gridExtra",
   "dplyr",
+  "purrr",
+  "tidyr",
   "data.table",
   "pbapply",
   "ggplot2",
@@ -738,7 +740,7 @@ NormalLvec <- function(xvec, dist, AoA = 0,
 
 #--- Find the BL Thickness ----
 # This method can be used on a single xO or a vector xvec
-BLThicknessOLD <- function(omesh, lvec, varnames = c("U", "V"), 
+BLThickness <- function(omesh, lvec, varnames = c("U", "V"), 
                         methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%

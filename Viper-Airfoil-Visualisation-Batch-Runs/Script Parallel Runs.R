@@ -23,8 +23,8 @@ airfoildata <- LoadAirfoil(NACA, a = -0.5, c = 1)
 #--- Location for Saving ----
 saveplot = "Output_Plot"
 savedata = "Output_Data"
-if (!file.info(saveplot)$isdir) dir.create(saveplot, recursive = TRUE)
-if (!file.info(savedata)$isdir) dir.create(savedata, recursive = TRUE)
+# if (!file.info(saveplot)$isdir) dir.create(saveplot, recursive = TRUE)
+# if (!file.info(savedata)$isdir) dir.create(savedata, recursive = TRUE)
 logfile = paste0(format(Sys.time(), "%Y-%m-%dT%H.%M.%S"), ".txt")
 
 #--- Thread Function ----

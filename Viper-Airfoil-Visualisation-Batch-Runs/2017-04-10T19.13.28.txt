@@ -1,0 +1,38 @@
+starting worker pid=5400 on localhost:11872 at 19:13:29.067
+starting worker pid=616 on localhost:11872 at 19:13:29.327
+starting worker pid=6244 on localhost:11872 at 19:13:29.580
+starting worker pid=588 on localhost:11872 at 19:13:29.834
+
+011-E164-074WL Progress 0 % 
+  localhost:11872  5400 : Re 200 AoA -2 7:13:36 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  5400 : Re 200 AoA -2 7:13:36 PM | Airfoil Coordinates Calculated 
+  localhost:11872   588 : Re 200 AoA -8 7:13:36 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872   588 : Re 200 AoA -8 7:13:36 PM | Airfoil Coordinates Calculated 
+  localhost:11872   616 : Re 200 AoA -4 7:13:36 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872   616 : Re 200 AoA -4 7:13:36 PM | Airfoil Coordinates Calculated 
+  localhost:11872  6244 : Re 200 AoA -6 7:13:36 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6244 : Re 200 AoA -6 7:13:36 PM | Airfoil Coordinates Calculated 
+  localhost:11872   616 : Re 200 AoA -4 7:13:42 PM | Airfoil Surface Values Plotted 
+  localhost:11872  5400 : Re 200 AoA -2 7:13:42 PM | Airfoil Surface Values Plotted 
+  localhost:11872   588 : Re 200 AoA -8 7:13:42 PM | Airfoil Surface Values Plotted 
+  localhost:11872  6244 : Re 200 AoA -6 7:13:42 PM | Airfoil Surface Values Plotted 
+  localhost:11872   616 : Re 200 AoA -4 7:14:15 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11872   588 : Re 200 AoA -8 7:14:15 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11872   616 : Re 200 AoA -4 7:14:16 PM | Airfoil Cp and Vort Plotted 
+  localhost:11872  5400 : Re 200 AoA -2 7:14:16 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11872  6244 : Re 200 AoA -6 7:14:16 PM | Airfoil Surface Interpolation Calculated 
+  localhost:11872   588 : Re 200 AoA -8 7:14:17 PM | Airfoil Cp and Vort Plotted 
+  localhost:11872  5400 : Re 200 AoA -2 7:14:18 PM | Airfoil Cp and Vort Plotted 
+  localhost:11872  6244 : Re 200 AoA -6 7:14:18 PM | Airfoil Cp and Vort Plotted 
+  localhost:11872   616 : Re 200 AoA -4 7:15:20 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11872  6244 : Re 200 AoA -6 7:15:24 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11872  5400 : Re 200 AoA -2 7:15:25 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11872   616 : Re 200 AoA -4 7:15:29 PM | Interpolation on Normals to Surface Plotted 
+  localhost:11872   588 : Re 200 AoA -8 7:15:30 PM | Interpolation on Normals to Surface Calculated 
+  localhost:11872  5400 : Re 200 AoA -2 7:15:32 PM | Interpolation on Normals to Surface Plotted 
+  localhost:11872  6244 : Re 200 AoA -6 7:15:32 PM | Interpolation on Normals to Surface Plotted 
+  localhost:11872   588 : Re 200 AoA -8 7:15:36 PM | Interpolation on Normals to Surface Plotted 

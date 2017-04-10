@@ -6,7 +6,7 @@
 # filename = filelist[2]
 
 #--- Full Functionality ----
-TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
+ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   source("Script All Functions.R")
   source("Script Plots.R")
  

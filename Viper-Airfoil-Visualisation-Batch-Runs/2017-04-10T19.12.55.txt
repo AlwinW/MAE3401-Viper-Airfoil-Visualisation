@@ -1,0 +1,31 @@
+starting worker pid=6560 on localhost:11872 at 19:12:55.806
+starting worker pid=6436 on localhost:11872 at 19:12:56.082
+starting worker pid=6352 on localhost:11872 at 19:12:56.342
+starting worker pid=6120 on localhost:11872 at 19:12:56.630
+
+011-E164-074WL Progress 0 % 
+  localhost:11872  6436 : Re 200 AoA -4 7:13:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6120 : Re 200 AoA -8 7:13:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6436 : Re 200 AoA -4 7:13:02 PM | Airfoil Coordinates Calculated 
+  localhost:11872  6120 : Re 200 AoA -8 7:13:02 PM | Airfoil Coordinates Calculated 
+  localhost:11872  6560 : Re 200 AoA -2 7:13:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6560 : Re 200 AoA -2 7:13:02 PM | Airfoil Coordinates Calculated 
+  localhost:11872  6352 : Re 200 AoA -6 7:13:03 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6352 : Re 200 AoA -6 7:13:03 PM | Airfoil Coordinates Calculated 
+Warning messages:
+Warning messages:
+Warning messages:
+1: Warning messages:
+g(..., res = dpi, units = "in") :
+ In grDevices::png(..., res = dpi, units = "in") :1:  unable to open file 'Output_Plot/Re0200AoA-04_airfoil_P.png' for writing
+
+ 1: In grDevices::png(..., res = dpi, units = "in") : unable to open file 'Output_Plot/Re0200AoA-02_airfo unable to open file 'Output_Plot/Re0200AoA-06_airfoil_P.png' for writin2: ening device failed
+
+  unable to open file 'Output_Plot/Re0200AoA-08_airfoil_P.png' for writing
+2: In grDevices::png(..., res = dpi, units = "in") :In grDevices::png(..., res = dpi, units = "in") :2: ening device failed
+ opening device failed
+In grDevices::png(..., res = dpi, units = "in") : opening device failed

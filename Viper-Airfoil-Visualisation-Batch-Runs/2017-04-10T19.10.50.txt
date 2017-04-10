@@ -1,0 +1,14 @@
+starting worker pid=6852 on localhost:11872 at 19:10:55.871
+starting worker pid=6268 on localhost:11872 at 19:10:56.136
+starting worker pid=6968 on localhost:11872 at 19:10:56.387
+starting worker pid=4012 on localhost:11872 at 19:10:56.637
+
+011-E164-074WL Progress 0 % 
+  localhost:11872  6852 : Re 200 AoA -2 7:11:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6968 : Re 200 AoA -6 7:11:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  4012 : Re 200 AoA -8 7:11:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11872  6268 : Re 200 AoA -4 7:11:02 PM | File Data Loaded
+                 --------------------------------------------------------------- 
