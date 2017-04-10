@@ -6,9 +6,15 @@
 /Viper-Airfoil-Visualisation-Batch-Runs/Past Logs/*.txt
 
 # Output_Data
+<<<<<<< HEAD
 # /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*
 # /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*/*
 # /Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
+=======
+/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*.*
+/Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/old/*
+/Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
+>>>>>>> refs/remotes/origin/master
 
 # =========================
 # Generated
