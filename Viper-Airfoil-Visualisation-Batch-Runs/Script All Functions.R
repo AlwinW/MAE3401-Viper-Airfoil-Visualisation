@@ -738,7 +738,7 @@ NormalLvec <- function(xvec, dist, AoA = 0,
 
 #--- Find the BL Thickness ----
 # This method can be used on a single xO or a vector xvec
-BLThickness <- function(omesh, lvec, varnames = c("U", "V"), 
+BLThicknessOLD <- function(omesh, lvec, varnames = c("U", "V"), 
                         methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%
