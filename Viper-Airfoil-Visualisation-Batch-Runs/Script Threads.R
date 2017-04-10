@@ -193,7 +193,6 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
                         group = interaction(surf, xO))) +
     geom_ribbon(aes(ymin = xO, ymax = xO + UUmdash * sep / 1.5, alpha = "out")) +
     geom_ribbon(data = filter(velprofile, bl == TRUE), aes(ymin = xO, ymax = xO + UUmdash * sep / 1.5, alpha = "in")) +
-    geom_point(aes(y = xO)) +
     geom_path(data = vptheory, aes(y = xO + UUmblasius * sep/1.5),
               linetype = "5111") +
     geom_path(data = filter(blplot, method %in% c("Blasius", "99% Max")), 

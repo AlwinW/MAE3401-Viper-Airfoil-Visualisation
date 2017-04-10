@@ -860,6 +860,8 @@ BLValues <- function(omesh, lvec, blthickness, varnames = c("U", "V")) {
       )
     }
     
+    # Calculate the xp and yp
+    
     blvals[[i]] <- cbind(
       soln, thickness = soln$dist, distances, method = blthickness$method[i])
   }
@@ -950,7 +952,7 @@ VelProfileLvec <- function(omesh, sep, blvals, AoA = 0, length.out = 100,
 #--- Velocity Profile Calculations ----
 VelProfile <- function(blvals, xvec, lvec, omesh, AoA = 0, Re, method = "max") {
   # Results (interpolation)
-  velprofile <- InterpProj(omesh, lvec, linear = TRUE)
+  velprofile <- InterpProj(omesh, lvec, linear = TRUE, plotsurf = FALSE)
   # Determine which part(s) are in the boundary layer
   vpblvals = BLCalcs(omesh, xvec, AoA, Re)
   vpbl = filter(vpblvals, method == method) %>%
