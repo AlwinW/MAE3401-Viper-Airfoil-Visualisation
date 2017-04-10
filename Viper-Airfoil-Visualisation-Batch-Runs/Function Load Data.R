@@ -3,6 +3,26 @@
 #--- Alwin Wang MAE3401
 #============================>
 
+#--- Load a folder ----
+LoadFolder <- function(foldername = "Input_Data", move = FALSE) {
+  # Get a list of all the files in the current filder
+  filelist <- list.files(foldername, pattern = "*.dat")
+  # Determine if the files need to be moved
+  if (move == FALSE) return(list(foldername = foldername, filelist = filelist))
+  # Make a new folder
+  newfolder = format(Sys.time(), "%Y-%m-%dT%H.%M.%S")
+  dir.create(paste0(foldername, "/", newfolder))
+  # Determine the relative file paths
+  oldpath = paste0(foldername, "/", filelist)
+  newpath = paste0(foldername, "/", newfolder, "/", filelist)
+  file.rename(from = oldpath,
+              to = newpath)
+  foldername = paste0(foldername, "/", newfolder)
+  filelist <- list.files(foldername, pattern = "*.dat")
+  return(list(foldername = foldername, filelist = filelist))
+}
+
+
 #--- Load a Single File ----
 # This takes a file name and reads the file.
 # It determines the start and the end point of the mesh and then
