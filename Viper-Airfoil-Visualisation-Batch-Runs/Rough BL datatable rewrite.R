@@ -73,6 +73,30 @@ BLThickness <- function(omesh, lvec, varnames = c("U", "V"),
     .[, method := factor(method, levels = methodlevels)] %>%
     setorder(., surf, xO)
   
+  
+  blthickmax <- numericalmethod[, outcols, with = FALSE] %>%
+    .[, .SD[(which.max(Udash)-1):(which.max(Udash) + 1)], by = c("surf", "xO")] %>%
+    .[, method := "max"]
+  
+  TP <- function(x, y) {
+    numerator = x[1]^2*(y[2]-y[3]) + x[3]^2*(y[1]-y[2]) + x[2]^2*(y[3]-y[1])
+    denominator = x[3]*(y[2]-y[1]) + x[2]*(y[1]-y[3]) + x[1]*(y[3]-y[2])
+    xtp = -1/2 * numerator/denominator
+    if(is.na(xtp)) xtp = x[2]
+    return(xtp)
+  }
+  
+  sapply(split(blthickmax, by = c("surf", "xO"), drop = TRUE),
+         function(points) {
+           xtp = TP(points$dist, points$Udash)
+           skew = points$dist[2] - mean(points$dist)
+           xmid = points$dist[2]
+           return(data.table(xtp = xtp, xmid = xmid, skew = skew))
+         }
+  )
+  
+  
+  
   return(blthickness)
 }
 

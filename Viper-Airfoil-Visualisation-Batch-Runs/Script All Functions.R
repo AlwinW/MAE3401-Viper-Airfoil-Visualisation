@@ -7,6 +7,8 @@ packages <- c(
   "parallel",
   "gridExtra",
   "dplyr",
+  "purrr",
+  "tidyr",
   "data.table",
   "pbapply",
   "ggplot2",
@@ -493,7 +495,7 @@ AirfoilCoord <- function(xmin = a, xmax = c + a, AoA = 0, res = 100) {
     mutate(surf = factor(surf, levels = c("L", "U"))) %>%
     arrange(surf, xO * ifelse(surf == "U", 1, -1)) %>%
     mutate(surf = as.character(surf)) %>%
-    select(x, y, surf)
+    select(x, y, xO, surf)
   coord = AoATransform(coord, AoA = AoA)
   return(coord)
 }
@@ -738,7 +740,7 @@ NormalLvec <- function(xvec, dist, AoA = 0,
 
 #--- Find the BL Thickness ----
 # This method can be used on a single xO or a vector xvec
-BLThicknessOLD <- function(omesh, lvec, varnames = c("U", "V"), 
+BLThickness <- function(omesh, lvec, varnames = c("U", "V"), 
                         methodlevels = c("max", "tp", "UUm", "mag", "theory")) {
   # Find the interpolation along the points of lvec
   interpval <- InterpProj(omesh, lvec, varnames = varnames, plotsurf = FALSE) %>%

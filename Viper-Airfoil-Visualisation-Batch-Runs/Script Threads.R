@@ -6,7 +6,7 @@
 # filename = filelist[2]
 
 #--- Full Functionality ----
-TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
+ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   source("Script All Functions.R")
   source("Script Plots.R")
  
@@ -23,7 +23,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   list2env(airfoildata, envir = .GlobalEnv)                     # N.B: global so all fn can find it
   airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
   # >> Calcs Done ----
-  ThreadProgress(threadname, Re, AoA, "Airfoil Coordinates Calculated")
+  ThreadProgress(threadname, Re, AoA, "Aerofoil Coordinates Calculated")
   
   # Plots
   plot_airfoil_P = 
@@ -34,7 +34,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   PlotSave(plot_airfoil_P, saveplot, ID, width = 5, height = 4)
   PlotSave(plot_airfoil_vort, saveplot, ID, width = 5, height = 4)
   # >> Plots Done ----
-  ThreadProgress(threadname, Re, AoA, "Airfoil Surface Values Plotted")
+  ThreadProgress(threadname, Re, AoA, "Aerofoil Surface Values Plotted")
   
   # >> Save Done ----
   ObjSave(airfoilcoord, omesh, plot_airfoil_P, plot_airfoil_vort,
@@ -46,7 +46,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
   airfoilsurfmesh$surf = factor(airfoilsurfmesh$surf, levels = c("U", "L"),  labels = c("Upper", "Lower"))
   # >> Calcs Done ----
-  ThreadProgress(threadname, Re, AoA, "Airfoil Surface Interpolation Calculated")
+  ThreadProgress(threadname, Re, AoA, "Aerofoil Surface Interpolation Calculated")
   
   # Coeffients of pressure and vorticity
   plot_cp = ggplot(airfoilsurfmesh, aes(x = x, y = P * 2, linetype = surf)) +
@@ -55,7 +55,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
     scale_linetype_manual("Surface",
                           values = c("twodash", "solid"), labels = c(Upper = "Upper", Lower = "Lower")) +
     labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Coefficient of Pressure"), 
-         y = expression(C[p]), x = "x (Airfoil Chord)")
+         y = expression(C[p]), x = "x (Aerofoil Chord)")
   plot_vort = ggplot(airfoilsurfmesh, aes(x = x, y = vort_xy_plane, linetype = surf)) +
     geom_path() +
     scale_y_reverse() + 
@@ -63,11 +63,11 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
     scale_linetype_manual("Surface",
                           values = c("twodash", "solid"), labels = c(Upper = "Upper", Lower = "Lower")) +
     labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Vorticity"), 
-         y = "Vorticity in the x-y Plane", x = "x (Airfoil Chord)")
+         y = "Vorticity in the x-y Plane", x = "x (Aerofoil Chord)")
   PlotSave(plot_cp, saveplot, ID, width = 5, height = 4)
   PlotSave(plot_vort, saveplot, ID, width = 5, height = 4)
   # >> Plots Done ----
-  ThreadProgress(threadname, Re, AoA, "Airfoil Cp and Vort Plotted")
+  ThreadProgress(threadname, Re, AoA, "Aerofoil Cp and Vort Plotted")
   # >> Save Done ----
   ObjSave(airfoilsurfmesh, plot_cp, plot_vort,
           path = savedata, ID = ID)
@@ -204,7 +204,7 @@ TreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
     scale_linetype_manual("Boundary Layer", values = c("dashed", "solid")) +
     theme(aspect.ratio = 0.6) +
     labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Velocity Profiles"),
-         x = "Distance Along the Chord", y = "Distance from Airfoil Surface")
+         x = "Distance Along the Chord", y = "Distance from Aerofoil Surface")
   
   PlotSave(plot_vp, saveplot, ID, width = 8, height = 4)
   # >> Plots Done ----
