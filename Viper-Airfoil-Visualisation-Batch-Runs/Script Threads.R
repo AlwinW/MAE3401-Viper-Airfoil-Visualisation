@@ -3,7 +3,7 @@
 #--- Alwin Wang MAE3401
 #============================>
 
-# filename = filelist[1]; clean = FALSE
+# filename = filelist[2]; clean = FALSE
 
 #--- Full Functionality ----
 ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, clean = TRUE) {
@@ -108,13 +108,26 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
   }
   
   #--- Separation and Stagnation Points ----
-  xvec = AirfoilSamp(seq(a, a+c, by = 0.01), cylinder = TRUE)
-  dist = c(1e-5, 2e-5)
+  xvec = AirfoilSamp(seq(a, a+c, by = 1e-3), cylinder = TRUE)
+  dist = c(2e-3, 1.1e-3)
   # Find the combined lvec for interpolation
   lvec <- NormalLvec(xvec, dist, AoA)
-  interpnorms <- InterpProj(omesh, lvec, plotsurf = FALSE)
+  interpnorms <- InterpProj(omesh, lvec, plotsurf = FALSE) %>%
+    mutate(Uclock = ifelse(surf == "upper", 1, -1) * Udash)
+  
+  stagnation <- interpnorms %>%
+    ungroup() %>%
+    filter(dist == min(dist), abs(Udash < 0.01)) %>%
+    mutate(sign = sign(Uclock * lag(Uclock, 1))) 
+  stagnation = stagnation[which(stagnation$sign != 1 & !is.na(stagnation$sign)),]
   
   
+  ggplot(interpnorms, 
+         aes(x = ifelse(surf == "upper", 1, -1)*xO2chord(xO, surf), y = Uclock, 
+         group = interaction(surf, dist), 
+         colour = surf, linetype = as.factor(dist))) +
+    geom_line() +
+    geom_point(data = stagnation)
   
   #--- Boundary Layer Calculations ----
   xvec = AirfoilSamp(seq(a, a+c, by = 0.2), polyn = 5, cylinder = TRUE)

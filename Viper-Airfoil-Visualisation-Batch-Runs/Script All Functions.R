@@ -671,6 +671,14 @@ AirfoilGradCyl <- function(xO, surf, del) {
   return(out)
 }
 
+xO2chord <- function(xO, surf) {
+  chord = ifelse(
+    xO < a, 
+    xc -r*cos(ifelse(surf == "upper", 1, -1) * (xO - a + abs(a))),
+    xO)
+  return(chord - a)
+}
+
 #--- Grad: Given some x ----
 # Determines the gradients etc at a point x on the airfoil
 AirfoilGrads <- function(xO, surf = "upper", del = c*1e-8, out = "all") {
