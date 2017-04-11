@@ -1,0 +1,38 @@
+starting worker pid=2884 on localhost:11676 at 00:54:02.614
+starting worker pid=2636 on localhost:11676 at 00:54:03.369
+starting worker pid=868 on localhost:11676 at 00:54:03.945
+starting worker pid=8924 on localhost:11676 at 00:54:04.532
+
+DESKTOP-1B1U6C0 Progress 0 % 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:09 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:09 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:09 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11676   868 : Re  50 AoA  0 12:54:09 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11676   868 : Re  50 AoA  0 12:54:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11676   868 : Re  50 AoA  0 12:54:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:18 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:18 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:18 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11676   868 : Re  50 AoA  0 12:54:18 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:21 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:21 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:21 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11676   868 : Re  50 AoA  0 12:54:22 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:26 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:26 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:26 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11676   868 : Re  50 AoA  0 12:54:26 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11676  2884 : Re 500 AoA  0 12:54:41 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11676  2636 : Re  50 AoA-40 12:54:42 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11676  8924 : Re  50 AoA 10 12:54:42 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11676   868 : Re  50 AoA  0 12:54:42 AM | Interpolation on Normals to Surface Plotted 

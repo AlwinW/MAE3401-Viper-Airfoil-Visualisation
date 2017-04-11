@@ -3,75 +3,75 @@
 #--- Alwin Wang MAE3401
 #============================>
 
-# filename = filelist[2]
+# filename = filelist[1]; clean = FALSE
 
 #--- Full Functionality ----
-ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
+ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, clean = TRUE) {
+  #--- Set-up ----
+  # Source required scripts for functions
   source("Script All Functions.R")
   source("Script Plots.R")
- 
+  # Threadname
   threadname <- ThreadName()
   
+  #--- Load the Data ---
   # Load the filedata and unlist it
   filedata <- LoadFile(filename, foldername)
   list2env(filedata, envir = environment()); # rm(filedata)       # N.B: local so must be passed as fn input
-  # >> File Data Loaded ----
+  #--- >> File Data Loaded ----
   ThreadProgress(threadname, Re, AoA, "File Data Loaded
                  ---------------------------------------------------------------")
   
   #--- Run Airfoil Calculations ----
   list2env(airfoildata, envir = .GlobalEnv)                     # N.B: global so all fn can find it
   airfoilcoord <- AirfoilCoord(a, c + a, AoA, res = 100)
-  # >> Calcs Done ----
+  #--- >> Calcs Done ----
   ThreadProgress(threadname, Re, AoA, "Aerofoil Coordinates Calculated")
   
   # Plots
-  plot_airfoil_P = 
-    PlotAirfoil(omesh, airfoilcoord, "P", "x", "y", -0.2, 0.2, Re, AoA, "Pressure", rev = TRUE)
-  plot_airfoil_vort = 
-    PlotAirfoil(omesh, airfoilcoord, "vort_xy_plane", "x", "y", -20, 20, Re, AoA, "Vorticity", rev = TRUE)
+  plot_airfoil_P = PlotAirfoil(omesh, airfoilcoord, "P", "x", "y", -0.2, 0.2, Re, AoA, "Pressure", rev = TRUE)
+  plot_airfoil_vort = PlotAirfoil(omesh, airfoilcoord, "vort_xy_plane", "x", "y", -20, 20, Re, AoA, "Vorticity", rev = TRUE)
   
   PlotSave(plot_airfoil_P, saveplot, ID, width = 5, height = 4)
   PlotSave(plot_airfoil_vort, saveplot, ID, width = 5, height = 4)
-  # >> Plots Done ----
+  #--- >> Plots Done ----
   ThreadProgress(threadname, Re, AoA, "Aerofoil Surface Values Plotted")
   
-  # >> Save Done ----
-  ObjSave(airfoilcoord, omesh, plot_airfoil_P, plot_airfoil_vort,
+  #--- >> Save Done ----
+  ObjSave(airfoilcoord, omesh,
           path = savedata, ID = ID)
-  # # rm(plot_airfoil_P, plot_airfoil_vort)
-  
+  if (clean == TRUE) {
+    rm(plot_airfoil_P, plot_airfoil_vort)
+    invisible(gc())
+  }
   
   #--- Interpolation on the airfoil----
   airfoilsurfmesh <- InterpPoint(omesh, airfoilcoord, varnames = c("P", "vort_xy_plane"))
   airfoilsurfmesh$surf = factor(airfoilsurfmesh$surf, levels = c("U", "L"),  labels = c("Upper", "Lower"))
+  airfoilsurfsum <- airfoilsurfmesh %>% 
+    select(-x, -y) %>%
+    gather(key = key, value = value, -xO, -surf) %>%
+    unite(newkey, surf, key) %>%
+    spread(newkey, value) %>%
+    mutate(Pnet = Lower_P - Upper_P)
+  
   # >> Calcs Done ----
   ThreadProgress(threadname, Re, AoA, "Aerofoil Surface Interpolation Calculated")
   
-  # Coeffients of pressure and vorticity
-  plot_cp = ggplot(airfoilsurfmesh, aes(x = x, y = P * 2, linetype = surf)) +
-    geom_path() +
-    scale_y_reverse() +
-    scale_linetype_manual("Surface",
-                          values = c("twodash", "solid"), labels = c(Upper = "Upper", Lower = "Lower")) +
-    labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Coefficient of Pressure"), 
-         y = expression(C[p]), x = "x (Aerofoil Chord)")
-  plot_vort = ggplot(airfoilsurfmesh, aes(x = x, y = vort_xy_plane, linetype = surf)) +
-    geom_path() +
-    scale_y_reverse() + 
-    # scale_y_log10() + # Make it a log scale laters
-    scale_linetype_manual("Surface",
-                          values = c("twodash", "solid"), labels = c(Upper = "Upper", Lower = "Lower")) +
-    labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Vorticity"), 
-         y = "Vorticity in the x-y Plane", x = "x (Aerofoil Chord)")
+  plot_cp = PlotCp(airfoilsurfmesh, Re, AoA)
+  plot_vort = PlotVort(airfoilsurfmesh, Re, AoA)
+  
   PlotSave(plot_cp, saveplot, ID, width = 5, height = 4)
   PlotSave(plot_vort, saveplot, ID, width = 5, height = 4)
   # >> Plots Done ----
   ThreadProgress(threadname, Re, AoA, "Aerofoil Cp and Vort Plotted")
   # >> Save Done ----
-  ObjSave(airfoilsurfmesh, plot_cp, plot_vort,
+  ObjSave(airfoilsurfmesh, airfoilsurfsum,
           path = savedata, ID = ID)
-  # # rm(airfoilsurfmesh, plot_cp, plot_vort)
+  if (clean == TRUE) {
+    rm(airfoilsurfmesh, airfoilsurfsum, plot_cp, plot_vort)
+    invisible(gc())
+  }
   
   #--- Interpolation on Normals ----
   xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
@@ -83,18 +83,12 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Calculated")
   
   # Plots
-  plot_Norm_Udash = 
-    PlotAirfoil(interpnorms, airfoilcoord, "Udash", "xp", "yp", -1.2, 1.2, Re, AoA, "U'")
-  plot_Norm_Vdash = 
-    PlotAirfoil(interpnorms, airfoilcoord, "Vdash", "xp", "yp", -0.8, 0.8, Re, AoA, "V'")
-  plot_Norm_UUmdash = 
-    PlotAirfoil(interpnorms, airfoilcoord, "UUmdash", "xp", "yp", -1.2, 1.2, Re, AoA, "U'/Um'")
-  plot_Norm_VVmdash = 
-    PlotAirfoil(interpnorms, airfoilcoord, "VVmdash", "xp", "yp", -1.2, 1.2, Re, AoA, "V'/Vm'")
-  plot_Norm_P = 
-    PlotAirfoil(interpnorms, airfoilcoord, "Vdash", "xp", "yp", -0.2, 0.2, Re, AoA, "Pressure")
-  plot_Norm_vort = 
-    PlotAirfoil(interpnorms, airfoilcoord, "vort_xy_plane", "xp", "yp", -20, 20, Re, AoA, "Vorticity")
+  plot_Norm_Udash = PlotAirfoil(interpnorms, airfoilcoord, "Udash", "xp", "yp", -1.2, 1.2, Re, AoA, "U'")
+  plot_Norm_Vdash = PlotAirfoil(interpnorms, airfoilcoord, "Vdash", "xp", "yp", -0.8, 0.8, Re, AoA, "V'")
+  plot_Norm_UUmdash = PlotAirfoil(interpnorms, airfoilcoord, "UUmdash", "xp", "yp", -1.2, 1.2, Re, AoA, "U'/Um'")
+  plot_Norm_VVmdash = PlotAirfoil(interpnorms, airfoilcoord, "VVmdash", "xp", "yp", -1.2, 1.2, Re, AoA, "V'/Vm'")
+  plot_Norm_P = PlotAirfoil(interpnorms, airfoilcoord, "Vdash", "xp", "yp", -0.2, 0.2, Re, AoA, "Pressure")
+  plot_Norm_vort = PlotAirfoil(interpnorms, airfoilcoord, "vort_xy_plane", "xp", "yp", -20, 20, Re, AoA, "Vorticity")
   
   PlotSave(plot_Norm_Udash, saveplot, ID, width = 5, height = 4)
   PlotSave(plot_Norm_Vdash, saveplot, ID, width = 5, height = 4)
@@ -105,9 +99,22 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   # >> Plots Done ----
   ThreadProgress(threadname, Re, AoA, "Interpolation on Normals to Surface Plotted")
   # >> Save Done ----
-  ObjSave(interpnorms, plot_Norm_Udash, plot_Norm_Vdash, plot_Norm_UUmdash, plot_Norm_VVmdash, plot_Norm_P, plot_Norm_vort, 
+  ObjSave(interpnorms,
           path = savedata, ID = ID)
-  # # rm(xvec, dist, lvec, interpnorms, plot_Norm_Udash, plot_Norm_Vdash, plot_Norm_UUmdash, plot_Norm_VVmdash, plot_Norm_P, plot_Norm_vort)
+  if (clean == TRUE) {
+    rm(xvec, dist, lvec, interpnorms, 
+     plot_Norm_Udash, plot_Norm_Vdash, plot_Norm_UUmdash, plot_Norm_VVmdash, plot_Norm_P, plot_Norm_vort)
+    invisible(gc())
+  }
+  
+  #--- Separation and Stagnation Points ----
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.01), cylinder = TRUE)
+  dist = c(1e-5, 2e-5)
+  # Find the combined lvec for interpolation
+  lvec <- NormalLvec(xvec, dist, AoA)
+  interpnorms <- InterpProj(omesh, lvec, plotsurf = FALSE)
+  
+  
   
   #--- Boundary Layer Calculations ----
   xvec = AirfoilSamp(seq(a, a+c, by = 0.2), polyn = 5, cylinder = TRUE)
@@ -121,8 +128,6 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
                            labels = c("Blasius", "99% Max", "Turning Pt", "99% U'/Um'", "vel magnitude")))
   # >> Boundary Layers Calculated ----
   ThreadProgress(threadname, Re, AoA, "Boundary Layers Calculated")
-  
-  # INSTAED OF ADDING EACH THING SEPARATELY, CAN I GROUP THEM AND ADD THEM TOEGHETER??
   
   # Plots
   plot_bl_methods = ggplot(data = blplot) +
@@ -188,23 +193,38 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot) {
   # >> Velocity Profiles Calculated ----
   ThreadProgress(threadname, Re, AoA, "Velocity Profiles Calculated")
   
+  ashift = -0.5
+  
   plot_vp <- ggplot(data = velprofile, 
                     aes(x = ifelse(surf == "upper", 1, -1) * dist,
                         group = interaction(surf, xO))) +
-    geom_ribbon(aes(ymin = xO, ymax = xO + UUmdash * sep / 1.5, alpha = "out")) +
-    geom_ribbon(data = filter(velprofile, bl == TRUE), aes(ymin = xO, ymax = xO + UUmdash * sep / 1.5, alpha = "in")) +
-    geom_path(data = vptheory, aes(y = xO + UUmblasius * sep/1.5),
+    # Airfoil
+    geom_path(data = data.frame(x = c(0.001, 0.001, -0.001, -0.001), y = c(-0.5, 0.5, 0.5, -0.5)), 
+              aes(x = x, y = y - ashift, linetype = "Aerofoil Surface"), 
+              colour = "black", size = 0.5,
+              inherit.aes = FALSE) +
+    # Flow in BL
+    geom_ribbon(aes(ymin = xO - ashift, ymax = xO + UUmdash * sep / 1.5 - ashift, alpha = "out")) +
+    # Flow out of BL
+    geom_ribbon(data = filter(velprofile, bl == TRUE), 
+                aes(ymin = xO - ashift, ymax = xO + UUmdash * sep / 1.5 - ashift, alpha = "in")) +
+    # Blasius soln for velocity profiles
+    geom_path(data = vptheory, aes(y = xO + UUmblasius * sep/1.5 - ashift),
               linetype = "5111") +
+    # Boundary Layers
     geom_path(data = filter(blplot, method %in% c("Blasius", "99% Max")), 
-              aes(y = xO,
+              aes(y = xO - ashift,
                   group = interaction(method),
-                  linetype = method)) +
-    coord_flip(xlim = c(-distmax, distmax), ylim = c(-0.6, 0.7)) +
-    scale_alpha_manual("Boundary Layer", values = c(0.3, 0.5)) +
-    scale_linetype_manual("Boundary Layer", values = c("dashed", "solid")) +
+                  colour = method)) +
+    # Legends
+    scale_alpha_manual("Flow", values = c(0.3, 0.1), labels = c("Boundary Layer", "Free Stream")) +
+    scale_linetype_manual("Airfoil", values = c("solid"), labels = c("Surface")) + 
+    # scale_linetype_manual("Boundary Layer", values = c("dashed", "solid")) +
+    # Plot transformations & Labels
+    coord_flip(xlim = c(-distmax, distmax), ylim = c(-0.1, 1.2)) +
     theme(aspect.ratio = 0.6) +
     labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Velocity Profiles"),
-         x = "Distance Along the Chord", y = "Distance from Aerofoil Surface")
+         x = "Distance Along the Chord", y = "Distance from the Leading Edge")
   
   PlotSave(plot_vp, saveplot, ID, width = 8, height = 4)
   # >> Plots Done ----
