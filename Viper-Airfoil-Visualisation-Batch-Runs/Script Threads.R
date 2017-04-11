@@ -74,7 +74,7 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
   }
   
   #--- Interpolation on Normals ----
-  xvec = AirfoilSamp(seq(a, a+c, by = 0.5), cylinder = TRUE)
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.05), cylinder = TRUE)
   dist = NormalSamp(seq(0, 1.5, by = 0.05))
   # Find the combined lvec for interpolation
   lvec <- NormalLvec(xvec, dist, AoA)
@@ -109,25 +109,31 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
   
   #--- Separation and Stagnation Points ----
   xvec = AirfoilSamp(seq(a, a+c, by = 1e-3), cylinder = TRUE)
-  dist = c(2e-3, 1.1e-3)
+  dist = c(1e-3, 2e-3)
   # Find the combined lvec for interpolation
   lvec <- NormalLvec(xvec, dist, AoA)
-  interpnorms <- InterpProj(omesh, lvec, plotsurf = FALSE) %>%
+  interpnorms <- InterpProj(omesh, lvec, plotsurf = TRUE) %>%
     mutate(Uclock = ifelse(surf == "upper", 1, -1) * Udash)
   
   stagnation <- interpnorms %>%
     ungroup() %>%
     filter(dist == min(dist), abs(Udash < 0.01)) %>%
+    arrange(ifelse(surf == "upper", 1, -1)*xO2chord(xO, surf)) %>%
     mutate(sign = sign(Uclock * lag(Uclock, 1))) 
   stagnation = stagnation[which(stagnation$sign != 1 & !is.na(stagnation$sign)),]
   
+  # ADD COMMENTS ETC
   
-  ggplot(interpnorms, 
-         aes(x = ifelse(surf == "upper", 1, -1)*xO2chord(xO, surf), y = Uclock, 
-         group = interaction(surf, dist), 
-         colour = surf, linetype = as.factor(dist))) +
-    geom_line() +
-    geom_point(data = stagnation)
+  plot_stag = PlotStag(interpnorms, stagnation, Re, AoA)
+  PlotSave(plot_stag, saveplot, ID, width = 5, height = 4)
+  
+  ObjSave(stagnation,
+          path = savedata, ID = ID)
+  if (clean == TRUE) {
+    rm(xvec, dist, lvec, interpnorms, stagnation, plot_stag)
+    invisible(gc())
+  }
+  
   
   #--- Boundary Layer Calculations ----
   xvec = AirfoilSamp(seq(a, a+c, by = 0.2), polyn = 5, cylinder = TRUE)

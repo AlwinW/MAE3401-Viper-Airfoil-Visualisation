@@ -7,7 +7,7 @@
 theme_set(theme_bw())
 options(scipen = 10)
 update_geom_defaults("path", list(size = 1))
-update_geom_defaults("polygon", list(fill = "white", colour = "grey", size = 1))
+update_geom_defaults("polygon", list(fill = "white", colour = "grey20", size = 1))
 
 #--- Save to external file ----
 PlotSave <- function(plot, path, ID, width, height) {
@@ -70,5 +70,19 @@ PlotVort <- function(airfoilsurfmesh, Re, AoA) {
       values = c("twodash", "solid")) +
     labs(title = PlotTitle(Re, AoA, "Vorticity"), 
        y = "Vorticity in the x-y Plane", x = "x (Aerofoil Chord)")
+  return(plot)
+}
+
+
+PlotStag <- function(interpnorms, stagnation, Re, AoA) {
+  plot <- 
+    ggplot(interpnorms, 
+      aes(x = ifelse(surf == "upper", 1, -1)*xO2chord(xO, surf), y = Uclock, 
+      group = interaction(surf, dist), 
+      colour = surf, linetype = as.factor(dist))) +
+    geom_path() +
+    geom_point(data = stagnation, size = 3) +
+    labs(title = PlotTitle(Re, AoA, "Stagnation Point"), 
+         y = "Velocity Parallel (clockwise about the centre)", x = "Lower TE > Lower LE > Upper LE > Upper TE")
   return(plot)
 }
