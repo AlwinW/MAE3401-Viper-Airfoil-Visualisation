@@ -556,8 +556,12 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
   lmesh <- InterpPoint(omesh, lvec, varnames, linear, extrap)
   # Use vector projection parallel to the normal
   lmesh <- lmesh %>%
-    mutate(surf = ifelse(plotsurf == FALSE & surf == "upper" & dely > 0, "upper", "lower")) %>%
-    mutate(surf = ifelse(plotsurf == FALSE & surf == "lower" & dely < 0, "lower", "upper")) %>%
+    ### IF ELSE CAUSING FUNNY BEHAVIOUR, NEED EXTRA LINES OF CODE
+    mutate(surf = as.character(surf)) %>%
+    mutate(adj = (surf == "upper" & dely < 0) | (surf == "lower" & dely > 0)) %>%
+    mutate(adj = plotsurf & adj) %>%
+    mutate(surf = ifelse(adj == FALSE, ifelse(surf == "upper", "lower", "upper"), surf)) %>%
+    select(-adj) %>%
     # Um and Vm using vector projections
     mutate(Umdash = sqrt((1 - (delx)/dist^2 * delx)^2 + (-(delx)/dist^2 * dely)^2),
            Vmdash = (delx)/dist) %>%
@@ -570,8 +574,8 @@ InterpProj <- function(omesh, lvec, varnames = c("U", "V", "P", "vort_xy_plane")
     mutate(Udash = ifelse(dist != 0, Udash, 0),
            Vdash = ifelse(dist != 0, Vdash, 0)) %>%
     # sign of Udash found by cross product, upper vs lower
-    mutate(Udash = sign(dely*U - delx*V) * ifelse(surf == "upper", 1, -1) * Udash,
-           Umdash = sign(dely) * ifelse(surf == "upper", 1, -1) * Umdash) %>%
+    mutate(Udash = - sign(dely*U - delx*V) * ifelse(surf == "upper", 1, -1) * Udash,
+           Umdash = - sign(dely) * ifelse(surf == "upper", 1, -1) * Umdash) %>%
     # Normalised velocity ratio
     mutate(UUmdash = Udash/Umdash,
            VVmdash = Vdash/Vmdash)
