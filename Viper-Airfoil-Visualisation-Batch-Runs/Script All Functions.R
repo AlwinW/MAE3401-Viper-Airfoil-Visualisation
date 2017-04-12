@@ -12,8 +12,10 @@ packages <- c(
   "data.table",
   "pbapply",
   "ggplot2",
+  "scales",
   "RColorBrewer",
-  "akima"
+  "akima",
+  "plotly"
 )
 
 #--- Install Missing Packages ----

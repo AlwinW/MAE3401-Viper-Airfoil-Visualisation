@@ -11,7 +11,7 @@ update_geom_defaults("polygon", list(fill = "white", colour = "grey20", size = 1
 
 #--- Save to external file ----
 PlotSave <- function(plot, path, ID, width, height) {
-  filename = paste0(ID, gsub("plot", "", deparse(substitute(plot))), ".png")
+  filename = paste0(ID, gsub("plot", "", deparse(substitute(plot))), ".pdf")
   ggsave(filename, plot = plot, path = path,
          width = width, height = height, scale = 1.4, dpi = 600)
 }

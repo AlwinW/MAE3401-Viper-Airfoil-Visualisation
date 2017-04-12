@@ -245,7 +245,7 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
     labs(title = paste("Re Number", Re, "AoA", paste(AoA, "deg:", sep = ""), "Velocity Profiles"),
          x = "Distance Along the Chord", y = "Distance from the Leading Edge")
   
-  PlotSave(plot_vp, saveplot, ID, width = 8, height = 4)
+  PlotSave(plot_vp, saveplot, ID, width = 7, height = 4)
   # >> Plots Done ----
   ThreadProgress(threadname, Re, AoA, "Velocity Profiles Plotted")
   # >> Save Done ----
