@@ -1,0 +1,519 @@
+starting worker pid=4448 on localhost:11177 at 04:12:45.248
+starting worker pid=5624 on localhost:11177 at 04:12:45.708
+starting worker pid=3656 on localhost:11177 at 04:12:45.984
+starting worker pid=6188 on localhost:11177 at 04:12:46.270
+
+011-E164-033WL Progress 0 % 
+  localhost:11177  4448 : Re 800 AoA -2 4:12:52 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 800 AoA -4 4:12:52 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 800 AoA -8 4:12:52 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 800 AoA -2 4:12:52 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 800 AoA -8 4:12:52 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 800 AoA -4 4:12:52 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:12:52 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 800 AoA -6 4:12:52 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:13:00 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 800 AoA -6 4:13:00 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:13:00 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA -8 4:13:00 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA -8 4:13:32 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:13:33 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:13:34 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:13:35 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 800 AoA -8 4:13:36 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:13:37 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:13:37 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:13:42 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 800 AoA -6 4:14:35 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:14:37 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 800 AoA -8 4:14:43 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:14:46 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA -2 4:14:50 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:14:55 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 800 AoA -8 4:15:06 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:15:22 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:26:38 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 800 AoA -4 4:26:46 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA -2 4:27:02 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:27:07 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA -2 4:30:27 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 800 AoA -2 4:30:59 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 800 AoA -2 4:31:03 AM | Completed:  7.28714752197266 Mb 
+  localhost:11177  5624 : Re 800 AoA -4 4:32:37 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 800 AoA -4 4:32:48 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 800 AoA -4 4:32:49 AM | Completed:  7.25216674804688 Mb 
+  localhost:11177  6188 : Re 800 AoA -8 4:32:58 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 800 AoA -8 4:33:02 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 800 AoA -6 4:35:05 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:35:09 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA -8 4:36:05 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 800 AoA -8 4:36:08 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 800 AoA -8 4:36:09 AM | Completed:  7.18472290039062 Mb 
+  localhost:11177  3656 : Re 800 AoA -6 4:37:49 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 800 AoA -6 4:37:52 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 800 AoA -6 4:37:53 AM | Completed:  7.21782684326172 Mb 
+
+011-E164-033WL Progress 10 % 
+  localhost:11177  3656 : Re 800 AoA  4 4:38:02 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 800 AoA  6 4:38:02 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 800 AoA  6 4:38:02 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:38:02 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 800 AoA  2 4:38:03 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 800 AoA  0 4:38:03 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 800 AoA  2 4:38:03 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 800 AoA  0 4:38:03 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:38:06 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:38:06 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 800 AoA  2 4:38:09 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:38:09 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:38:33 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:38:33 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 800 AoA  6 4:38:35 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 800 AoA  4 4:38:35 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 800 AoA  2 4:38:36 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  5624 : Re 800 AoA  2 4:38:38 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:38:40 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA  0 4:38:42 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:39:28 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:39:30 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 800 AoA  2 4:39:31 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 800 AoA  6 4:39:36 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:39:37 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:39:37 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA  2 4:39:39 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:39:45 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:47:01 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 800 AoA  0 4:47:11 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:47:25 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 800 AoA  6 4:47:31 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 800 AoA  2 4:52:10 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 800 AoA  0 4:52:27 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 800 AoA  2 4:52:27 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:52:33 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 800 AoA  0 4:52:35 AM | Completed:  7.25681304931641 Mb 
+  localhost:11177  3656 : Re 800 AoA  4 4:52:57 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:53:03 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:54:38 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 800 AoA  6 4:54:42 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 800 AoA  6 4:54:43 AM | Completed:  7.25340270996094 Mb 
+  localhost:11177  5624 : Re 800 AoA  2 4:55:20 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 800 AoA  2 4:55:22 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 800 AoA  2 4:55:24 AM | Completed:  7.29023742675781 Mb 
+  localhost:11177  3656 : Re 800 AoA  4 4:55:56 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 800 AoA  4 4:55:58 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 800 AoA  4 4:56:00 AM | Completed:  7.25372314453125 Mb 
+
+011-E164-033WL Progress 20 % 
+  localhost:11177  3656 : Re 800 AoA 12 4:56:08 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 800 AoA 10 4:56:08 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 800 AoA  8 4:56:08 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 800 AoA 12 4:56:08 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 800 AoA  8 4:56:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 800 AoA 10 4:56:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 800 AoA 14 4:56:09 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 800 AoA 14 4:56:09 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA 12 4:56:13 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 4:56:13 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 800 AoA 10 4:56:13 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 4:56:15 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 800 AoA 12 4:56:41 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 800 AoA 12 4:56:43 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 4:56:43 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 800 AoA 14 4:56:45 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 800 AoA 10 4:56:45 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA  8 4:56:45 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  5624 : Re 800 AoA 10 4:56:47 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 4:56:47 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 800 AoA 12 4:57:38 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 800 AoA 14 4:57:40 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 800 AoA 10 4:57:42 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 800 AoA  8 4:57:43 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 800 AoA 12 4:57:46 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 4:57:48 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA 10 4:57:50 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 4:57:50 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  3656 : Re 800 AoA 12 5:06:41 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 800 AoA 12 5:06:52 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 5:07:19 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 800 AoA 14 5:07:23 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 5:11:55 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 800 AoA 14 5:12:13 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 800 AoA 14 5:12:15 AM | Completed:  6.75112152099609 Mb 
+  localhost:11177  3656 : Re 800 AoA 12 5:16:14 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 800 AoA 12 5:17:21 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 800 AoA 12 5:17:24 AM | Completed:  6.78516387939453 Mb 
+  localhost:11177  5624 : Re 800 AoA 10 5:18:11 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 800 AoA 10 5:18:33 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 5:18:33 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 800 AoA  8 5:18:41 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 5:21:33 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 800 AoA  8 5:21:36 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 800 AoA  8 5:21:37 AM | Completed:  7.25063323974609 Mb 
+  localhost:11177  5624 : Re 800 AoA 10 5:21:45 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 800 AoA 10 5:21:48 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 800 AoA 10 5:21:49 AM | Completed:  7.08289337158203 Mb 
+
+011-E164-033WL Progress 30 % 
+  localhost:11177  5624 : Re 800 AoA 18 5:21:59 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 800 AoA 16 5:21:59 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 800 AoA 16 5:21:59 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 800 AoA 18 5:21:59 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:21:59 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 800 AoA 20 5:21:59 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 800 AoA 18 5:22:03 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 800 AoA 16 5:22:03 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:22:05 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 800 AoA 22 5:22:05 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:22:11 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:22:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:22:30 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA 16 5:22:30 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 800 AoA 16 5:22:31 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:22:31 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 800 AoA 20 5:22:40 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:22:42 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:22:45 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 800 AoA 22 5:22:47 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 800 AoA 16 5:23:25 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 800 AoA 18 5:23:25 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 800 AoA 16 5:23:32 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:23:32 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  3656 : Re 800 AoA 20 5:23:35 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 800 AoA 22 5:23:42 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:23:43 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:23:50 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 800 AoA 16 5:32:01 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 800 AoA 16 5:32:12 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:33:32 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 800 AoA 18 5:33:43 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 800 AoA 16 5:37:02 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 800 AoA 16 5:37:11 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 800 AoA 16 5:37:13 AM | Completed:  6.65302276611328 Mb 
+  localhost:11177  3656 : Re 800 AoA 20 5:37:30 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:37:38 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:38:07 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 800 AoA 18 5:38:11 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 800 AoA 18 5:38:13 AM | Completed:  6.65146636962891 Mb 
+  localhost:11177  3656 : Re 800 AoA 20 5:41:31 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 800 AoA 20 5:41:36 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 800 AoA 20 5:41:37 AM | Completed:  6.58647155761719 Mb 
+  localhost:11177  6188 : Re 800 AoA 22 5:41:56 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 800 AoA 22 5:41:59 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:44:44 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 800 AoA 22 5:44:46 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 800 AoA 22 5:44:48 AM | Completed:  6.61680603027344 Mb 
+
+011-E164-033WL Progress 40 % 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:00 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:01 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:01 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:02 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:02 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:02 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:04 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:05 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:05 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:06 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:06 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:07 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:07 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:08 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:08 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:10 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:10 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:10 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:12 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:15 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:16 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 1000 AoA-15 5:45:17 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 1000 AoA-20 5:45:18 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:20 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:22 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:45:22 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:26 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 1000 AoA -5 5:45:33 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:48:32 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 1000 AoA-10 5:48:36 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:49:09 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 1000 AoA-10 5:49:12 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 1000 AoA-10 5:49:13 AM | Completed:  4.30269622802734 Mb 
+  localhost:11177  4448 : Re 1000 AoA -5 5:50:34 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 1000 AoA -5 5:50:37 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 1000 AoA -5 5:51:03 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 1000 AoA -5 5:51:09 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 1000 AoA -5 5:51:10 AM | Completed:  4.303955078125 Mb 
+  localhost:11177  6188 : Re 1000 AoA-20 5:53:44 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:53:49 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 1000 AoA-20 5:54:33 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 1000 AoA-20 5:54:37 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 1000 AoA-20 5:54:38 AM | Completed:  4.26620483398438 Mb 
+  localhost:11177  3656 : Re 1000 AoA-15 5:56:52 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 1000 AoA-15 5:56:56 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 1000 AoA-15 5:57:32 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 1000 AoA-15 5:57:34 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 1000 AoA-15 5:57:35 AM | Completed:  4.2999267578125 Mb 
+
+011-E164-033WL Progress 50 % 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:43 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:44 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 1000 AoA-40 5:57:44 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:44 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:44 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 5:57:44 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 1000 AoA  0 5:57:46 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 1000 AoA  0 5:57:47 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:47 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:48 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 1000 AoA-40 5:57:48 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:48 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:49 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:50 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:51 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:57:53 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 1000 AoA 10 5:57:54 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 5:57:55 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  5624 : Re 1000 AoA  0 5:57:56 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 1000 AoA-40 5:57:56 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 5:57:57 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 5:58:00 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 1000 AoA  0 5:58:00 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:58:00 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 1000 AoA 10 5:58:02 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 5:58:03 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 5:58:08 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 5:58:11 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:59:19 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 1000 AoA  5 5:59:24 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 5:59:39 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 1000 AoA 10 5:59:39 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 1000 AoA  5 5:59:42 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 1000 AoA 10 5:59:46 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 5:59:46 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:59:46 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 1000 AoA  5 5:59:48 AM | Completed:  4.30580902099609 Mb 
+  localhost:11177  5624 : Re 1000 AoA  0 5:59:58 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 1000 AoA  0 6:00:02 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 1000 AoA  0 6:00:03 AM | Completed:  4.30640411376953 Mb 
+  localhost:11177  6188 : Re 1000 AoA 10 6:00:05 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 1000 AoA 10 6:00:08 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 1000 AoA 10 6:00:09 AM | Completed:  4.30271911621094 Mb 
+  localhost:11177  4448 : Re 1000 AoA-40 6:01:03 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 6:01:06 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 1000 AoA-40 6:01:27 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 1000 AoA-40 6:01:30 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 1000 AoA-40 6:01:30 AM | Completed:  4.09906005859375 Mb 
+
+011-E164-033WL Progress 60 % 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:31 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:31 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:31 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:31 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:31 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:31 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:01:32 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 5000 AoA -5 6:01:32 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:34 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:34 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:34 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:35 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:35 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:35 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:01:37 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:37 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:37 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:37 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:40 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:40 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:40 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 1000 AoA 15 6:01:47 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:01:47 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:01:48 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 5000 AoA -5 6:02:05 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:02:06 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  6188 : Re 5000 AoA -5 6:03:01 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:03:27 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:04:40 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 1000 AoA 20 6:04:43 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:05:18 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 1000 AoA 20 6:05:21 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 1000 AoA 20 6:05:22 AM | Completed:  4.06501770019531 Mb 
+  localhost:11177  4448 : Re 1000 AoA 15 6:05:49 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 1000 AoA 15 6:05:53 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 1000 AoA 15 6:06:11 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 1000 AoA 15 6:06:15 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 1000 AoA 15 6:06:16 AM | Completed:  4.16654968261719 Mb 
+  localhost:11177  6188 : Re 5000 AoA -5 6:11:00 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:11:05 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:12:50 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 1000 AoA 40 6:12:53 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:13:11 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 1000 AoA 40 6:13:14 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 1000 AoA 40 6:13:14 AM | Completed:  4.13188934326172 Mb 
+  localhost:11177  6188 : Re 5000 AoA -5 6:13:33 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 5000 AoA -5 6:13:36 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 5000 AoA -5 6:13:37 AM | Completed:  7.28929901123047 Mb 
+
+011-E164-033WL Progress 70 % 
+  localhost:11177  3656 : Re 5000 AoA-20 6:13:47 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 5000 AoA-40 6:13:48 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 5000 AoA-20 6:13:48 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:13:48 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 5000 AoA-10 6:13:51 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 5000 AoA-10 6:13:51 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 5000 AoA-20 6:13:52 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 5000 AoA-40 6:13:52 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 5000 AoA-10 6:14:01 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:14:11 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 5000 AoA-15 6:14:12 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 5000 AoA-20 6:14:19 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:14:19 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:14:21 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 5000 AoA-20 6:14:21 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:14:23 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 5000 AoA-10 6:14:31 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 5000 AoA-10 6:14:33 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:14:50 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  5624 : Re 5000 AoA-15 6:14:52 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 5000 AoA-20 6:15:14 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:15:15 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 5000 AoA-20 6:15:22 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 5000 AoA-40 6:15:23 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 5000 AoA-10 6:15:28 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 5000 AoA-10 6:15:36 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:15:47 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 5000 AoA-15 6:15:55 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  3656 : Re 5000 AoA-20 6:21:46 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 5000 AoA-20 6:22:08 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 5000 AoA-40 6:22:38 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:22:43 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 5000 AoA-20 6:25:22 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 5000 AoA-20 6:25:28 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 5000 AoA-20 6:25:31 AM | Completed:  7.11540222167969 Mb 
+  localhost:11177  6188 : Re 5000 AoA-40 6:25:48 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 5000 AoA-40 6:25:50 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 5000 AoA-40 6:25:52 AM | Completed:  7.01374816894531 Mb 
+  localhost:11177  4448 : Re 5000 AoA-10 6:32:33 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 5000 AoA-10 6:32:42 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:36:29 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 5000 AoA-15 6:36:33 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 5000 AoA-10 6:36:38 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 5000 AoA-10 6:36:41 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 5000 AoA-10 6:36:43 AM | Completed:  7.15097808837891 Mb 
+  localhost:11177  5624 : Re 5000 AoA-15 6:39:09 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 5000 AoA-15 6:39:12 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 5000 AoA-15 6:39:13 AM | Completed:  7.08259582519531 Mb 
+
+011-E164-033WL Progress 80 % 
+  localhost:11177  5624 : Re 5000 AoA  5 6:39:22 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 5000 AoA  0 6:39:22 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  5624 : Re 5000 AoA  5 6:39:22 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  5624 : Re 5000 AoA  5 6:39:26 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:39:26 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  5624 : Re 5000 AoA  5 6:39:52 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 5000 AoA  0 6:39:52 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  5624 : Re 5000 AoA  5 6:39:53 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:39:53 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 5000 AoA 10 6:39:56 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  3656 : Re 5000 AoA 10 6:39:58 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 5000 AoA 15 6:40:13 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 5000 AoA 15 6:40:15 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:40:19 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 5000 AoA 15 6:40:34 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:40:46 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  5624 : Re 5000 AoA  5 6:40:46 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:40:48 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:40:50 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:40:53 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  5624 : Re 5000 AoA  5 6:40:54 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 5000 AoA 15 6:41:03 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA 15 6:41:05 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  3656 : Re 5000 AoA 10 6:41:45 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:41:53 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 5000 AoA 15 6:41:59 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 5000 AoA 15 6:42:06 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:44:40 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 5000 AoA  0 6:44:44 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:47:30 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 5000 AoA  0 6:47:50 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 5000 AoA  0 6:47:52 AM | Completed:  7.32581329345703 Mb 
+  localhost:11177  5624 : Re 5000 AoA  5 6:49:32 AM | Boundary Layers Calculated 
+  localhost:11177  5624 : Re 5000 AoA  5 6:49:53 AM | Boundary Layers Plotted 
+  localhost:11177  5624 : Re 5000 AoA  5 6:54:11 AM | Velocity Profiles Calculated 
+  localhost:11177  5624 : Re 5000 AoA  5 6:54:33 AM | Velocity Profiles Plotted 
+  localhost:11177  5624 : Re 5000 AoA  5 6:54:36 AM | Completed:  7.32272338867188 Mb 
+  localhost:11177  6188 : Re 5000 AoA 15 6:55:54 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 5000 AoA 15 6:55:59 AM | Boundary Layers Plotted 
+  localhost:11177  3656 : Re 5000 AoA 10 6:56:01 AM | Boundary Layers Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:56:06 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 5000 AoA 15 6:58:44 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 5000 AoA 15 6:58:47 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 5000 AoA 15 6:58:48 AM | Completed:  7.25310516357422 Mb 
+  localhost:11177  3656 : Re 5000 AoA 10 6:59:03 AM | Velocity Profiles Calculated 
+  localhost:11177  3656 : Re 5000 AoA 10 6:59:06 AM | Velocity Profiles Plotted 
+  localhost:11177  3656 : Re 5000 AoA 10 6:59:07 AM | Completed:  7.22309112548828 Mb 
+
+011-E164-033WL Progress 90 % 
+  localhost:11177  6188 : Re 5000 AoA 40 6:59:18 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  6188 : Re 5000 AoA 40 6:59:19 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  6188 : Re 5000 AoA 40 6:59:23 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 5000 AoA 40 6:59:47 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  6188 : Re 5000 AoA 40 6:59:48 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 5000 AoA 20 7:00:00 AM | File Data Loaded
+                 --------------------------------------------------------------- 
+  localhost:11177  4448 : Re 5000 AoA 20 7:00:03 AM | Aerofoil Coordinates Calculated 
+  localhost:11177  4448 : Re 5000 AoA 20 7:00:22 AM | Aerofoil Surface Values Plotted 
+  localhost:11177  6188 : Re 5000 AoA 40 7:00:38 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  6188 : Re 5000 AoA 40 7:00:45 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  4448 : Re 5000 AoA 20 7:00:51 AM | Aerofoil Surface Interpolation Calculated 
+  localhost:11177  4448 : Re 5000 AoA 20 7:00:53 AM | Aerofoil Cp and Vort Plotted 
+  localhost:11177  4448 : Re 5000 AoA 20 7:01:46 AM | Interpolation on Normals to Surface Calculated 
+  localhost:11177  4448 : Re 5000 AoA 20 7:01:52 AM | Interpolation on Normals to Surface Plotted 
+  localhost:11177  6188 : Re 5000 AoA 40 7:08:52 AM | Boundary Layers Calculated 
+  localhost:11177  6188 : Re 5000 AoA 40 7:08:56 AM | Boundary Layers Plotted 
+  localhost:11177  4448 : Re 5000 AoA 20 7:11:32 AM | Boundary Layers Calculated 
+  localhost:11177  4448 : Re 5000 AoA 20 7:11:36 AM | Boundary Layers Plotted 
+  localhost:11177  6188 : Re 5000 AoA 40 7:11:56 AM | Velocity Profiles Calculated 
+  localhost:11177  6188 : Re 5000 AoA 40 7:11:59 AM | Velocity Profiles Plotted 
+  localhost:11177  6188 : Re 5000 AoA 40 7:12:00 AM | Completed:  7.05181884765625 Mb 
+  localhost:11177  4448 : Re 5000 AoA 20 7:14:12 AM | Velocity Profiles Calculated 
+  localhost:11177  4448 : Re 5000 AoA 20 7:14:15 AM | Velocity Profiles Plotted 
+  localhost:11177  4448 : Re 5000 AoA 20 7:14:16 AM | Completed:  7.18625640869141 Mb 
+
+011-E164-033WL Progress 100 % 
