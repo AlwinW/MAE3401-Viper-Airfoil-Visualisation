@@ -9,6 +9,7 @@
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/*.*
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Data/old/*
 /Viper-Airfoil-Visualisation-Batch-Runs/Output_Plot/*
+/Viper-Airfoil-Visualisation-Batch-Runs/Input_Data/Don't Run/*/*.dat
 
 # =========================
 # Generated
@@ -88,3 +89,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 .Rproj.user
+Viper-Airfoil-Visualisation-Batch-Runs/Input_Data/Don't Run/2017-04-12T04.01.35/Re0050AoA-05.dat
+*.zip

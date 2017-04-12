@@ -4,7 +4,7 @@
 #============================>
 
 #--- Set the wd() if necessary ----
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # setwd("//ad.monash.edu/home/User032/awan39/Documents/GitHub/MAE3401-Viper-Airfoil-Visualisation/Viper-Airfoil-Visualisation-Batch-Runs")
 
 #--- Load All the functions -----
@@ -12,7 +12,7 @@ source("Script All Functions.R")
 
 #--- Load the Data in the Folder ----
 # If using multiple computers set move = TRUE
-temp = LoadFolder(foldername = "Input_Data", move = FALSE)
+temp = LoadFolder(foldername = "Input_Data", move = TRUE)
 list2env(temp, envir = environment()); rm(temp)
 
 #--- Load the AIrfoil Data ----
