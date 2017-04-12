@@ -136,7 +136,7 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
   
   
   #--- Boundary Layer Calculations ----
-  xvec = AirfoilSamp(seq(a, a+c, by = 0.2), polyn = 5, cylinder = TRUE)
+  xvec = AirfoilSamp(seq(a, a+c, by = 0.05), polyn = 5, cylinder = TRUE)
   blvals = BLCalcs(omesh, xvec, AoA, Re)
   bltheory = BLTheory(omesh, xvec, AoA, Re) %>%
     mutate(x = xO)
@@ -204,7 +204,7 @@ ThreadAll <- function(filename, foldername, airfoildata, savedata, saveplot, cle
   # # rm(xvec, blvals, bltheory, plot_bl_methods, plot_bl_max, plot_bl_thick, plot_bl_maxlog)
   
   #--- Velocity Profile Calculations ----
-  sep = 0.2
+  sep = 0.1
   vec = VelProfileLvec(omesh, sep, blplot, AoA)
   xvec = vec$xvec; lvec = vec$lvec; distmax = vec$distmax; # rm(vec)
   velprofile = VelProfile(blplot, xvec, lvec, omesh, AoA, Re)

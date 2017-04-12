@@ -12,7 +12,7 @@ source("Script All Functions.R")
 
 #--- Load the Data in the Folder ----
 # If using multiple computers set move = TRUE
-temp = LoadFolder(foldername = "Input_Data", move = FALSE)
+temp = LoadFolder(foldername = "Input_Data", move = TRUE)
 list2env(temp, envir = environment()); rm(temp)
 
 #--- Load the AIrfoil Data ----
